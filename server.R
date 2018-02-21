@@ -61,9 +61,9 @@ server <- function(input, output) {
      downloadButton('downloadData', 'Save')
    })
    
-   output$downloadZip <- renderUI({
-     downloadButton('downloadZip1', 'Download result plots')
-   })
+   # output$downloadZip <- renderUI({
+   #   downloadButton('downloadZip1', 'Download result plots')
+   # })
    
   ### Reactive components
    processed_data<- reactive({
@@ -349,41 +349,41 @@ server <- function(input, output) {
                   sep =",") }
   )
   
-  output$downloadZip1<-downloadHandler(
-    # filename = function() {
-    #   "Result_plots.pdf"
-    # },
-    # content = function(file) {
-    #   pdf(file)
-    #   print( pca_input() )
-    #   print( heatmap_input() )
-    #  # print( volcano_input() ) 
-    #   
-    #   for(i in input$volcano_cntrst){
-    #     print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
-    #   }
-    #  # print( age_plot() )
-    #   dev.off()
-    # }
-    filename = function() {
-      paste("output", "zip", sep=".")
-    },
-    content= function(fname){
-      fs<-c()
-      tmpdir<-tempdir()
-      setwd(tempdir())
-      for (i in c(pca_input,heatmap_input)){
-        path<-paste0(deparse(substitute(i())),".pdf")
-        fs<- c(fs,path)
-        pdf(paste0(deparse(substitute(i())),".pdf",sep=""))
-        print(i())
-        dev.off()
-      }
-      print(fs)
-      zip(zipfile = fname, files = fs)
-    },
-    contentType = "applications/zip"
-  )
+  # output$downloadZip1<-downloadHandler(
+  #   # filename = function() {
+  #   #   "Result_plots.pdf"
+  #   # },
+  #   # content = function(file) {
+  #   #   pdf(file)
+  #   #   print( pca_input() )
+  #   #   print( heatmap_input() )
+  #   #  # print( volcano_input() ) 
+  #   #   
+  #   #   for(i in input$volcano_cntrst){
+  #   #     print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
+  #   #   }
+  #   #  # print( age_plot() )
+  #   #   dev.off()
+  #   # }
+  #   filename = function() {
+  #     paste("output", "zip", sep=".")
+  #   },
+  #   content= function(fname){
+  #     fs<-c()
+  #     tmpdir<-tempdir()
+  #     setwd(tempdir())
+  #     for (i in c(pca_input,heatmap_input)){
+  #       path<-paste0(deparse(substitute(i())),".pdf")
+  #       fs<- c(fs,path)
+  #       pdf(paste0(deparse(substitute(i())),".pdf",sep=""))
+  #       print(i())
+  #       dev.off()
+  #     }
+  #     print(fs)
+  #     zip(zipfile = fname, files = fs)
+  #   },
+  #   contentType = "applications/zip"
+  # )
   
    
 }
