@@ -67,7 +67,7 @@ server <- function(input, output) {
    
   ### Reactive components
    processed_data<- reactive({
-     filter<-dplyr::filter(maxquant_data(),Reverse!="+", 
+     filter<-dplyr::filter(maxquant_data(),Reverse!="+", Potential.contaminant!="+",
                    Only.identified.by.site!="+", Razor...unique.peptides>=2)
      data_unique<- DEP::make_unique(filter,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))
@@ -182,7 +182,7 @@ server <- function(input, output) {
                                   num_total),
                            paste0("Too large fraction (",
                                   signif(frac * 100, digits = 3),
-                                  "%) of proteins differentially expressed"),
+                                  "%) of proteins differentially expressed across all conditions"),
                            icon = icon("star-half-o", lib = "glyphicon"),
                            color = "orange",
                            width = 4)
@@ -192,7 +192,7 @@ server <- function(input, output) {
                            paste0(num_signif,
                                   " out of ",
                                   num_total),
-                           "No proteins differentially expressed",
+                           "No proteins differentially expressed across all conditions",
                            icon = icon("star-o", lib = "glyphicon"),
                            color = "red",
                            width = 4)
@@ -203,7 +203,7 @@ server <- function(input, output) {
                                     " out of ",
                                     num_total),
                              paste0(signif(frac * 100, digits = 3),
-                                    "% of proteins differentially expressed"),
+                                    "% of proteins differentially expressed across all conditions"),
                              icon = icon("star", lib = "glyphicon"),
                              color = "green",
                              width = 4)
