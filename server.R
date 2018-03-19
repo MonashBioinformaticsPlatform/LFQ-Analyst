@@ -67,11 +67,23 @@ server <- function(input, output) {
    
   ### Reactive components
    processed_data<- reactive({
-     filter<-dplyr::filter(maxquant_data(),Reverse!="+", Potential.contaminant!="+",
-                   Only.identified.by.site!="+", Razor...unique.peptides>=2)
-     data_unique<- DEP::make_unique(filter,"Gene.names","Protein.IDs",delim=";")
+     if(grepl('+',maxquant_data()$Reverse)==TRUE){
+     filtered_data<-dplyr::filter(maxquant_data(),Reverse!="+")
+     }
+     else{filtered_data<-maxquant_data()}
+     if(grepl('+',filtered_data$Potential.contaminant)){
+       filtered_data<-dplyr::filter(filtered_data,Potential.contaminant!="+")
+     }
+     if(grepl('+',filtered_data$Only.identified.by.site)){
+       filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+", Razor...unique.peptides>=2)
+     }
+     #else{filtered_data<-maxquant_data()}
+     # filter<-dplyr::filter(maxquant_data(),Reverse!="+", Potential.contaminant!="+",
+     #                       Only.identified.by.site!="+", Razor...unique.peptides>=2)
+     data_unique<- DEP::make_unique(filtered_data,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))
      data_se<-DEP:::make_se(data_unique,lfq_columns,exp_design())
+  
      # Check number of replicates
      if(max(exp_design()$replicate)<3){
        threshold<-0
