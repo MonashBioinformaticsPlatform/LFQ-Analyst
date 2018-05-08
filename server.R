@@ -41,7 +41,7 @@ server <- function(input, output) {
    
    output$volcano_cntrst <- renderUI({
      if (!is.null(comparisons())) {
-       df <- rowData(dep())
+       df <- SummarizedExperiment::rowData(dep())
        cols <- grep("_significant$",colnames(df))
        selectizeInput("volcano_cntrst",
                       "Comparison",
@@ -64,10 +64,13 @@ server <- function(input, output) {
    # output$downloadZip <- renderUI({
    #   downloadButton('downloadZip1', 'Download result plots')
    # })
+    output$downloadreport <- renderUI({
+     downloadButton('downloadReport', 'Download report')
+    })
    
   ### Reactive components
    processed_data<- reactive({
-     if(grepl('+',maxquant_data()$Reverse)==TRUE){
+     if(grepl('+',maxquant_data()$Reverse)){
      filtered_data<-dplyr::filter(maxquant_data(),Reverse!="+")
      }
      else{filtered_data<-maxquant_data()}
@@ -125,7 +128,7 @@ server <- function(input, output) {
    })
    
    comparisons<-reactive ({
-  temp<-capture.output(test_diff(imputed_data(),type='all'),type = "message")
+  temp<-capture.output(DEP::test_diff(imputed_data(),type='all'),type = "message")
     gsub(".*: ","",temp)
    ## Split conditions into character vector
     unlist(strsplit(temp,","))
@@ -183,7 +186,7 @@ server <- function(input, output) {
      num_total <- dep() %>%
        nrow()
      num_signif <- dep() %>%
-       .[rowData(.)$significant, ] %>%
+       .[SummarizedExperiment::rowData(.)$significant, ] %>%
        nrow()
      frac <- num_signif / num_total
      
@@ -362,40 +365,84 @@ server <- function(input, output) {
   )
   
   # output$downloadZip1<-downloadHandler(
-  #   # filename = function() {
-  #   #   "Result_plots.pdf"
-  #   # },
-  #   # content = function(file) {
-  #   #   pdf(file)
-  #   #   print( pca_input() )
-  #   #   print( heatmap_input() )
-  #   #  # print( volcano_input() ) 
-  #   #   
-  #   #   for(i in input$volcano_cntrst){
-  #   #     print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
-  #   #   }
-  #   #  # print( age_plot() )
-  #   #   dev.off()
-  #   # }
   #   filename = function() {
-  #     paste("output", "zip", sep=".")
+  #     "Result_plots.pdf"
   #   },
-  #   content= function(fname){
-  #     fs<-c()
-  #     tmpdir<-tempdir()
-  #     setwd(tempdir())
-  #     for (i in c(pca_input,heatmap_input)){
-  #       path<-paste0(deparse(substitute(i())),".pdf")
-  #       fs<- c(fs,path)
-  #       pdf(paste0(deparse(substitute(i())),".pdf",sep=""))
-  #       print(i())
-  #       dev.off()
-  #     }
-  #     print(fs)
-  #     zip(zipfile = fname, files = fs)
-  #   },
-  #   contentType = "applications/zip"
-  # )
+  #   content = function(file) {
+  #     pdf(file)
+  #     print( pca_input() )
+  #     print( heatmap_input() )
+  #    # print( volcano_input() )
+  # 
+  #     # for(i in input$volcano_cntrst){
+  #     #   print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
+  #     # }
+  #    # print( age_plot() )
+  #     dev.off()
+  #   }
+    # filename = function() {
+    #   paste("output", "zip", sep=".")
+    # },
+    # content= function(fname){
+    #   fs<-c()
+    #   tmpdir<-tempdir()
+    #   setwd(tempdir())
+    #   for (i in c(pca_input,heatmap_input)){
+    #     path<-paste0(deparse(substitute(i())),".pdf")
+    #     fs<- c(fs,path)
+    #     pdf(paste0(deparse(substitute(i())),".pdf",sep=""))
+    #     print(i())
+    #     dev.off()
+    #   }
+    #   print(fs)
+    #   zip(zipfile = fname, files = fs)
+    # },
+    # contentType = "applications/zip"
+ # )
   
-   
+#####===== Download Report =====#####
+  output$downloadReport <- downloadHandler(
+    # For PDF output, change this to "report.pdf"
+    filename = "report.doc",
+    content = function(file) {
+      # Copy the report file to a temporary directory before processing it, in
+      # case we don't have write permissions to the current working dir (which
+      # can happen when deployed).
+      tempReport <- file.path(tempdir(), "LFQ_report.Rmd")
+      file.copy("LFQ_report.Rmd", tempReport, overwrite = TRUE)
+      
+      sig_proteins<-dep() %>%
+        .[SummarizedExperiment::rowData(.)$significant, ] %>%
+        nrow()
+      
+      tested_contrasts<- gsub("_p.adj", "", 
+                              colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", colnames(SummarizedExperiment::rowData(dep())))])
+      pg_width<- ncol(imputed_data()) / 2.5
+      # Set up parameters to pass to Rmd document
+      params <- list(data = processed_data,
+                     alpha = input$p,
+                     lfc = input$lfc,
+                     #data_filter = imputed_data(),
+                     num_signif= sig_proteins,
+                     tested_contrasts= tested_contrasts,
+                     pg_width = pg_width,
+                     numbers_input= numbers_input,
+                     pca_input = pca_input,
+                     coverage_input= coverage_input,
+                     correlation_input =correlation_input,
+                     heatmap_input = heatmap_input,
+                    # num_total = num_total,
+                     #comparisons = comparisons,
+                     dep = dep
+                     )
+      
+      # Knit the document, passing in the `params` list, and eval it in a
+      # child of the global environment (this isolates the code in the document
+      # from the code in this app).
+      rmarkdown::render(tempReport, output_file = file,
+                        params = params,
+                        envir = new.env(parent = globalenv())
+      )
+    }
+  )
 }

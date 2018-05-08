@@ -51,7 +51,7 @@ ui <- shinyUI(
       uiOutput("downloadTable"),
       uiOutput("downloadButton"),
       tags$br(),
-    #  uiOutput("downloadZip"),
+     uiOutput("downloadreport"),
       tags$br(),
       fluidRow(
         box(
@@ -209,5 +209,10 @@ ui <- shinyUI(
   #       )
   #     )
   #   )
+
+ ####===== Download report ===== ####
+  
+
+
    )
 )
