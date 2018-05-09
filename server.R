@@ -68,6 +68,9 @@ server <- function(input, output) {
      downloadButton('downloadReport', 'Download report')
     })
    
+    output$downloadPlots <- renderUI({
+      downloadButton('downloadPlots1', 'Download Plots')
+    })
   ### Reactive components
    processed_data<- reactive({
      if(grepl('+',maxquant_data()$Reverse)){
@@ -272,7 +275,7 @@ server <- function(input, output) {
     heatmap_input<-eventReactive(input$analyze,{
       DEP::plot_heatmap(dep(),
                         type="centered",kmeans = TRUE,
-                        k=6, col_limit = 6, show_row_names=T)
+                        k=6, col_limit = 6)
     })
   #str(lfq_results)
     data_result<-reactive({
@@ -435,6 +438,41 @@ server <- function(input, output) {
                      #comparisons = comparisons,
                      dep = dep
                      )
+      
+      # Knit the document, passing in the `params` list, and eval it in a
+      # child of the global environment (this isolates the code in the document
+      # from the code in this app).
+      rmarkdown::render(tempReport, output_file = file,
+                        params = params,
+                        envir = new.env(parent = globalenv())
+      )
+    }
+  )
+  
+  
+### ===== Download Plots ===== #####
+  output$downloadPlots1 <- downloadHandler(
+    filename = "Plots.pdf",
+    content = function(file) {
+      tempReport <- file.path(tempdir(), "Plots.Rmd")
+      file.copy("Plots.Rmd", tempReport, overwrite = TRUE)
+      
+      tested_contrasts<- gsub("_p.adj", "", 
+                              colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", 
+                                                                                  colnames(SummarizedExperiment::rowData(dep())))])
+      pg_width<- ncol(imputed_data()) / 2.5
+      
+      # Set up parameters to pass to Rmd document
+      params <- list(tested_contrasts= tested_contrasts,
+                     pg_width = pg_width,
+                     numbers_input= numbers_input,
+                     pca_input = pca_input,
+                     coverage_input= coverage_input,
+                     correlation_input =correlation_input,
+                     heatmap_input = heatmap_input,
+                     cvs_input= cvs_input,
+                     dep = dep
+      )
       
       # Knit the document, passing in the `params` list, and eval it in a
       # child of the global environment (this isolates the code in the document

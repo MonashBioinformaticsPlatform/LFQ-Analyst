@@ -51,8 +51,14 @@ ui <- shinyUI(
       uiOutput("downloadTable"),
       uiOutput("downloadButton"),
       tags$br(),
-     uiOutput("downloadreport"),
+      uiOutput("downloadreport"),
       tags$br(),
+     uiOutput('downloadPlots'),
+     # div(style="display:inline-block;",downloadButton("downloadButton", 'Save Results')),
+     # div(style="display:inline-block; margin-left: 25px;",downloadButton("downloadreport", 'Download Report')),
+     # div(style="display:inline-block; margin-left: 25px;",downloadButton('downloadPlots', 'Download Plots')),
+    tags$br(),
+     tags$br(),
       fluidRow(
         box(
           title = "LFQ Results Table",

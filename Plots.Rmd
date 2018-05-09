@@ -1,0 +1,95 @@
+---
+title: "MBPF Label Free Quantitive (LFQ) Proteomics Analysis Plots"
+#author: "Anup Shah"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  tested_contrasts: NA
+  numbers_input: NA
+  coverage_input: NA
+  pca_input: NA
+  correlation_input: NA
+  heatmap_input: NA
+  dep: NA
+  pg_width: NA
+  cvs_input: NA
+output: 
+  pdf_document:
+    fig_caption: yes
+---
+
+### Proteomics Experiment Summary
+
+Protein identifications per sample.
+
+
+
+```{r numbers, echo=FALSE, warning=FALSE }
+#str(data_filter)
+print(params$numbers_input())
+#plot_numbers(params$data_filter)
+```
+\pagebreak
+
+Protein overlap in all samples.
+
+
+```{r coverage, echo=FALSE, warning=FALSE}
+print(params$coverage_input())
+```
+
+
+\pagebreak
+
+### Exploratory Analysis
+
+#### PCA plot
+
+```{r, echo=FALSE}
+num = 400
+#if (nrow(params$dep) < 400) num = nrow(params$dep)
+```
+
+
+```{r pca_plot, echo=FALSE, fig.height= 4}
+print(params$pca_input())
+```
+
+
+#### Sample Correlation matrix
+
+```{r correlation_heatmap, echo=FALSE,   fig.height= 4}
+print(params$correlation_input())
+```
+
+
+#### Sample Coefficient of variation (CVs)
+
+```{r sample_cv,  echo=FALSE, warning=FALSE }
+print(params$cvs_input())
+```
+\pagebreak
+
+
+### Differential Expression Analysis
+
+#### Heatmap
+  A plot representing an overview of expression of all significant(differencially expressed) proteins (rows) in all samples (columns).
+
+ 
+```{r heatmap_2,  echo=FALSE}
+print(params$heatmap_input())
+```
+
+#### Volcano Plots
+
+```{r volcano,  echo=FALSE, fig.cap='volcano plots for analysis', warning=FALSE}
+for(i in params$tested_contrasts){
+  print(paste0('volcano_plot_',i,sep=""))
+  print(plot_volcano(params$dep(),contrast = i,label_size = 2, add_names = T, adjusted=T))
+  }
+```
+
+
+
+
+

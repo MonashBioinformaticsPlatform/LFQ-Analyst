@@ -1,6 +1,6 @@
 ---
 title: "MBPF Label Free Quantitive (LFQ) Proteomics Analysis Report"
-author: "Anup Shah"
+#author: "Anup Shah"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 params:
   data: NA
