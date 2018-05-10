@@ -407,7 +407,7 @@ server <- function(input, output) {
 #####===== Download Report =====#####
   output$downloadReport <- downloadHandler(
     # For PDF output, change this to "report.pdf"
-    filename = "report.doc",
+    filename = "report.docx",
     content = function(file) {
       # Copy the report file to a temporary directory before processing it, in
       # case we don't have write permissions to the current working dir (which
