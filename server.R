@@ -21,6 +21,7 @@ server <- function(input, output) {
       retun(NULL)
     read.table(inFile$datapath,
                header = TRUE,
+               fill= TRUE, # to fill any missing data
                sep = "\t"
                 )
   })
