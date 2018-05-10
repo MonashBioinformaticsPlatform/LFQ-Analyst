@@ -23,7 +23,7 @@ output:
 ---
 \newpage
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dev= 'pdf')
+knitr::opts_chunk$set(dev= 'png', dpi = 300)
 ```
 This report presents an overview of the label free quantitation (LFQ) analysis.
 
