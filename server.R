@@ -160,11 +160,11 @@ server <- function(input, output) {
    })
    
    missval_input <- reactive({
-     plot_missval(normalised_data())
+     plot_missval(processed_data())
    })
    
    detect_input <- reactive({
-     plot_detect(normalised_data())
+     plot_detect(processed_data())
    })
    
    imputation_input <- reactive({
@@ -503,6 +503,9 @@ server <- function(input, output) {
       params <- list(tested_contrasts= tested_contrasts,
                      pg_width = pg_width,
                      numbers_input= numbers_input,
+                     detect_input = detect_input,
+                     imputation_input = imputation_input,
+                     missval_input = missval_input, 
                      pca_input = pca_input,
                      coverage_input= coverage_input,
                      correlation_input =correlation_input,
