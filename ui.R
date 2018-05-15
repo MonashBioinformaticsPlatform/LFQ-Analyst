@@ -76,7 +76,16 @@ ui <- shinyUI(
             tabPanel(title = "PCA Plot",
                      plotOutput("pca_plot")),
             tabPanel(title= "Heatmap",
-                     plotOutput("heatmap")),
+                     fluidRow(
+                     plotOutput("heatmap", height = 600)
+                     ),
+                     fluidRow(
+                       box(numericInput("cluster_number",
+                                    "Cluster to download (1-6)",
+                                    min=1, max=6, value = 1), width = 6),
+                    box(downloadButton('downloadCluster',"Save Cluster"),width = 3)
+                       )
+                     ),
             tabPanel(title = "Volcano plot",
                      fluidRow(
                        box(uiOutput("volcano_cntrst"), width = 6),

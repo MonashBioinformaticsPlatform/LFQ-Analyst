@@ -15,6 +15,9 @@ server <- function(input, output) {
   
   ### Use of event reactive to use action button
   
+  
+  
+  
   maxquant_data<-eventReactive(input$analyze,{
     inFile<-input$file1
     if(is.null(inFile))
@@ -185,6 +188,10 @@ server <- function(input, output) {
      plot_cvs(dep())
    })
    
+   num_total<-reactive({
+     dep() %>%
+       nrow()
+   }) 
    #### Interactive UI
    output$significantBox <- renderInfoBox({
      num_total <- dep() %>%
@@ -269,14 +276,21 @@ server <- function(input, output) {
 
    ## PCA Plot
     pca_input<-eventReactive(input$analyze,{
-      DEP::plot_pca(dep())
+      if (num_total()<=500){
+        DEP::plot_pca(dep(), n=num_total())
+      }
+      else{
+        DEP::plot_pca(dep())
+      }
+      
    })
     
     ### Heatmap Differentially expressed proteins
     heatmap_input<-eventReactive(input$analyze,{
-      DEP::plot_heatmap(dep(),
+      get_cluster_heatmap(dep(),
                         type="centered",kmeans = TRUE,
-                        k=6, col_limit = 6)
+                        k=6, col_limit = 6,
+                        indicate = c("condition", "replicate"))
     })
   #str(lfq_results)
     data_result<-reactive({
@@ -362,6 +376,28 @@ server <- function(input, output) {
     filename = function() { paste(input$dataset, ".csv", sep = "") }, ## use = instead of <-
     content = function(file) {
       write.table(datasetInput(),
+                  file,
+                  col.names = TRUE,
+                  row.names = FALSE,
+                  sep =",") }
+  )
+  
+  ### === Cluster Download ==== ####
+  
+  individual_cluster <- reactive({
+      cluster_number <- input$cluster_number
+      cluster_all <- heatmap_input()
+      data_result()[cluster_all[[cluster_number]],]
+    })
+  
+  # output$text1 <- renderPrint({
+  #   paste(individual_cluster())
+  # })
+  
+  output$downloadCluster <- downloadHandler(
+    filename = function() { paste("Cluster_info_",input$cluster_number, ".csv", sep = "") }, ## use = instead of <-
+    content = function(file) {
+      write.table(individual_cluster(),
                   file,
                   col.names = TRUE,
                   row.names = FALSE,
@@ -484,4 +520,5 @@ server <- function(input, output) {
       )
     }
   )
+  
 }
