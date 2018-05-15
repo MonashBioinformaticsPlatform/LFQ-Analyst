@@ -59,12 +59,12 @@ at least 2 out of three replicates)
 ### Done So Far
 
 - R scipt for differencial expression analysis of LFQ data
-- Shiny app (development version)
+- Build a [Shiny app](http://proteomics-dev.erc.monash.edu:3838/LFQ_analysis_pipeline/)
 - Run it on Shiny server with R version 3.4.1
-
-### In Progress
-
 - Build a download button for downloading all plots
 - Download cluster from heatmap
+
+
+### In Progress
 - Small symbols for PCA
 - Progress bar or spinner
