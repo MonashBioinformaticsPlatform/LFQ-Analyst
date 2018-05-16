@@ -11,6 +11,7 @@ params:
   missval_input: NA
   detect_input: NA
   imputation_input: NA
+  p_hist_input: NA
   heatmap_input: NA
   dep: NA
   pg_width: NA
@@ -75,21 +76,29 @@ print(params$cvs_input())
 ```
 \pagebreak
 
+## _p value_ Distribution
+A histogram of distribution of _p values_ across the experiment
+
+```{r p_hist, echo=FALSE, warning=FALSE, results='hide'}
+print(params$p_hist_input())
+```
+\pagebreak
+
 ## Missing Value handling
 
 #### Missing value heatmap
 A heatmap for proteins with missing value in each dataset. Each row represent a protein with missing value in one or more replicate. Each replicate is clustered based on presence of missing values in the sample. 
 
 
-```{r missing_value_heatmap, echo=FALSE, message=FALSE, warning=FALSE, tidy=TRUE}
-print(params$missval_input())
+```{r missing_value_heatmap, echo=FALSE, message=FALSE, results='hide',warning=FALSE, tidy=TRUE}
+params$missval_input()
 ```
 \pagebreak
 
 ### Missing value distribution
 What are the intensities for proteins with and without missing values in the dataset?
 
-```{r missing_value_distribution, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+```{r missing_value_distribution, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 print(params$detect_input())
 ```
 \pagebreak

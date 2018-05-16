@@ -142,7 +142,10 @@ ui <- shinyUI(
                                   tabPanel(title = "Imputation",
                                            plotOutput("imputation", height = 600)
                                       #     downloadButton('downloadImputation', 'Save')
-                                  )
+                                  ),
+                                 tabPanel(title = "p-value Histogram",
+                                          plotOutput("p_hist", height = 600)
+                                 )
                            )
       )
       )

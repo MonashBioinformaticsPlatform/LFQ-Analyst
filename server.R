@@ -172,6 +172,10 @@ server <- function(input, output) {
                      diff_all())
    })
    
+   p_hist_input <- reactive({
+     plot_p_hist(dep())
+   })
+   
    numbers_input <- reactive({
      plot_numbers(normalised_data())
    })
@@ -351,6 +355,10 @@ server <- function(input, output) {
     imputation_input()
   })
   
+  output$p_hist <- renderPlot({
+    p_hist_input()
+  })
+  
   output$numbers <- renderPlot({
     numbers_input()
   })
@@ -505,7 +513,8 @@ server <- function(input, output) {
                      numbers_input= numbers_input,
                      detect_input = detect_input,
                      imputation_input = imputation_input,
-                     missval_input = missval_input, 
+                     missval_input = missval_input,
+                     p_hist_input = p_hist_input,
                      pca_input = pca_input,
                      coverage_input= coverage_input,
                      correlation_input =correlation_input,
