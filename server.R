@@ -130,7 +130,7 @@ server <- function(input, output) {
    })
 
    dep<-reactive({
-     diff_all<-test_diff(imputed_data(),type='all')
+     diff_all<-test_limma(imputed_data(),type='all')
      add_rejections(diff_all,alpha = input$p, lfc= input$lfc)
    })
    
