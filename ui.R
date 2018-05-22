@@ -36,7 +36,12 @@ ui <- shinyUI(
                               selected = "man"),
                  p(a("Imputation method information",
                      href = "https://www.rdocumentation.org/packages/MSnbase/versions/1.20.7/topics/impute-methods",
-                     target="_blank"))
+                     target="_blank")),
+                 radioButtons("fdr_correction",
+                              "Type of FDR correction",
+                              choices =  c("Benjamini Hocheberg"="BH",
+                                              "t-statistics-based"="fdrtool"
+                                              ), selected= "BH")
         ),
        
         tags$hr(),
@@ -70,9 +75,6 @@ ui <- shinyUI(
           tabBox(
             title = "Result Plots",
             width = 12,
-            # tabPanel(title = "Protein Frequency",
-            #          plotOutput("protein_frequency")),
-            #downloadButton('downloadPlot', 'Save plot')),
             tabPanel(title = "PCA Plot",
                      plotOutput("pca_plot")),
             tabPanel(title= "Heatmap",
@@ -150,85 +152,8 @@ ui <- shinyUI(
       )
       )
     )
-  #     fluidRow(
-  #       box(numericInput("p",
-  #                        "adj. P value",
-  #                        min = 0.0001, max = 0.1, value = 0.05),
-  #           width = 2),
-  #       box(numericInput("lfc",
-  #                        "Log2 fold change",
-  #                        min = 0, max = 10, value = 1),
-  #           width = 2),
-  #       infoBoxOutput("significantBox"),
-  #       box(radioButtons("pres",
-  #                        "Data presentation",
-  #                        c("contrast", "centered"),
-  #                        selected = "contrast"),
-  #           width = 2),
-  #       box(radioButtons("contrasts",
-  #                        "Contrasts",
-  #                        c("control", "all"),
-  #                        selected = "control"),
-  #           width = 2)
-  #     ),
-  #     fluidRow(
-  #       column(width = 7,
-  #              box(title = "Top Table",
-  #                  box(uiOutput("select"), width = 6),
-  #                  box(uiOutput("exclude"), width = 6),
-  #                  DT::dataTableOutput("table"), width = 12)
-  #       ),
-  #       column(width = 5,
-  #              tabBox(title = "Result Plots", width = 12,
-  #                     tabPanel(title = "Selected Protein",
-  #                              plotOutput("selected_plot"),
-  #                              downloadButton('downloadPlot', 'Save plot')),
-  #                     tabPanel(title = "Heatmap",
-  #                              fluidRow(
-  #                                box(numericInput("k",
-  #                                                 "Kmeans clusters",
-  #                                                 min = 0, max = 15, value = 7),
-  #                                    width = 4),
-  #                                box(numericInput("limit",
-  #                                                 "Color limit (log2)",
-  #                                                 min = 0, max = 16, value = 6),
-  #                                    width = 4),
-  #                                box(numericInput("size",
-  #                                                 "Heatmap size (4-30)",
-  #                                                 min = 4, max = 30, value = 10),
-  #                                    width = 4)
-  #                              ),
-  #                              fluidRow(
-  #                                uiOutput("plot"),
-  #                                downloadButton('downloadHeatmap', 'Save heatmap'))
-  #                     ),
-  #                     tabPanel(title = "Volcano plot",
-  #                              fluidRow(
-  #                                box(uiOutput("volcano_cntrst"), width = 6),
-  #                                box(numericInput("fontsize",
-  #                                                 "Font size",
-  #                                                 min = 0, max = 8, value = 4),
-  #                                    width = 3),
-  #                                box(checkboxInput("check_names",
-  #                                                  "Display names",
-  #                                                  value = TRUE),
-  #                                    checkboxInput("p_adj",
-  #                                                  "Adjusted p values",
-  #                                                  value = FALSE),
-  #                                    width = 3)
-  #                              ),
-  #                              fluidRow(
-  #                                plotOutput("volcano", height = 600),
-  #                                downloadButton('downloadVolcano', 'Save volcano')
-  #                              )
-  #                     )
-  #              ),
-  #              
-  #       )
-  #     )
-  #   )
+  
 
- ####===== Download report ===== ####
   
 
 

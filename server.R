@@ -75,7 +75,8 @@ server <- function(input, output) {
     output$downloadPlots <- renderUI({
       downloadButton('downloadPlots1', 'Download Plots')
     })
-  ### Reactive components
+  
+### Reactive components
    processed_data<- reactive({
      if(grepl('+',maxquant_data()$Reverse)){
      filtered_data<-dplyr::filter(maxquant_data(),Reverse!="+")
@@ -113,7 +114,7 @@ server <- function(input, output) {
    })
    
    imputed_data<-reactive({
-     DEP::impute(normalised_data(),input$imputation)
+     DEP::impute(processed_data(),input$imputation)
    })
    
    imputed_table<-reactive({
@@ -130,8 +131,15 @@ server <- function(input, output) {
    })
 
    dep<-reactive({
-     diff_all<-test_limma(imputed_data(),type='all')
-     add_rejections(diff_all,alpha = input$p, lfc= input$lfc)
+     if(input$fdr_correction=="BH"){
+       diff_all<-test_limma(imputed_data(),type='all')
+       add_rejections(diff_all,alpha = input$p, lfc= input$lfc)
+     }
+     else{
+       diff_all<-test_diff(imputed_data(),type='all')
+       add_rejections(diff_all,alpha = input$p, lfc= input$lfc)
+     }
+     
    })
    
    comparisons<-reactive ({
@@ -196,7 +204,9 @@ server <- function(input, output) {
      dep() %>%
        nrow()
    }) 
-   #### Interactive UI
+
+   
+#### Interactive UI
    output$significantBox <- renderInfoBox({
      num_total <- dep() %>%
        nrow()
@@ -281,10 +291,10 @@ server <- function(input, output) {
    ## PCA Plot
     pca_input<-eventReactive(input$analyze,{
       if (num_total()<=500){
-        DEP::plot_pca(dep(), n=num_total())
+        DEP::plot_pca(dep(), n=num_total(), point_size = 4)
       }
       else{
-        DEP::plot_pca(dep())
+        DEP::plot_pca(dep(), point_size = 4)
       }
       
    })
