@@ -1,5 +1,5 @@
 ---
-title: "MBPF Label Free Quantitive (LFQ) Proteomics Analysis Report"
+title: "Label Free Quantitive (LFQ) of nanoLC ESI DDI-MS data using MaxQuant"
 #author: "Anup Shah"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 params:
@@ -25,76 +25,70 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(dev= 'png', dpi = 300)
 ```
-This report presents an overview of the label free quantitation (LFQ) analysis.
 
 ## General information
-* Project Number :
-* Experiment Number:
-* Project tier: Collaboration
-* Client:
-* Reported by: 
+* **Project number** :
+* **Experiment number**:
+* **Project tier**: Collaboration
+* **Client**:
+* **Reported by**: 
 
 ## Samples
-* Number of Samples: 
-* Sample Details:
-* Goal of Experiment:
+* **Number of samples**: 
+* **Sample details**:
+* **Goal of experiment**:
 
 ## Sample Preparation
-* Sample prep SOP:
-* Prepared by:
-* Protease:
-* iRT peptide Present:
+* **Sample prep SOP**:
+* **Prepared by**:
+* **Protease**:
+* **iRT peptide**:
 
 ## Mass Spectrometry acquisition
-* Nano LC System: 
-* Mass spectrometer: 
-* Analytical column:
-* Trap column:
-* Acquisition method: Analysis date:
-* Analysis time (in hours):
+* **Nano LC System**: 
+* **Mass spectrometer**: 
+* **Analytical column**:
+* **Trap column**:
+* **Acquisition method**: 
+* **Analysis date**:
+* **Analysis time (in hours)**:
 
 \pagebreak
 
-## Data analysis summary
+## Data analysis
+
+* **LFQ generation**:	MaxQuant vXXX
+* **Search engine**:	Andromeda (implemented in MaxQuant)
+* **Data base**:	RS Mouse Swissprot iRT
+* **Protein FDR cutoff**:	1%
+* **Fixed modification**:	Carbamidomethylation
+* **Variable modification**:	Oxidation @ M
+	Acetylation @ Protein N-terminus
+* **Comments**:	None
+* **Statistical analysis**:	In-house generated script
+
+## Method details
+
+The raw data files were analyzed using MaxQuant to obtain protein identifications and their respective label-free quantification values using in-house standard parameters. Of note, the data were normalization based on the assumption that the majority of proteins do not change between the different conditions. 
+Statistical analysis was performed using an in-house generated R script based on the ProteinGroup.txt file. First, contaminant proteins, reverse sequences and proteins identified “only by site” were filtered out. In addition, proteins that have been only identified by a single peptide and proteins not identified/quantified consistantly in same condition have been removed as well. The LFQ data was converted to log2 scale, samples were grouped by conditions and missing values were imputed using the ‘Missing not At Random’ (MNAR) method, which uses random draws from a left-shifted Gaussian distribution of 1.8 StDev (standard deviation) apart with a width of 0.3. Protein-wise linear models combined with empirical Bayes statistics were used for the differential expression analyses. The _limma_ package from R Bioconductor was used to generate a list of differentially expressed proteins for each pair-wise comparison. A cutoff of the _adjusted p-value_ of 0.05 (Benjamini-Hochberg method) along with a |log2 fold change| of 1 has been applied to determine significantly regulated proteins in each pairwise comparison.
 
 
-#### MaxQuant result output contains `r nrow(params$data)` proteins groups of which _`r nrow(params$dep())`_ proteins were reproducibly quantified.
-
-<!-- In total `r length(params$comparisons)` samples were analysed.   
-<span style="color:blue"> `r print(params$comparisons)` </span> -->
-
-#### `r params$num_signif` proteins differ significantly between samples.
-
-Parameters used:  
+### Quick summary of parameters used:
 
 * Tested pairwise comparisons = <span style="color:blue">`r params$tested_contrasts`</span>  
 * Adjusted _p-value_ cutoff <= <span style="color:blue">`r params$alpha`</span>  
 * Log fold change cutoff >= <span style="color:blue">`r params$lfc`</span>  
 
+## Results
+
+#### MaxQuant result output contains `r nrow(params$data)` proteins groups of which _`r nrow(params$dep())`_ proteins were reproducibly quantified.
+
+#### `r params$num_signif` proteins differ significantly between samples.
+
 \pagebreak
 
-### Method
-  The raw mass-spectrometry data was first analyzed using MazQuand and resulting "proteinGroups.txt" file was used as an input for downstream statistical analysis. 
-  
-  As a first step of data analysis, we have performed data pre-processing to generate clean data matrix.
-  
-  Filter protein data matrix by removing
-  
-1. Reverse sequences
-2. Potential contaminants
-3. Proteins only identified by sites
-4. Proteins identified by single peptide
-5. Proteins that are not identified consistantly (for example: only identified in 1 out of 3 replicate of at-least one condition)
+### Number of identified proteins
 
-#### Missing Value Imputation
-  After the stringent filtering we still be left with a data matrix with few missing values which needs to be imputed (See FAQ for details). Missing values were imputed using Missing not at random (MNAR) method using random draws from a left-shifted Gaussian distribution of 1.8 Standard Deviation apart, with the width of 0.3.
-  
-#### Differencial Expression Analysis
-  Protein-wise linear models combined with empirical Bayes statistics are used for the differential  expression analysis. The _"limma"_ package from R Biocondoctor was used to generate a list of differencially expressed protein for each pair-wise comparison. A cutoff of _adjusted p-value_ of <= 0.05 (Benjamini Hochberg method) along with |log2 fold change| of 1 was considered to define up and down regulted proteins in each pairwise comparison. 
-
-### Protein Summary
-
-Protein identifications per sample.
 
 ```{r page_width,echo=FALSE}
 if (params$pg_width > 15) { params$pg_width = 15 }
@@ -106,7 +100,6 @@ print(params$numbers_input())
 #plot_numbers(params$data_filter)
 ```
 
-Proteins coverage in all samples.
 
 ```{r coverage, echo=FALSE, warning=FALSE, fig.height = 4, fig.width = 3}
 print(params$coverage_input())
@@ -159,7 +152,7 @@ In most cases, interesting candidate proteins are those proteins that are signif
 #### **Why do we need filter on missing values?**
   The dataset contains proteins which are not quantified in all replicates. Some proteins are even only quantified in a single replicate.
   
-  This leaves our dataset with missing values, which need to be imputed. However, this should not be done for proteins that contain too many missing values. Therefore, we first filter out proteins that contain too many missing values.
+  This leaves our dataset with missing values, which need to be imputed (see below). However, this should not be done for proteins that contain too many missing values. Therefore, we filtered out proteins that contain too many missing values.
 
 #### **What exactly means that missing values have been imputed? And why do I get 2 data matrices (before and after imputation)?**    
 If a peptide (and thus protein) has been identified in a certain sample, MaxQuant tries to find the corresponding mass peak in the other samples and if a corresponding peak can be found, MaxQuant provides a quantitative value for this peak (basically the area under the curve). However, if MaxQuant cannot find the corresponding peak, it will return a **zero** as quantitative value. Of course, this  **might** mean that the peptide (and protein) is absent in this sample (and those proteins are often the most important proteins!!). However, it **can also mean** that the peak is not quantifiable (for example due to isobaric contaminants or abnormal peak shapes etc…). **So, the most important thing to understand here is that a LFQ value of zero does not necessarily mean that the peptide/protein is absent!!**
@@ -186,7 +179,7 @@ How does this influence the results?
   
 This is the reason why we provide both the unimputed as well as imputed data matrix. See 8.1 how to deal with both matrices.
 
-#### **Which quantitative value is directly (and linearly) proportional to the actual protein abundance?Is it the log2-transformed intensity or the untransformed intensity?**
+#### **Which quantitative value is directly (and linearly) proportional to the actual protein abundance? Is it the log2-transformed intensity or the untransformed intensity?**
   The untransformed intensities are directly proportional to the actual protein abundance. The log2 “fold-changes (FC)” that are given by the “Student’s T-test Differences” columns are mathematically defined as:
 
 Difference = $log2FC = log2(intensity(condition1)/intensity(condition2))$ =
@@ -209,13 +202,13 @@ $log2(intensity(condition1)) - log2(intensity(condition2))$
   http://setosa.io/ev/principal-component-analysis/
 
 #### Sample Correlation plot
-  A correlation matrix is plotted as a heatmap, to visualize the Pearson correlations between the different samples.
+  A correlation matrix is plotted as a heatmap and visualize the Pearson correlation coefficients between the different samples.
   
 #### Pairwise correlation plots
-  Another way of visualising how samples are related to each other (i.e among replicates or among condition) is scatterplot. The plot shows pair-wise comparison of all samples. The lower half represents a scatterplot of protein intensities in two samples (gray points) and the blue line is a _loess_ regression line. The diagonal line shows the distribution of (log2) protein intensitites in the given sample and the upper part of matrix shows the actual correlation values. 
+  Another way of visualizing how samples are related to each other (i.e among replicates or among condition) is a scatterplot. The plot shows pair-wise comparison of all samples. The lower half represents a scatterplot of protein intensities in two samples (gray points) and the blue line is a _loess_ regression line. The diagonal line shows the distribution of (log2) protein intensitites in the given sample and the upper part of matrix shows the actual correlation values. 
   
 #### Heatmap 
-  The heatmap representation gives an overview of all significant proteins (rows) in all samples (columns). This allows to see general trends, for example if one sample or replicate is really different compared to the others. Additionally, the clustering of samples (columns) can indicate closer related samples and clustering of proteins (rows) indicates similarly behaving proteins.
+  The heatmap representation gives an overview of all significant proteins (rows) in all samples (columns). This visualization allows the identfication of general trends such as if one sample or replicate is highly different compared to the others and might be considerd as an outlier. Additionally, the hierarchical clustering of samples (columns) indicates how related the different samples are and  hierarchicalclustering of proteins (rows) identifies similarly behaving proteins.
 
 #### Volcano Plot (for each comparison one Plot)
   A volcano blot is merely a graphical visualization by plotting the “Fold Change (Log2)” on the x-axis versus the –log10 of the “adjusted _p-value_” on the y-axis. Interesting candidate proteins are located in the left and right upper quadrant. 
