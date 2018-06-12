@@ -56,9 +56,9 @@ server <- function(input, output) {
    output$downloadTable <- renderUI({
      selectizeInput("dataset",
                     "Choose a dataset to save" ,
-                    c("Results","input_matrix",
-                      "imputed_matrix",
-                      "full_dataset"))
+                    c("Results","Original_matrix",
+                      "Imputed_matrix",
+                      "Full_dataset"))
    })
    
    output$downloadButton <- renderUI({
@@ -107,6 +107,14 @@ server <- function(input, output) {
      }
      
      filter_missval(data_se,thr = threshold)
+   })
+   
+   unimputed_table<-reactive({
+     temp<-assay(processed_data())
+     temp1<-2^(temp)
+     colnames(temp1)<-paste(colnames(temp1),"original_intensity",sep="_")
+     temp1<-cbind(ProteinID=rownames(temp1),temp1) #temp1$ProteinID<-rownames(temp1)
+     return(as.data.frame(temp1))
    })
    
    normalised_data<-reactive({
@@ -382,12 +390,12 @@ server <- function(input, output) {
   datasetInput <- reactive({
     switch(input$dataset,
            "Results" = get_results(dep()),
-           "input_matrix"=maxquant_data(),
+           "Original_matrix"= unimputed_table(),
            # "significant_proteins" = get_results(dep()) %>%
            #   filter(significant) %>%
            #   select(-significant),
-           "imputed_matrix" = imputed_table(),
-           "full_dataset" = get_df_wide(dep()))
+           "Imputed_matrix" = imputed_table(),
+           "Full_dataset" = get_df_wide(dep()))
   })
   
   output$downloadData <- downloadHandler(
