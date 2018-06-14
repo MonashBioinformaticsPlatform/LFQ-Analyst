@@ -353,6 +353,10 @@ server <- function(input, output) {
       get_results_proteins(dep())
       #get_results(dep())
     })
+    
+    output$select_info<-renderText({
+      "Select protein from LFQ Results Table to show on plot"
+    })
   #### Data table
   output$contents <- DT::renderDataTable({
     # req(input$file1)

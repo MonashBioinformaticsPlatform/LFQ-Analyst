@@ -90,7 +90,7 @@ ui <- shinyUI(
                      ),
             tabPanel(title = "Volcano plot",
                      fluidRow(
-                       box(uiOutput("volcano_cntrst"), width = 6),
+                       box(uiOutput("volcano_cntrst"), width = 5),
                        box(numericInput("fontsize",
                                         "Font size",
                                         min = 0, max = 8, value = 4),
@@ -101,7 +101,11 @@ ui <- shinyUI(
                            checkboxInput("p_adj",
                                          "Adjusted p values",
                                          value = FALSE),
-                           width = 3)
+                           width = 4),
+                       box(
+                         textOutput("select_info"),
+                         width = 12
+                         )
                      ),
                      fluidRow(
                        plotOutput("volcano", height = 600),
