@@ -159,16 +159,50 @@ server <- function(input, output) {
       trimws(temp)
    })
    
-   volcano_input <- reactive({
-     if(!is.null(input$volcano_cntrst)) {
-       plot_volcano(dep(),
+   
+    volcano_input <- reactive({
+      if(!is.null(input$volcano_cntrst)) {
+                    plot_volcano(dep(),
                     input$volcano_cntrst,
                     input$fontsize,
                     input$check_names,
                     input$p_adj)
-     }
-   })
-   
+    
+      }
+    })
+    
+    
+    volcano_input_selected<-reactive({
+      if(!is.null(input$volcano_cntrst)){
+        proteins_selected<-data_result()[c(input$contents_rows_selected),] ## get all rows selected
+       ## convert contrast to x and padj to y
+       diff_proteins <- grep(paste(input$volcano_cntrst, "_ratio", sep = ""),
+                    colnames(proteins_selected))
+
+       padj_proteins <- grep(paste(input$volcano_cntrst, "_p.val", sep = ""),
+                                     colnames(proteins_selected))
+
+       df_protein <- data.frame(x = proteins_selected[, diff_proteins],
+                        y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,
+                        name = proteins_selected$name)
+
+       p<-plot_volcano(dep(),
+                    input$volcano_cntrst,
+                    input$fontsize,
+                    input$check_names,
+                    input$p_adj)
+       
+       p + geom_point(data = df_protein, color = "maroon", size= 3) +
+         ggrepel::geom_text_repel(data = df_protein,
+                                  aes(label = name),
+                                  size = 4,
+                                  box.padding = unit(0.1, 'lines'),
+                                  point.padding = unit(0.1, 'lines'),
+                                  segment.size = 0.5)## use the dataframe to plot points
+
+       }
+    })
+    # 
    ## QC Inputs
    norm_input <- reactive({
      plot_normalization(processed_data(),
@@ -316,7 +350,8 @@ server <- function(input, output) {
     })
   #str(lfq_results)
     data_result<-reactive({
-      get_results(dep())
+      get_results_proteins(dep())
+      #get_results(dep())
     })
   #### Data table
   output$contents <- DT::renderDataTable({
@@ -344,9 +379,16 @@ server <- function(input, output) {
   output$heatmap<-renderPlot({
    heatmap_input()
   })
+ 
   output$volcano <- renderPlot({
+    if(is.null(input$contents_rows_selected)){
     volcano_input()
+    }
+    else if(!is.null(input$volcano_cntrst)){
+      volcano_input_selected()
+      } # else close
   })
+ 
  
   ### QC Outputs
   output$sample_corr <-renderPlot({
@@ -428,6 +470,17 @@ server <- function(input, output) {
                   col.names = TRUE,
                   row.names = FALSE,
                   sep =",") }
+  )
+  
+  output$downloadVolcano <- downloadHandler(
+    filename = function() {
+      paste0("Volcano_", input$volcano_cntrst, ".pdf")
+    },
+    content = function(file) {
+      pdf(file)
+      print(volcano_input_selected())
+      dev.off()
+    }
   )
   
   # output$downloadZip1<-downloadHandler(

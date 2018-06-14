@@ -104,7 +104,8 @@ ui <- shinyUI(
                            width = 3)
                      ),
                      fluidRow(
-                       plotOutput("volcano", height = 600)
+                       plotOutput("volcano", height = 600),
+                       downloadButton('downloadVolcano', 'Save Highlighted Plot')
                      ))
           )
         )

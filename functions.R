@@ -253,7 +253,7 @@ get_cluster_heatmap <- function(dep, type = c("contrast", "centered"),
     df <- rowData(filtered) %>%
       data.frame() %>%
       column_to_rownames(var = "name") %>%
-      select(ends_with("_diff"))
+      select(dplyr::ends_with("_diff"))
     colnames(df) <-
       gsub("_diff", "", colnames(df)) %>%
       gsub("_vs_", " vs ", .)
@@ -586,5 +586,69 @@ test_limma <- function(se, type = c("control", "all", "manual"),
                        by.x = "name", by.y = "rowname", all.x = TRUE)
   return(se)
   #return(table)
+}
+
+get_results_proteins <- function(dep) {
+  # Show error if inputs are not the required classes
+  assertthat::assert_that(inherits(dep, "SummarizedExperiment"))
+  
+  row_data <- rowData(dep)
+  # Show error if inputs do not contain required columns
+  if(any(!c("name", "ID") %in% colnames(row_data))) {
+    stop("'name' and/or 'ID' columns are not present in '",
+         deparse(substitute(dep)),
+         "'\nRun make_unique() and make_se() to obtain the required columns",
+         call. = FALSE)
+  }
+  if(length(grep("_p.adj|_diff", colnames(row_data))) < 1) {
+    stop("'[contrast]_diff' and/or '[contrast]_p.adj' columns are not present in '",
+         deparse(substitute(dep)),
+         "'\nRun test_diff() to obtain the required columns",
+         call. = FALSE)
+  }
+  
+  # Obtain average protein-centered enrichment values per condition
+  row_data$mean <- rowMeans(assay(dep), na.rm = TRUE)
+  centered <- assay(dep) - row_data$mean
+  centered <- data.frame(centered) %>%
+    tibble::rownames_to_column() %>%
+    tidyr::gather(ID, val, -rowname) %>%
+    dplyr::left_join(., data.frame(colData(dep)), by = "ID")
+  centered <- dplyr::group_by(centered, rowname, condition) %>%
+    dplyr::summarize(val = mean(val, na.rm = TRUE)) %>%
+    dplyr::mutate(val = signif(val, digits = 3)) %>%
+    tidyr::spread(condition, val)
+  colnames(centered)[2:ncol(centered)] <-
+    paste(colnames(centered)[2:ncol(centered)], "_centered", sep = "")
+  
+  # Obtain average enrichments of conditions versus the control condition
+  ratio <- as.data.frame(row_data) %>%
+    tibble::column_to_rownames("name") %>%
+    dplyr::select(dplyr::ends_with("diff")) %>%
+    signif(., digits = 3) %>%
+    tibble::rownames_to_column()
+  colnames(ratio)[2:ncol(ratio)] <-
+    gsub("_diff", "_ratio", colnames(ratio)[2:ncol(ratio)])
+ # df <- left_join(ratio, centered, by = "rowname")
+  
+  # Select the adjusted p-values and significance columns
+  pval <- as.data.frame(row_data) %>%
+    tibble::column_to_rownames("name") %>%
+    dplyr::select(dplyr::ends_with("p.val"),
+                  dplyr::ends_with("p.adj"),
+                  dplyr::ends_with("significant")) %>%
+   tibble::rownames_to_column()
+  pval[, grep("p.adj", colnames(pval))] <-
+    pval[, grep("p.adj", colnames(pval))] %>%
+    signif(digits = 3)
+  
+  # Join into a results table
+  ids <- as.data.frame(row_data) %>% dplyr::select(name, ID)
+  table<-dplyr::left_join(ids,ratio, by=c("name"="rowname"))
+  table <- dplyr::left_join(table, pval, by = c("name" = "rowname"))
+  table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
+    dplyr::arrange(desc(significant))
+  # table$Gene_name<-table$name
+  return(table)
 }
 
