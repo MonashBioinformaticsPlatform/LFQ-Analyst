@@ -133,7 +133,7 @@ print(params$correlation_input())
 #### Heatmap
   A plot representing an overview of all significant proteins (rows) in all samples (columns).
   
-```{r heatmap_2, echo=FALSE, warning=FALSE, results='hide'}
+```{r heatmap_2, echo=FALSE, warning=FALSE, results='hide', fig.keep='all'}
 print(params$heatmap_input())
 ```
 

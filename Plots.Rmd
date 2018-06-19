@@ -117,7 +117,7 @@ print(params$imputation_input())
   A plot representing an overview of expression of all significant(differencially expressed) proteins (rows) in all samples (columns).
 
  
-```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide'}
+```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep='all'}
 print(params$heatmap_input())
 ```
 
