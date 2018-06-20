@@ -14,8 +14,31 @@ server <- function(input, output) {
   #   })
   
   ### Use of event reactive to use action button
-  
-  
+  ## Show alert
+  # if(is.null(input$analyze)){
+  #   shinyjs::show("downloadbox")
+  # }
+  # else{
+  #   shinyjs::hide("downloadbox")
+  # }
+   observeEvent(input$analyze,{
+    shinyjs::show("downloadbox")
+  })
+   
+   observeEvent(input$analyze,{
+     shinyjs::show("results_tab")
+   })
+   
+   observeEvent(input$analyze,{
+     shinyjs::show("qc_tab")
+   })
+  observeEvent(input$analyze,{
+    showModal(modalDialog(
+      title = "Data analysis is in Progress",
+      "Your data analysis is running, please wait until you see the table",
+      easyClose = TRUE
+    ))
+  })
   
   
   maxquant_data<-eventReactive(input$analyze,{
@@ -54,26 +77,36 @@ server <- function(input, output) {
    })
    
    output$downloadTable <- renderUI({
+     if(!is.null(dep())){
      selectizeInput("dataset",
                     "Choose a dataset to save" ,
                     c("Results","Original_matrix",
                       "Imputed_matrix",
                       "Full_dataset"))
-   })
+     }
+    })
    
    output$downloadButton <- renderUI({
+     if(!is.null(dep())){
      downloadButton('downloadData', 'Save')
+     }
    })
    
-   # output$downloadZip <- renderUI({
-   #   downloadButton('downloadZip1', 'Download result plots')
-   # })
+   output$downloadZip <- renderUI({
+     if(!is.null(dep())){
+     downloadButton('downloadZip1', 'Download result plots')
+     }
+   })
     output$downloadreport <- renderUI({
+      if(!is.null(dep())){
      downloadButton('downloadReport', 'Download report')
+      }
     })
    
     output$downloadPlots <- renderUI({
+      if(!is.null(dep())){
       downloadButton('downloadPlots1', 'Download Plots')
+      }
     })
   
 ### Reactive components
@@ -354,9 +387,9 @@ server <- function(input, output) {
       #get_results(dep())
     })
     
-    output$select_info<-renderText({
-      "Select protein from LFQ Results Table to show on plot"
-    })
+    # output$select_info<-renderText({
+    #   "Select protein from LFQ Results Table to show on plot"
+    # })
   #### Data table
   output$contents <- DT::renderDataTable({
     # req(input$file1)
@@ -487,41 +520,41 @@ server <- function(input, output) {
     }
   )
   
-  # output$downloadZip1<-downloadHandler(
-  #   filename = function() {
-  #     "Result_plots.pdf"
-  #   },
-  #   content = function(file) {
-  #     pdf(file)
-  #     print( pca_input() )
-  #     print( heatmap_input() )
-  #    # print( volcano_input() )
-  # 
-  #     # for(i in input$volcano_cntrst){
-  #     #   print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
-  #     # }
-  #    # print( age_plot() )
-  #     dev.off()
-  #   }
-    # filename = function() {
-    #   paste("output", "zip", sep=".")
-    # },
-    # content= function(fname){
-    #   fs<-c()
-    #   tmpdir<-tempdir()
-    #   setwd(tempdir())
-    #   for (i in c(pca_input,heatmap_input)){
-    #     path<-paste0(deparse(substitute(i())),".pdf")
-    #     fs<- c(fs,path)
-    #     pdf(paste0(deparse(substitute(i())),".pdf",sep=""))
-    #     print(i())
-    #     dev.off()
-    #   }
-    #   print(fs)
-    #   zip(zipfile = fname, files = fs)
-    # },
-    # contentType = "applications/zip"
- # )
+ output$downloadZip1<-downloadHandler(
+   # filename = function() {
+   #   "Result_plots.pdf"
+   # },
+   # content = function(file) {
+   #   pdf(file)
+   #   print( pca_input() )
+   #   print( heatmap_input() )
+    # print( volcano_input() )
+
+     # for(i in input$volcano_cntrst){
+     #   print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
+     # }
+    # print( age_plot() )
+   #   dev.off()
+   # }
+ filename = function() {
+   paste("output", "zip", sep=".")
+ },
+ content= function(fname){
+   fs<-c()
+   tmpdir<-tempdir()
+   setwd(tempdir())
+   for (i in c("pca_input","heatmap_input")){
+     path<-paste0(i,".png",sep="")
+     fs<- c(fs,path)
+     png(paste0(i,".png",sep=""))
+     print(i())
+     dev.off()
+   }
+   print(fs)
+   zip(zipfile = fname, files = fs)
+ },
+ contentType = "applications/zip"
+ )
   
 #####===== Download Report =====#####
   output$downloadReport <- downloadHandler(

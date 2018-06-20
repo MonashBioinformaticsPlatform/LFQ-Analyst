@@ -1,10 +1,12 @@
 # Define UI for data upload app ----
 ui <- shinyUI(
+  #theme="bootstrap.css",
   dashboardPage(
     dashboardHeader(title = "LFQ Analysis"),
+                   # disable = TRUE),# Disable title bar
     dashboardSidebar(
       sidebarMenu(
-        menuItem("Input Files", selected = TRUE,
+        menuItem("Input Files", icon=icon("file"),selected = TRUE,
                  fileInput('file1',
                            'Upload MaxQuant ProteinGroups.txt',
                            accept=c('text/csv',
@@ -48,35 +50,58 @@ ui <- shinyUI(
         actionButton("analyze", "Start Analysis"),
         tags$hr()
       )
-    ),
+    ), # sidebar close
     dashboardBody(
+      useShinyjs(),
+      # tags$head(
+      #   tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")
+      # ), ## Adding custom css
      #  Add logo to the body
 #      tags$img(src="mbpf_logo.jpg",height=50, align="right"),
-      infoBoxOutput("significantBox",width = 7),
-      uiOutput("downloadTable"),
-      uiOutput("downloadButton"),
-      tags$br(),
-      uiOutput("downloadreport"),
-      tags$br(),
-     uiOutput('downloadPlots'),
+      
+      # fluidRow(
+          shinyjs::hidden(div(id="downloadbox",
+                          box(
+                          uiOutput("downloadTable"),
+                          uiOutput("downloadButton"), 
+                          width = 4))),
+        infoBoxOutput("significantBox",width = 8),
+      #),
+      fluidRow(
+      
+     # tags$br(),
+     column(2,uiOutput("downloadreport")),
+    #  tags$br(),
+    column(2,uiOutput('downloadPlots')),
+    column(2, uiOutput('downloadZip'))
+      ),
      # div(style="display:inline-block;",downloadButton("downloadButton", 'Save Results')),
      # div(style="display:inline-block; margin-left: 25px;",downloadButton("downloadreport", 'Download Report')),
      # div(style="display:inline-block; margin-left: 25px;",downloadButton('downloadPlots', 'Download Plots')),
     tags$br(),
      tags$br(),
       fluidRow(
+        shinyjs::hidden(div(id="results_tab",
         box(
           title = "LFQ Results Table",
         DT::dataTableOutput("contents"),
-        width = 6
+        width = 6,
+        status = "success",
+       #color=""
+        solidHeader = TRUE
         ),
-        column(
+       # column(
+       box(
           width= 6,
+          collapsible = TRUE,
+          #status="primary",
+          #solidHeader=TRUE,
           tabBox(
             title = "Result Plots",
             width = 12,
+           # color="olive",
             tabPanel(title = "PCA Plot",
-                     plotOutput("pca_plot")),
+                     plotOutput("pca_plot"), height=600),
             tabPanel(title= "Heatmap",
                      fluidRow(
                      plotOutput("heatmap", height = 600)
@@ -102,22 +127,24 @@ ui <- shinyUI(
                                          "Adjusted p values",
                                          value = FALSE),
                            width = 4),
-                       box(
-                         textOutput("select_info"),
-                         width = 12
-                         )
+                       tags$p("Select protein from LFQ Results Table to show on plot")
+                       # box(
+                       #   textOutput("select_info"),
+                       #   width = 12
+                       #   )
                      ),
                      fluidRow(
                        plotOutput("volcano", height = 600),
                        downloadButton('downloadVolcano', 'Save Highlighted Plot')
                      ))
           )
-        )
-      ),
+        ) # box or column end
+      ))),
       ## QC Box
       fluidRow(
+        shinyjs::hidden(div(id="qc_tab",
         column(
-          width=7,
+          width=6,
         tabBox(title = "QC Plots", width = 12,
                                  tabPanel(title="Sample Correlation",
                                            plotOutput("sample_corr", height = 600)
@@ -155,12 +182,8 @@ ui <- shinyUI(
                                  )
                            )
       )
-      )
+      ))) # fluidrow qc close
     )
-  
-
-  
-
 
    )
 )
