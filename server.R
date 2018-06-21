@@ -211,9 +211,14 @@ server <- function(input, output) {
        ## convert contrast to x and padj to y
        diff_proteins <- grep(paste(input$volcano_cntrst, "_ratio", sep = ""),
                     colnames(proteins_selected))
-
+        if(input$p_adj=="FALSE"){
        padj_proteins <- grep(paste(input$volcano_cntrst, "_p.val", sep = ""),
                                      colnames(proteins_selected))
+        }
+       else{
+         padj_proteins <- grep(paste(input$volcano_cntrst, "_p.adj", sep = ""),
+                               colnames(proteins_selected))
+       }
 
        df_protein <- data.frame(x = proteins_selected[, diff_proteins],
                         y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,

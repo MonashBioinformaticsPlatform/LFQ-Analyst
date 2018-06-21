@@ -122,7 +122,7 @@ ui <- shinyUI(
                            width = 3),
                        box(checkboxInput("check_names",
                                          "Display names",
-                                         value = TRUE),
+                                         value = FALSE),
                            checkboxInput("p_adj",
                                          "Adjusted p values",
                                          value = FALSE),
