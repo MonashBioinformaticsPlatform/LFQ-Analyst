@@ -66,5 +66,4 @@ at least 2 out of three replicates)
 
 
 ### In Progress
-- Small symbols for PCA
 - Progress bar or spinner
