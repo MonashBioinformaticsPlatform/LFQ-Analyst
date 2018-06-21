@@ -61,20 +61,33 @@ ui <- shinyUI(
       
       # fluidRow(
           shinyjs::hidden(div(id="downloadbox",
+        fluidRow(
                           box(
-                          uiOutput("downloadTable"),
-                          uiOutput("downloadButton"), 
-                          width = 4))),
-        infoBoxOutput("significantBox",width = 8),
+                          column(6,uiOutput("downloadTable"),offset = 1),
+                          column(4,uiOutput("downloadButton")), # make the button on same line
+                          width = 4),#)),
+                          
+        infoBoxOutput("significantBox",width = 4),
       #),
-      fluidRow(
-      
-     # tags$br(),
-     column(2,uiOutput("downloadreport")),
-    #  tags$br(),
-    column(2,uiOutput('downloadPlots')),
-    column(2, uiOutput('downloadZip'))
-      ),
+      box(
+        column(5,uiOutput("downloadreport"), offset = 1),
+        #tags$br(),
+       column(5,uiOutput('downloadPlots')),
+        width = 4
+      )
+          ))), #close div and first row 
+
+    tags$style(type='text/css', "#downloadButton { width:100%; margin-top: 25px;}"), # align save button
+    tags$style(type='text/css', "#downloadreport { width:100%; margin-top: 25px; margin-bottom: 25px;}"),
+    tags$style(type='text/css', "#downloadPlots { width:100%; margin-top: 25px;}"),
+    #   fluidRow(
+    #   
+    #  # tags$br(),
+    #  column(2,uiOutput("downloadreport")),
+    # #  tags$br(),
+    # column(2,uiOutput('downloadPlots')),
+    # column(2, uiOutput('downloadZip'))
+    #   ),
      # div(style="display:inline-block;",downloadButton("downloadButton", 'Save Results')),
      # div(style="display:inline-block; margin-left: 25px;",downloadButton("downloadreport", 'Download Report')),
      # div(style="display:inline-block; margin-left: 25px;",downloadButton('downloadPlots', 'Download Plots')),

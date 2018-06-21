@@ -99,7 +99,7 @@ server <- function(input, output) {
    })
     output$downloadreport <- renderUI({
       if(!is.null(dep())){
-     downloadButton('downloadReport', 'Download report')
+     downloadButton('downloadReport', 'Download Report')
       }
     })
    
