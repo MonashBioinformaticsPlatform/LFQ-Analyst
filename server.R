@@ -1,29 +1,11 @@
 #Define server logic to read selected file ----
 server <- function(input, output) {
   options(shiny.maxRequestSize=100*1024^2)  ## Set maximum upload size to 100MB
-  ## Read input files in R
-  ## NOTE: have to use reactive framework, otherwise throws out error
-  ##
-  # maxquant_data<-reactive({
-  #   inFile <- input$file1
-  #   if (is.null(inFile))
-  #     return(NULL)
-  #   read.table(inFile$datapath,
-  #              header=TRUE,
-  #              sep="\t")
-  #   })
-  
-  ### Use of event reactive to use action button
-  ## Show alert
-  # if(is.null(input$analyze)){
-  #   shinyjs::show("downloadbox")
-  # }
-  # else{
-  #   shinyjs::hide("downloadbox")
-  # }
+ 
+#  Show elements on clicking Start analysis button
    observeEvent(input$analyze,{
     shinyjs::show("downloadbox")
-  })
+    })
    
    observeEvent(input$analyze,{
      shinyjs::show("results_tab")
@@ -32,37 +14,16 @@ server <- function(input, output) {
    observeEvent(input$analyze,{
      shinyjs::show("qc_tab")
    })
-  observeEvent(input$analyze,{
-    showModal(modalDialog(
-      title = "Data analysis is in Progress",
-      "Your data analysis is running, please wait until you see the table",
-      easyClose = TRUE
-    ))
-  })
-  
-  
-  maxquant_data<-eventReactive(input$analyze,{
-    inFile<-input$file1
-    if(is.null(inFile))
-      retun(NULL)
-    read.table(inFile$datapath,
-               header = TRUE,
-               fill= TRUE, # to fill any missing data
-               sep = "\t"
-                )
-  })
-    
-   exp_design<-eventReactive(input$analyze,{
-     inFile<-input$file2
-     if (is.null(inFile))
-       return(NULL)
-    temp_df<-read.table(inFile$datapath,
-               header = TRUE,
-                sep="\t",
-               stringsAsFactors = FALSE)
-    temp_df$label<-as.character(temp_df$label)
-    return(temp_df)
-    })
+ 
+   ## Shinyalert
+   observeEvent(input$analyze,{
+     shinyalert("In Progress!", "Data analysis has started, wait until table and plots
+                appear in the background", type="info",
+                closeOnClickOutside = TRUE,
+                closeOnEsc = TRUE)
+   })
+   
+ 
    
    ####======= Render Functions
    
@@ -108,6 +69,32 @@ server <- function(input, output) {
       downloadButton('downloadPlots1', 'Download Plots')
       }
     })
+    
+    ## Read input files on shiny server
+    ## NOTE: have to use reactive framework, otherwise throws out error
+    maxquant_data<-eventReactive(input$analyze,{
+      inFile<-input$file1
+      if(is.null(inFile))
+        retun(NULL)
+      read.table(inFile$datapath,
+                 header = TRUE,
+                 fill= TRUE, # to fill any missing data
+                 sep = "\t"
+      )
+    })
+    
+    exp_design<-eventReactive(input$analyze,{
+      inFile<-input$file2
+      if (is.null(inFile))
+        return(NULL)
+      temp_df<-read.table(inFile$datapath,
+                          header = TRUE,
+                          sep="\t",
+                          stringsAsFactors = FALSE)
+      temp_df$label<-as.character(temp_df$label)
+      return(temp_df)
+    })    
+    
   
 ### Reactive components
    processed_data<- reactive({
@@ -193,6 +180,28 @@ server <- function(input, output) {
    })
    
    
+   ## Results plot inputs
+   
+   ## PCA Plot
+   pca_input<-eventReactive(input$analyze,{
+     if (num_total()<=500){
+       DEP::plot_pca(dep(), n=num_total(), point_size = 4)
+     }
+     else{
+       DEP::plot_pca(dep(), point_size = 4)
+     }
+     
+   })
+   
+   ### Heatmap Differentially expressed proteins
+   heatmap_input<-eventReactive(input$analyze,{
+     get_cluster_heatmap(dep(),
+                         type="centered",kmeans = TRUE,
+                         k=6, col_limit = 6,
+                         indicate = c("condition", "replicate"))
+   })
+   
+   ### Volcano Plot
     volcano_input <- reactive({
       if(!is.null(input$volcano_cntrst)) {
                     plot_volcano(dep(),
@@ -240,7 +249,7 @@ server <- function(input, output) {
 
        }
     })
-    # 
+     
    ## QC Inputs
    norm_input <- reactive({
      plot_normalization(processed_data(),
@@ -305,6 +314,7 @@ server <- function(input, output) {
                                   "%) of proteins differentially expressed across all conditions"),
                            icon = icon("star-half-o", lib = "glyphicon"),
                            color = "orange",
+                           fill = TRUE,
                            width = 4)
      }
      if(frac == 0) {
@@ -315,6 +325,7 @@ server <- function(input, output) {
                            "No proteins differentially expressed across all conditions",
                            icon = icon("star-o", lib = "glyphicon"),
                            color = "red",
+                           fill = TRUE,
                            width = 4)
      }
      if(frac > 0 & frac <= 0.2) {
@@ -326,95 +337,28 @@ server <- function(input, output) {
                                     "% of proteins differentially expressed across all conditions"),
                              icon = icon("star", lib = "glyphicon"),
                              color = "green",
+                            # fill = TRUE,
                              width = 4)
      }
      info_box
    })
-   
-  #  lfq<-new.env()
-  # # Result Table
-  #    dep<-eventReactive(input$analyze,{
-  #    LFQ_wrapper(maxquant_data(),exp_design())
-  #   #attach("data/lfq_results.RData")
-  #  })
-  # load("data/lfq_results.RData", envir = lfq)
-  #results<-reactiveFileReader(1000, "data/lfq_results.RData",load)
- # results<-reactiveFileReader(1000, "data/lfq_results.RData")
-  # 
-  # dep<-reactive({
-  #   results[['dep']]
-  # })
-   ## Load RDATA file
-   
-   
-   # data_result<-eventReactive(input$analyze,{
-   #   #results_lfq()$data_result
-   #   lfq.env()$data_result
-   # })
-   ## "()" is important
-   
-    # data_filter<-reactive({
-    #   results_lfq()$data_filter
-    # })
-   
-    # dep<-reactive({
-    #   results_lfq()$dep
-    # })
-    # typeof(dep)
-   
-   
-   # #### Frequency Plot
-   # protein_frequency_input<-eventReactive(input$analyze,{
-   #   plot_numbers(processed_data())
-   # })
 
-   ## PCA Plot
-    pca_input<-eventReactive(input$analyze,{
-      if (num_total()<=500){
-        DEP::plot_pca(dep(), n=num_total(), point_size = 4)
-      }
-      else{
-        DEP::plot_pca(dep(), point_size = 4)
-      }
-      
-   })
-    
-    ### Heatmap Differentially expressed proteins
-    heatmap_input<-eventReactive(input$analyze,{
-      get_cluster_heatmap(dep(),
-                        type="centered",kmeans = TRUE,
-                        k=6, col_limit = 6,
-                        indicate = c("condition", "replicate"))
-    })
-  #str(lfq_results)
+  ##### Get results dataframe from Summarizedexperiment object
     data_result<-reactive({
       get_results_proteins(dep())
       #get_results(dep())
     })
     
-    # output$select_info<-renderText({
-    #   "Select protein from LFQ Results Table to show on plot"
-    # })
+    
   #### Data table
   output$contents <- DT::renderDataTable({
-    # req(input$file1)
-    
-    # df <- read.table(input$file1$datapath,
-    #                header = TRUE,
-    #                sep = "\t"
-    #                )
-   # df<- imputed_table()
     df<- data_result()
     return(df)
   },
   options = list(scrollX = TRUE)
   )
   
-  ## Render Plots
-  #
-  # output$protein_frequency<-renderPlot({
-  #   protein_frequency_input()
-  #  })
+  ## Render Result Plots
   output$pca_plot<-renderPlot({
     pca_input()
   })
@@ -597,10 +541,8 @@ server <- function(input, output) {
                      dep = dep
                      )
       
-      # Knit the document, passing in the `params` list, and eval it in a
-      # child of the global environment (this isolates the code in the document
-      # from the code in this app).
-      rmarkdown::render(tempReport, output_file = file,
+      # Knit the document, passing in the `params` list
+       rmarkdown::render(tempReport, output_file = file,
                         params = params,
                         envir = new.env(parent = globalenv())
       )
@@ -636,9 +578,7 @@ server <- function(input, output) {
                      dep = dep
       )
       
-      # Knit the document, passing in the `params` list, and eval it in a
-      # child of the global environment (this isolates the code in the document
-      # from the code in this app).
+      # Knit the document, passing in the `params` list
       rmarkdown::render(tempReport, output_file = file,
                         params = params,
                         envir = new.env(parent = globalenv())

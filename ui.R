@@ -1,10 +1,10 @@
 # Define UI for data upload app ----
 ui <- shinyUI(
-  #theme="bootstrap.css",
   dashboardPage(
     dashboardHeader(title = "LFQ Analysis"),
                    # disable = TRUE),# Disable title bar
     dashboardSidebar(
+      useShinyalert(),
       sidebarMenu(
         menuItem("Input Files", icon=icon("file"),selected = TRUE,
                  fileInput('file1',
@@ -52,47 +52,35 @@ ui <- shinyUI(
       )
     ), # sidebar close
     dashboardBody(
-      useShinyjs(),
-      # tags$head(
-      #   tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")
-      # ), ## Adding custom css
-     #  Add logo to the body
-#      tags$img(src="mbpf_logo.jpg",height=50, align="right"),
+      useShinyjs(), #imp to use shinyjs functions
       
-      # fluidRow(
-          shinyjs::hidden(div(id="downloadbox",
+     #  Add logo to the body
+    #  tags$img(src="mbpf_logo.jpg",height=50, align="right"),
+        shinyjs::hidden(div(id="downloadbox",
         fluidRow(
                           box(
-                          column(6,uiOutput("downloadTable"),offset = 1),
+                          column(6,uiOutput("downloadTable"),offset = 1), 
                           column(4,uiOutput("downloadButton")), # make the button on same line
-                          width = 4),#)),
+                          width = 4),
                           
         infoBoxOutput("significantBox",width = 4),
-      #),
       box(
-        column(5,uiOutput("downloadreport"), offset = 1),
+        column(5,uiOutput("downloadreport"), offset = 1), # offset for dist between buttons
         #tags$br(),
        column(5,uiOutput('downloadPlots')),
         width = 4
       )
           ))), #close div and first row 
-
-    tags$style(type='text/css', "#downloadButton { width:100%; margin-top: 25px;}"), # align save button
+    
+    # align save button
+    tags$style(type='text/css', "#downloadButton { width:100%; margin-top: 25px;}"), 
     tags$style(type='text/css', "#downloadreport { width:100%; margin-top: 25px; margin-bottom: 25px;}"),
     tags$style(type='text/css', "#downloadPlots { width:100%; margin-top: 25px;}"),
-    #   fluidRow(
-    #   
-    #  # tags$br(),
-    #  column(2,uiOutput("downloadreport")),
-    # #  tags$br(),
-    # column(2,uiOutput('downloadPlots')),
-    # column(2, uiOutput('downloadZip'))
-    #   ),
-     # div(style="display:inline-block;",downloadButton("downloadButton", 'Save Results')),
-     # div(style="display:inline-block; margin-left: 25px;",downloadButton("downloadreport", 'Download Report')),
-     # div(style="display:inline-block; margin-left: 25px;",downloadButton('downloadPlots', 'Download Plots')),
-    tags$br(),
-     tags$br(),
+    
+      tags$br(), # Blank lines
+      tags$br(),
+    
+  ## Data table and result plots box
       fluidRow(
         shinyjs::hidden(div(id="results_tab",
         box(
@@ -112,7 +100,6 @@ ui <- shinyUI(
           tabBox(
             title = "Result Plots",
             width = 12,
-           # color="olive",
             tabPanel(title = "PCA Plot",
                      plotOutput("pca_plot"), height=600),
             tabPanel(title= "Heatmap",
@@ -140,11 +127,7 @@ ui <- shinyUI(
                                          "Adjusted p values",
                                          value = FALSE),
                            width = 4),
-                       tags$p("Select protein from LFQ Results Table to show on plot")
-                       # box(
-                       #   textOutput("select_info"),
-                       #   width = 12
-                       #   )
+                       tags$p("Select protein from LFQ Results Table to show on plot") #Add text line
                      ),
                      fluidRow(
                        plotOutput("volcano", height = 600),
@@ -153,6 +136,7 @@ ui <- shinyUI(
           )
         ) # box or column end
       ))),
+  
       ## QC Box
       fluidRow(
         shinyjs::hidden(div(id="qc_tab",
@@ -167,36 +151,29 @@ ui <- shinyUI(
                                            ),
                                   tabPanel(title = "Protein Numbers",
                                            plotOutput("numbers", height = 600)
-                                        #   downloadButton('downloadNumbers', 'Save')
                                   ),
                                   
                                   tabPanel(title = "Sample coverage",
                                            plotOutput("coverage", height = 600)
-                                          # downloadButton('downloadCoverage', 'Save')
                                   ),
                                   tabPanel(title = "Normalization",
                                            plotOutput("norm", height = 600)
-                                      #     downloadButton('downloadNorm', 'Save')
                                   ),
                                   tabPanel(title = "Missing values - Quant",
                                            plotOutput("detect", height = 600)
-                                       #    downloadButton('downloadDetect', 'Save')
                                   ),
                                   tabPanel(title = "Missing values - Heatmap",
                                            plotOutput("missval", height = 600)
-                                      #     downloadButton('downloadMissval', 'Save')
                                   ),
                                   tabPanel(title = "Imputation",
                                            plotOutput("imputation", height = 600)
-                                      #     downloadButton('downloadImputation', 'Save')
                                   ),
                                  tabPanel(title = "p-value Histogram",
                                           plotOutput("p_hist", height = 600)
                                  )
-                           )
+                           ) # Tab box close
       )
       ))) # fluidrow qc close
-    )
-
-   )
-)
+    ) # Dasbboardbody close
+  ) #Dashboard page close
+) #Shiny U Close
