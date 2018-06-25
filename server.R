@@ -20,7 +20,8 @@ server <- function(input, output) {
      shinyalert("In Progress!", "Data analysis has started, wait until table and plots
                 appear in the background", type="info",
                 closeOnClickOutside = TRUE,
-                closeOnEsc = TRUE)
+                closeOnEsc = TRUE,
+                timer = 30000) # timer 500ms
    })
    
  

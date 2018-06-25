@@ -641,6 +641,9 @@ get_results_proteins <- function(dep) {
   pval[, grep("p.adj", colnames(pval))] <-
     pval[, grep("p.adj", colnames(pval))] %>%
     signif(digits = 3)
+  pval[, grep("p.val", colnames(pval))] <-
+    pval[, grep("p.val", colnames(pval))] %>%
+    signif(digits = 3)
   
   # Join into a results table
   ids <- as.data.frame(row_data) %>% dplyr::select(name, ID)
