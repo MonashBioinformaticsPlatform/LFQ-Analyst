@@ -76,7 +76,7 @@ server <- function(input, output) {
     maxquant_data<-eventReactive(input$analyze,{
       inFile<-input$file1
       if(is.null(inFile))
-        retun(NULL)
+        return(NULL)
       read.table(inFile$datapath,
                  header = TRUE,
                  fill= TRUE, # to fill any missing data
