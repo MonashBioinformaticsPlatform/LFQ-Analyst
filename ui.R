@@ -16,12 +16,12 @@ ui <- shinyUI(
                            'Upload Experimental Design Matrix',
                            accept=c('text/csv',
                                     'text/comma-separated-values,text/plain',
-                                    '.csv')),
-                 radioButtons("anno",
-                              "Sample Information",
-                              choices = list("Parse from MaxQuant file" = "columns",
-                                             "Use Experimental Design information" = "expdesign"),
-                              selected = "expdesign")
+                                    '.csv'))#,
+                 # radioButtons("anno",
+                 #              "Sample Information",
+                 #              choices = list("Parse from MaxQuant file" = "columns",
+                 #                             "Use Experimental Design information" = "expdesign"),
+                 #              selected = "expdesign")
         ),
         menuItemOutput("columns"),
         tags$hr(),
@@ -86,6 +86,7 @@ ui <- shinyUI(
         box(
           title = "LFQ Results Table",
         DT::dataTableOutput("contents"),
+        actionButton("clear", "Deselect Rows"),
         width = 6,
         status = "success",
        #color=""

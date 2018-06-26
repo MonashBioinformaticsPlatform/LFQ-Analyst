@@ -359,6 +359,13 @@ server <- function(input, output) {
   options = list(scrollX = TRUE)
   )
   
+  ## Deselect all rows button
+  proxy <- dataTableProxy("contents")
+  
+  observeEvent(input$clear,{
+    proxy %>% selectRows(NULL)
+  })
+  
   ## Render Result Plots
   output$pca_plot<-renderPlot({
     pca_input()
