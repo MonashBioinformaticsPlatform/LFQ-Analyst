@@ -8,6 +8,7 @@ library("shinyjs")
 library("shinyalert")
 library("ComplexHeatmap")
 library("limma")
+library("DT")
 source("functions.R")
 
 
