@@ -25,7 +25,7 @@ ui <- shinyUI(
         ),
         menuItemOutput("columns"),
         tags$hr(),
-        menuItem("Advanced Options",
+        menuItem("Advanced Options",icon = icon("cogs"),
                  numericInput("p", 
                               "Adjusted p-value cutoff",
                               min = 0.0001, max = 0.1, value = 0.05),
@@ -129,11 +129,14 @@ ui <- shinyUI(
                                          value = FALSE),
                            width = 4),
                        tags$p("Select protein from LFQ Results Table to show on plot") #Add text line
-                     ),
+                      ),
+                     
                      fluidRow(
-                       plotOutput("volcano", height = 600),
+                       plotOutput("volcano", height = 600),# click = "protein_click"),
                        downloadButton('downloadVolcano', 'Save Highlighted Plot')
                      ))
+                     #), verbatimTextOutput("protein_info"))
+            
           )
         ) # box or column end
       ))),

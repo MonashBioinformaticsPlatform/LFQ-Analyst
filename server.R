@@ -21,7 +21,7 @@ server <- function(input, output) {
                 appear in the background", type="info",
                 closeOnClickOutside = TRUE,
                 closeOnEsc = TRUE,
-                timer = 30000) # timer 500ms
+                timer = 10000) # timer in miliseconds (10 sec)
    })
    
  
@@ -180,6 +180,13 @@ server <- function(input, output) {
       trimws(temp)
    })
    
+   ## Select point on volcano plot
+   # protein_graph_selected<- reactive({
+   #   protein_row<-nearPoints(data_result(), input$protein_click,
+   #                           maxpoints = 1)
+   #  # as.character(protein_row$name)
+   # })
+   # 
    
    ## Results plot inputs
    
@@ -213,7 +220,7 @@ server <- function(input, output) {
     
       }
     })
-    
+
     
     volcano_input_selected<-reactive({
       if(!is.null(input$volcano_cntrst)){
@@ -366,6 +373,27 @@ server <- function(input, output) {
     proxy %>% selectRows(NULL)
   })
   
+ # observeEvent(input$protein_click,{
+  # output$protein_info<-renderPrint({
+  # #  protein_selected()
+  #   nearPoints(rowData(dep()), input$protein_click, maxpoints = 1)
+  #   
+  # })
+  #})
+  
+  ## Select rows dynamically
+ # observeEvent(input$protein_click,{
+ #    # output$contents <- DT::renderDataTable({
+ #    #   df<- data_result()
+ #    #   return(df)
+ #    # },
+ #    # options = list(search= list(search = protein_selected()))
+ #    # )
+ #   replaceData(proxy, protein_selected())
+ #   # options(DT.options=list(search= list(search=protein_selected())))
+ #  })
+ 
+ 
   ## Render Result Plots
   output$pca_plot<-renderPlot({
     pca_input()
