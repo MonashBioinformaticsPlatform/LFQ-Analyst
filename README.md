@@ -46,8 +46,8 @@ at least 2 out of three replicates)
   4. Full results (with and without imputation coulumns along with fold change and p-values)
 - Result Plots
   1. PCA plot (Could move to QC section)
-  2. Heatmap for differencially expressed proteins
-  3. Volcano plot for each pairwise comparison
+  2. Heatmap for differencially expressed proteins
+  3. Volcano plot for each pairwise comparison
 - QC plots
   1. Sample Correlation (pearson correlation)
   2. Sample Coefficient of variations (CVs)

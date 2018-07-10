@@ -14,6 +14,27 @@ server <- function(input, output) {
    observeEvent(input$analyze,{
      shinyjs::show("qc_tab")
    })
+   
+   # observeEvent(input$analyze,{
+   #   shinyjs::hide("howto")
+   # })
+   
+  # observe({
+  #   if(input$body=="info"){
+      # output$howto<-renderUI({
+      #   box(width=12,
+      #       includeMarkdown("www/Info.Rmd")
+      #   )
+      # })
+      # 
+      # observeEvent(input$analyze,{
+      #   output$howto<-renderUI({NULL})
+      # })
+    #   }
+    # else{
+    #   output$howto<-renderUI({NULL})
+    #     }
+    # })
  
    ## Shinyalert
    observeEvent(input$analyze,{
@@ -373,13 +394,13 @@ server <- function(input, output) {
     proxy %>% selectRows(NULL)
   })
   
- # observeEvent(input$protein_click,{
-  # output$protein_info<-renderPrint({
-  # #  protein_selected()
-  #   nearPoints(rowData(dep()), input$protein_click, maxpoints = 1)
-  #   
-  # })
-  #})
+ observeEvent(input$protein_hover,{
+ output$protein_info<-renderPrint({
+ #  protein_selected()
+  # nearPoints(rowData(dep()), input$protein_click, maxpoints = 1)
+  str(input$protein_hover)
+ })
+  })
   
   ## Select rows dynamically
  # observeEvent(input$protein_click,{

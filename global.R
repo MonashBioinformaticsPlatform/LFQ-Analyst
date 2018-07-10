@@ -9,6 +9,7 @@ library("shinyalert")
 library("ComplexHeatmap")
 library("limma")
 library("DT")
+library("rmdformats")
 source("functions.R")
 
 

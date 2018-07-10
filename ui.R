@@ -6,7 +6,9 @@ ui <- shinyUI(
     dashboardSidebar(
       useShinyalert(),
       sidebarMenu(
-        menuItem("Input Files", icon=icon("file"),selected = TRUE,
+        id="tabs",
+        menuItem("Analysis", icon=icon("flask"), tabName="analysis",
+        menuItem("Input Files", icon=icon("file"), #selected = TRUE,
                  fileInput('file1',
                            'Upload MaxQuant ProteinGroups.txt',
                            accept=c('text/csv',
@@ -25,7 +27,7 @@ ui <- shinyUI(
         ),
         menuItemOutput("columns"),
         tags$hr(),
-        menuItem("Advanced Options",icon = icon("cogs"),
+        menuItem("Advanced Options",icon = icon("cogs"), 
                  numericInput("p", 
                               "Adjusted p-value cutoff",
                               min = 0.0001, max = 0.1, value = 0.05),
@@ -36,9 +38,7 @@ ui <- shinyUI(
                               "Imputation type",
                               choices = c("Perseus-type"="man", MSnbase::imputeMethods())[1:9],
                               selected = "man"),
-                 p(a("Imputation method information",
-                     href = "https://www.rdocumentation.org/packages/MSnbase/versions/1.20.7/topics/impute-methods",
-                     target="_blank")),
+                
                  radioButtons("fdr_correction",
                               "Type of FDR correction",
                               choices =  c("Benjamini Hocheberg"="BH",
@@ -47,7 +47,9 @@ ui <- shinyUI(
         ),
        
         tags$hr(),
-        actionButton("analyze", "Start Analysis"),
+        actionButton("analyze", "Start Analysis")),
+        tags$hr(),
+        menuItem('Information', icon=icon("question"), tabName = "info"),
         tags$hr()
       )
     ), # sidebar close
@@ -56,6 +58,11 @@ ui <- shinyUI(
       
      #  Add logo to the body
     #  tags$img(src="mbpf_logo.jpg",height=50, align="right"),
+    
+    ## Add tabItems
+    id="body",
+    # tabItems(
+    #   tabItem(tabName = "analysis",
         shinyjs::hidden(div(id="downloadbox",
         fluidRow(
                           box(
@@ -132,10 +139,13 @@ ui <- shinyUI(
                       ),
                      
                      fluidRow(
-                       plotOutput("volcano", height = 600),# click = "protein_click"),
+                       plotOutput("volcano", height = 600,
+                                  hover = "protein_hover"),
+                                  #),# click = "protein_click"),
                        downloadButton('downloadVolcano', 'Save Highlighted Plot')
-                     ))
-                     #), verbatimTextOutput("protein_info"))
+                     #)),
+                     ), 
+            verbatimTextOutput("protein_info"))
             
           )
         ) # box or column end
@@ -178,6 +188,19 @@ ui <- shinyUI(
                            ) # Tab box close
       )
       ))) # fluidrow qc close
-    ) # Dasbboardbody close
+  #  )#, analysis tab close
+  # tabItem(tabName = "info",
+  #          fluidPage( div(id="howto",
+  #          # uiOutput("howto")
+  #         includeHTML("www/Info.html")
+  #          ))
+   # )# analysis tab close
+  # tabItems(
+  #  ) Tab items close
+         
+  #)# info tab lose
+  #   )#tabitems close
+  ) # Dasbboardbody close
+    
   ) #Dashboard page close
 ) #Shiny U Close
