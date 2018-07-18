@@ -1,13 +1,15 @@
 ---
 title: "LFQ Analysis"
-#output: html_document
+output: md_document
+keep_md: true
 #runtime: shiny
  # rmdformats::material:
  # highlight: kate
-output:
-   prettydoc::html_pretty:
-   theme: cayman
-   highlight: github
+# output:
+#    theme: cayman
+#    prettydoc::html_pretty:
+#    highlight: github
+#    keep_md: true
 # editor_options: 
 #   chunk_output_type: inline
 ---
@@ -36,6 +38,7 @@ This tool is developed to automate downstream statistical analysis of quantitati
 ## Input
 - MaxQuant **proteinGroups.txt** file that **Must** contain *Gene name* and _Protein IDs_ column.
 - An **experiment design table**:  A tab separated file **only** containing **three** columns namely: "_label_", "_condition_", "_replicate_". The column names are **case sensitive**
+
 
 ```{r exp_design, echo=FALSE, results='asis'}
 exp_design<-read.delim("../data/exp_design_p10_0144.txt",

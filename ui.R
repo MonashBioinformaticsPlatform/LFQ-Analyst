@@ -6,9 +6,9 @@ ui <- shinyUI(
     dashboardSidebar(
       useShinyalert(),
       sidebarMenu(
-        id="tabs",
-        menuItem("Analysis", icon=icon("flask"), tabName="analysis",
-        menuItem("Input Files", icon=icon("file"), #selected = TRUE,
+       # id="tabs",
+        menuItem("Analysis",  tabName="analysis", icon=icon("flask"),
+        menuItem("Input Files", tabName="file", icon=icon("file"), #selected = TRUE,
                  fileInput('file1',
                            'Upload MaxQuant ProteinGroups.txt',
                            accept=c('text/csv',
@@ -27,7 +27,7 @@ ui <- shinyUI(
         ),
         menuItemOutput("columns"),
         tags$hr(),
-        menuItem("Advanced Options",icon = icon("cogs"), 
+        menuItem("Advanced Options",tabName="advanced", icon = icon("cogs"), 
                  numericInput("p", 
                               "Adjusted p-value cutoff",
                               min = 0.0001, max = 0.1, value = 0.05),
@@ -187,14 +187,15 @@ ui <- shinyUI(
                                  )
                            ) # Tab box close
       )
-      ))) # fluidrow qc close
+      ))), # fluidrow qc close
   #  )#, analysis tab close
-  # tabItem(tabName = "info",
-  #          fluidPage( div(id="howto",
-  #          # uiOutput("howto")
-  #         includeHTML("www/Info.html")
-  #          ))
-   # )# analysis tab close
+  tabItem(tabName = "info",
+           fluidRow( 
+           # uiOutput("howto")
+          includeMarkdown("www/Info.Rmd")
+          # ))
+           )
+  )# analysis tab close
   # tabItems(
   #  ) Tab items close
          
