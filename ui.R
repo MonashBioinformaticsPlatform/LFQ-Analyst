@@ -42,7 +42,7 @@ ui <- shinyUI(
                 
                  radioButtons("fdr_correction",
                               "Type of FDR correction",
-                              choices =  c("Benjamini Hocheberg"="BH",
+                              choices =  c("Benjamini Hochberg"="BH",
                                               "t-statistics-based"="fdrtool"
                                               ), selected= "BH")
         ),
@@ -95,6 +95,7 @@ ui <- shinyUI(
           title = "LFQ Results Table",
         DT::dataTableOutput("contents"),
         actionButton("clear", "Deselect Rows"),
+        actionButton("original", "Original Table"),
         width = 6,
         status = "success",
        #color=""
@@ -136,18 +137,23 @@ ui <- shinyUI(
                                          "Adjusted p values",
                                          value = FALSE),
                            width = 4),
-                       tags$p("Select protein from LFQ Results Table to show on plot") #Add text line
+                       tags$p("Select protein from LFQ Results Table to highlight on the plot OR 
+                              drag the mouse on plot to show expression of proteins in Table")
+                       #Add text line
+                      # tags$p("OR"),
+                     #  tags$p("Drag the mouse on plot to show expression of proteins in Table") 
                       ),
                      
                      fluidRow(
                        plotOutput("volcano", height = 600,
-                                  hover = "protein_hover"),
-                                  #),# click = "protein_click"),
+                                 # hover = "protein_hover"),
+                                  #),
+                      # click = "protein_click"),
+                      brush = "protein_brush"),
                        downloadButton('downloadVolcano', 'Save Highlighted Plot')
                      #)),
-                     ), 
-            verbatimTextOutput("protein_info"))
-            
+                     ))#, 
+           # verbatimTextOutput("protein_info"))
           )
         ) # box or column end
       ))),
@@ -193,7 +199,7 @@ ui <- shinyUI(
   tabItem(tabName = "info",
            fluidRow( 
            # uiOutput("howto")
-          includeMarkdown("www/Info.Rmd")
+         # includeMarkdown("www/Info.Rmd")
           # ))
            )
   )# analysis tab close
