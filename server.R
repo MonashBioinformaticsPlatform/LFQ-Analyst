@@ -233,20 +233,12 @@ server <- function(input, output) {
    ### Volcano Plot
     volcano_input <- reactive({
       if(!is.null(input$volcano_cntrst)) {
-                    plot_volcano_new(dep(),
+                    plot_volcano(dep(),
                     input$volcano_cntrst,
                     input$fontsize,
                     input$check_names,
                     input$p_adj)
     
-      }
-    })
-    
-    volcano_df<- reactive({
-      if(!is.null(input$volcano_cntrst)) {
-        get_volcano_df(dep(),
-                         input$volcano_cntrst)
-        
       }
     })
 
@@ -402,43 +394,26 @@ server <- function(input, output) {
     proxy %>% selectRows(NULL)
   })
   
-  observeEvent(input$original,{
-    output$contents <- DT::renderDataTable({
-      df<- data_result()
-      return(df)
-    },
-    options = list(scrollX = TRUE)
-    )
+ observeEvent(input$protein_hover,{
+ output$protein_info<-renderPrint({
+ #  protein_selected()
+  # nearPoints(rowData(dep()), input$protein_click, maxpoints = 1)
+  str(input$protein_hover)
+ })
   })
-
-   protein_name<- reactive({
-     #protein_tmp<-nearPoints(volcano_df(), input$protein_click, maxpoints = 1)
-     protein_tmp<-brushedPoints(volcano_df(), input$protein_brush, 
-                                xvar = "diff", yvar = "p_values")
-     protein_selected<-protein_tmp$name
-     }) 
- #   observeEvent(input$protein_brush,{
- # output$protein_info<-renderPrint({
- # #  protein_selected()
- #   #nearPoints(rowData(dep()), input$protein_click, maxpoints = 1)
- #   brushedPoints(volcano_df(), input$protein_brush, 
- #               xvar = "diff", yvar = "p_values")
- #  # head(volcano_df())
- #   #input$protein_click
- #  # str(input$protein_hover)
- # })
- #  })
   
   ## Select rows dynamically
- observeEvent(input$protein_brush,{
-    output$contents <- DT::renderDataTable({
-      df<- data_result()[data_result()[["name"]] %in% protein_name(), ]
-      return(df)
-    },
-    options = list(scrollX= TRUE)
-    )
-  })
-
+ # observeEvent(input$protein_click,{
+ #    # output$contents <- DT::renderDataTable({
+ #    #   df<- data_result()
+ #    #   return(df)
+ #    # },
+ #    # options = list(search= list(search = protein_selected()))
+ #    # )
+ #   replaceData(proxy, protein_selected())
+ #   # options(DT.options=list(search= list(search=protein_selected())))
+ #  })
+ 
  
   ## Render Result Plots
   output$pca_plot<-renderPlot({
@@ -450,8 +425,8 @@ server <- function(input, output) {
  
   output$volcano <- renderPlot({
     if(is.null(input$contents_rows_selected)){
-   volcano_input()
-     }
+    volcano_input()
+    }
     else if(!is.null(input$volcano_cntrst)){
       volcano_input_selected()
       } # else close
