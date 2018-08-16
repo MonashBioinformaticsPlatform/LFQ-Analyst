@@ -1,6 +1,7 @@
 # Define UI for data upload app ----
 ui <- shinyUI(
   dashboardPage(
+    #tags$head(includeScript("google-analytics.js")),
     dashboardHeader(title = "LFQ Analysis"),
                    # disable = TRUE),# Disable title bar
     dashboardSidebar(

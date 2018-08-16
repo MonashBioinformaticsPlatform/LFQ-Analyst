@@ -214,10 +214,20 @@ server <- function(input, output) {
    ## PCA Plot
    pca_input<-eventReactive(input$analyze,{
      if (num_total()<=500){
+       if(length(levels(as.factor(colData(dep())$replicate))) <= 6){
        DEP::plot_pca(dep(), n=num_total(), point_size = 4)
+       }
+       else{
+         DEP::plot_pca(dep(), n=num_total(), point_size = 4, indicate = "condition") 
+       }
      }
      else{
+       if(length(levels(as.factor(colData(dep())$replicate))) <= 6){
        DEP::plot_pca(dep(), point_size = 4)
+       }
+       else{
+         DEP::plot_pca(dep(), point_size = 4, indicate = "condition")
+       }
      }
      
    })
@@ -343,7 +353,7 @@ server <- function(input, output) {
                                   "%) of proteins differentially expressed across all conditions"),
                            icon = icon("star-half-o", lib = "glyphicon"),
                            color = "orange",
-                           fill = TRUE,
+                          # fill = TRUE,
                            width = 4)
      }
      if(frac == 0) {
@@ -354,7 +364,7 @@ server <- function(input, output) {
                            "No proteins differentially expressed across all conditions",
                            icon = icon("star-o", lib = "glyphicon"),
                            color = "red",
-                           fill = TRUE,
+                        #   fill = TRUE,
                            width = 4)
      }
      if(frac > 0 & frac <= 0.2) {
