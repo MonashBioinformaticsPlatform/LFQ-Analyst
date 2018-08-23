@@ -1,0 +1,4 @@
+site_name: Label Free Proteomics Analysis
+pages:
+- Home: index.md
+- Info: Info.md
