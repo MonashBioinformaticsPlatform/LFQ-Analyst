@@ -113,6 +113,7 @@ server <- function(input, output) {
                           header = TRUE,
                           sep="\t",
                           stringsAsFactors = FALSE)
+      exp_design_test(temp_df)
       temp_df$label<-as.character(temp_df$label)
       return(temp_df)
     })    

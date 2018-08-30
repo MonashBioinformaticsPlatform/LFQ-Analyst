@@ -12,6 +12,7 @@ library("DT")
 library("rmdformats")
 source("functions.R")
 source("volcano_function.R")
+source("tests.R")
 
 
 
