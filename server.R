@@ -644,8 +644,8 @@ server <- function(input, output) {
       # Copy the report file to a temporary directory before processing it, in
       # case we don't have write permissions to the current working dir (which
       # can happen when deployed).
-      tempReport <- file.path(tempdir(), "LFQ_report.Rmd")
-      file.copy("LFQ_report.Rmd", tempReport, overwrite = TRUE)
+      tempReport <- file.path(tempdir(), "markdown/LFQ_report.Rmd")
+      file.copy("markdown/LFQ_report.Rmd", tempReport, overwrite = TRUE)
       
       sig_proteins<-dep() %>%
         .[SummarizedExperiment::rowData(.)$significant, ] %>%
@@ -685,8 +685,8 @@ server <- function(input, output) {
   output$downloadPlots1 <- downloadHandler(
     filename = "Plots.pdf",
     content = function(file) {
-      tempReport <- file.path(tempdir(), "Plots.Rmd")
-      file.copy("Plots.Rmd", tempReport, overwrite = TRUE)
+      tempReport <- file.path(tempdir(), "markdown/Plots.Rmd")
+      file.copy("markdown/Plots.Rmd", tempReport, overwrite = TRUE)
       
       tested_contrasts<- gsub("_p.adj", "", 
                               colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", 
