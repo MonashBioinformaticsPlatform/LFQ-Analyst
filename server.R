@@ -3,15 +3,24 @@ server <- function(input, output) {
   options(shiny.maxRequestSize=100*1024^2)  ## Set maximum upload size to 100MB
  
 #  Show elements on clicking Start analysis button
-   observeEvent(input$analyze,{
+   observeEvent(input$analyze | input$load_data,{ 
+     if(input$analyze==0 && input$load_data==0){
+       return()
+     }
     shinyjs::show("downloadbox")
     })
    
-   observeEvent(input$analyze,{
+   observeEvent(input$analyze | input$load_data,{ 
+       if(input$analyze==0 && input$load_data==0){
+         return()
+       }
      shinyjs::show("results_tab")
    })
    
-   observeEvent(input$analyze,{
+   observeEvent(input$analyze | input$load_data,{ 
+     if(input$analyze==0 && input$load_data==0){
+       return()
+     }
      shinyjs::show("qc_tab")
    })
    
@@ -37,7 +46,11 @@ server <- function(input, output) {
     # })
  
    ## Shinyalert
-   observeEvent(input$analyze,{
+   observeEvent(input$analyze | input$load_data,{ 
+     if(input$analyze==0 && input$load_data==0){
+       return()
+     }
+     
      shinyalert("In Progress!", "Data analysis has started, wait until table and plots
                 appear in the background", type="info",
                 closeOnClickOutside = TRUE,
@@ -117,8 +130,27 @@ server <- function(input, output) {
       temp_df$label<-as.character(temp_df$label)
       return(temp_df)
     })    
+ 
     
-  
+### Load data from Rdata
+  # observeEvent(input$load_data,{
+      # example_data<-reactive({
+      #   load("data/example_data.RData", envir = .GlobalEnv)
+      # })
+      # maxquant_data<-reactive({example_data[1]})
+      # exp_design<-reactive({example_data[2]})
+    env<-reactive({
+      LoadToEnvironment("data/example_data.RData")
+    })
+     maxquant_data<-eventReactive(input$load_data,{
+       env()[["maxquant_output"]]
+     })
+     exp_design<-eventReactive(input$load_data,{
+       env()[["exp_design"]]
+     })
+   # })
+   
+   
 ### Reactive components
    processed_data<- reactive({
      if(grepl('+',maxquant_data()$Reverse)){
@@ -213,7 +245,10 @@ server <- function(input, output) {
    ## Results plot inputs
    
    ## PCA Plot
-   pca_input<-eventReactive(input$analyze,{
+   pca_input<-eventReactive(input$analyze | input$load_data,{ 
+     if(input$analyze==0 && input$load_data==0){
+       return()
+     }
      if (num_total()<=500){
        if(length(levels(as.factor(colData(dep())$replicate))) <= 6){
        DEP::plot_pca(dep(), n=num_total(), point_size = 4)
@@ -234,7 +269,10 @@ server <- function(input, output) {
    })
    
    ### Heatmap Differentially expressed proteins
-   heatmap_input<-eventReactive(input$analyze,{
+   heatmap_input<-eventReactive(input$analyze | input$load_data,{ 
+     if(input$analyze==0 && input$load_data==0){
+       return()
+     }
      get_cluster_heatmap(dep(),
                          type="centered",kmeans = TRUE,
                          k=6, col_limit = 6,

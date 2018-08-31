@@ -48,8 +48,10 @@ ui <- shinyUI(
         ),
        
         tags$hr(),
-        actionButton("analyze", "Start Analysis")),
+        actionButton("analyze", "Start Analysis"),
+        actionButton("load_data", "Run Example")),
         tags$hr(),
+        
         menuItem('Information', icon=icon("question"), tabName = "info"),
         tags$hr()
       )

@@ -10,10 +10,10 @@ library("ComplexHeatmap")
 library("limma")
 library("DT")
 library("rmdformats")
-source("functions.R")
-source("volcano_function.R")
-source("tests.R")
-
+source("R/functions.R")
+source("R/volcano_function.R")
+source("R/tests.R")
+source("R/demo_functions.R")
 
 
 
