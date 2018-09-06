@@ -107,17 +107,45 @@ server <- function(input, output) {
     
     ## Read input files on shiny server
     ## NOTE: have to use reactive framework, otherwise throws out error
+    # observeEvent(input$analyze,{
+    #   maxquant_data<-reactive({
+    #     inFile<-input$file1
+    #     if(is.null(inFile))
+    #       return(NULL)
+    #     read.table(inFile$datapath,
+    #                header = TRUE,
+    #                fill= TRUE, # to fill any missing data
+    #                sep = "\t"
+    #     )
+    #   })
+    # })
     maxquant_data<-eventReactive(input$analyze,{
       inFile<-input$file1
       if(is.null(inFile))
         return(NULL)
-      read.table(inFile$datapath,
+      temp_data<-read.table(inFile$datapath,
                  header = TRUE,
                  fill= TRUE, # to fill any missing data
                  sep = "\t"
       )
+      maxquant_input_test(temp_data)
+      return(temp_data)
     })
-    
+   
+    # observeEvent(input$analyze,{
+    #   exp_design<-reactive({
+    #     inFile<-input$file2
+    #     if (is.null(inFile))
+    #       return(NULL)
+    #     temp_df<-read.table(inFile$datapath,
+    #                         header = TRUE,
+    #                         sep="\t",
+    #                         stringsAsFactors = FALSE)
+    #     exp_design_test(temp_df)
+    #     temp_df$label<-as.character(temp_df$label)
+    #     return(temp_df)
+    #   })    
+    # })
     exp_design<-eventReactive(input$analyze,{
       inFile<-input$file2
       if (is.null(inFile))
@@ -129,8 +157,8 @@ server <- function(input, output) {
       exp_design_test(temp_df)
       temp_df$label<-as.character(temp_df$label)
       return(temp_df)
-    })    
- 
+    })
+   
     
 ### Load data from Rdata
   # observeEvent(input$load_data,{
@@ -142,12 +170,16 @@ server <- function(input, output) {
     env<-reactive({
       LoadToEnvironment("data/example_data.RData")
     })
-     maxquant_data<-eventReactive(input$load_data,{
+     observeEvent(input$load_data,{
+       maxquant_data<-reactive({
        env()[["maxquant_output"]]
      })
-     exp_design<-eventReactive(input$load_data,{
+     })
+     observeEvent(input$load_data,{
+       exp_design<-reactive({
        env()[["exp_design"]]
      })
+    })
    # })
    
    
