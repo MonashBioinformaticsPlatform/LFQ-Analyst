@@ -193,7 +193,8 @@ server <- function(input, output) {
        filtered_data<-dplyr::filter(filtered_data,Potential.contaminant!="+")
      }
      if(grepl('+',filtered_data$Only.identified.by.site)){
-       filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+", Razor...unique.peptides>=2)
+       filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+", 
+                                    Razor...unique.peptides>=2)
      }
      #else{filtered_data<-maxquant_data()}
      # filter<-dplyr::filter(maxquant_data(),Reverse!="+", Potential.contaminant!="+",
@@ -220,7 +221,8 @@ server <- function(input, output) {
      temp<-assay(processed_data())
      temp1<-2^(temp)
      colnames(temp1)<-paste(colnames(temp1),"original_intensity",sep="_")
-     temp1<-cbind(ProteinID=rownames(temp1),temp1) #temp1$ProteinID<-rownames(temp1)
+     temp1<-cbind(ProteinID=rownames(temp1),temp1) 
+     #temp1$ProteinID<-rownames(temp1)
      return(as.data.frame(temp1))
    })
    
@@ -526,10 +528,24 @@ server <- function(input, output) {
     pca_input()
   })
   output$heatmap<-renderPlot({
+    withProgress(message = 'Heatmap rendering is in progress',
+                 detail = 'Please wait for a while', value = 0, {
+                   for (i in 1:15) {
+                     incProgress(1/15)
+                     Sys.sleep(0.25)
+                   }
+                 })
    heatmap_input()
   })
  
   output$volcano <- renderPlot({
+    withProgress(message = 'Vacano Plot calculations are in progress',
+                 detail = 'Please wait for a while', value = 0, {
+                   for (i in 1:15) {
+                     incProgress(1/15)
+                     Sys.sleep(0.25)
+                   }
+                 })
     if(is.null(input$contents_rows_selected)){
    volcano_input()
      }
