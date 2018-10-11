@@ -26,7 +26,7 @@ ui <- shinyUI(
                  #                             "Use Experimental Design information" = "expdesign"),
                  #              selected = "expdesign")
         ),
-        menuItemOutput("columns"),
+         menuItemOutput("columns"),
         tags$hr(),
         menuItem("Advanced Options",tabName="advanced", icon = icon("cogs"), 
                  numericInput("p", 
@@ -156,7 +156,23 @@ ui <- shinyUI(
                       brush = "protein_brush"),
                        downloadButton('downloadVolcano', 'Save Highlighted Plot')
                      #)),
-                     ))#, 
+                     )),
+            tabPanel(title = "Protein Plot",
+                     fluidRow(
+                      box(radioButtons("type",
+                                    "Plot type",
+                                    choices = c("Violin Plot"="violin", 
+                                                "Box Plot"= "boxplot"),
+                                    selected = "violin", 
+                                    inline = TRUE),
+                          width = 12
+                        )
+                     ),
+                     fluidRow(
+                     plotOutput("protein_plot"),
+                     downloadButton('downloadProtein', 'Download Plot')
+                     )
+                  )
            # verbatimTextOutput("protein_info"))
           )
         ) # box or column end

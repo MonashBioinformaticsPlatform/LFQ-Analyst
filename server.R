@@ -369,6 +369,14 @@ server <- function(input, output) {
 
        }
     })
+    
+    protein_input<-reactive({ 
+      protein_selected <- data_result()[input$contents_rows_selected,1]
+      #protein<-row_selected$name
+      plot_protein(dep(), protein_selected, input$type)
+      
+    })
+    
      
    ## QC Inputs
    norm_input <- reactive({
@@ -553,6 +561,12 @@ server <- function(input, output) {
       volcano_input_selected()
       } # else close
   })
+  
+  output$protein_plot<-renderPlot({
+    if(!is.null(input$contents_rows_selected)){
+    protein_input()
+    }
+  })
  
  
   ### QC Outputs
@@ -644,6 +658,19 @@ server <- function(input, output) {
     content = function(file) {
       pdf(file)
       print(volcano_input_selected())
+      dev.off()
+    }
+  )
+  
+  
+  ## Protein plot download
+  output$downloadProtein <- downloadHandler(
+    filename = function() {
+      paste0(input$type,".pdf")
+    },
+    content = function(file) {
+      pdf(file)
+      print(protein_input())
       dev.off()
     }
   )

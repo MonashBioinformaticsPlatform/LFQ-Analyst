@@ -106,7 +106,7 @@ Protein-wise linear models combined with empirical Bayes statistics are used for
   ![PCA_plot](PCA_plot.png)
   
 
-  2. **Heatmap**: The heatmap representation gives an overview of all significant/differentially expressed proteins (rows) in all samples (columns). This visualization allows the identfication of general trends such as if one sample or replicate is highly different compared to the others and might be considerd as an outlier. Additionally, the hierarchical clustering of samples (columns) indicates how related the different samples are and  hierarchicalclustering of proteins (rows) identifies similarly behaving proteins. This analysis divides differncially expressed proteins into _six_ clusters/groups. User also have option to download protein information from individual cluster. 
+  2. **Heatmap**: The heatmap representation gives an overview of all significant/differentially expressed proteins (rows) in all samples (columns). This visualization allows the identfication of general trends such as if one sample or replicate is highly different compared to the others and might be considerd as an outlier. Additionally, the hierarchical clustering of samples (columns) indicates how related the different samples are and  hierarchicalclustering of proteins (rows) identifies similarly behaving proteins. This analysis divides differencially expressed proteins into _six_ clusters/groups. User also have option to download protein information from individual cluster. 
   
   ![heatmap](heatmap.png)
   

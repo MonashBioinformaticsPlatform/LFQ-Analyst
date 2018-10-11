@@ -189,3 +189,46 @@ get_volcano_df <- function(dep, contrast, adjusted = FALSE) {
  return(df)
 }
 
+### Function to plot intensities of individual proteins
+plot_protein<-function(dep, protein, type){
+  assertthat::assert_that(inherits(dep, "SummarizedExperiment"),
+                          is.character(protein),
+                          is.character(type))
+  subset<-dep[protein]
+  
+  df_reps <- data.frame(assay(subset)) %>%
+    rownames_to_column() %>%
+    gather(ID, val, -rowname) %>%
+    left_join(., data.frame(colData(subset)), by = "ID")
+  df_reps$rowname <- parse_factor(df_reps$rowname, levels = protein)
+  if(type=="violin"){
+    p<-ggplot(df_reps, aes(condition, val))+
+      geom_violin(fill="grey90", width= 0.8) +
+      geom_boxplot(width=0.1)+
+      geom_jitter(aes(color = factor(replicate)),
+                  size = 3, position = position_dodge(width=0.3)) +
+      labs(
+        y = expression(log[2]~"Intensity"),
+        col = "Replicates") +
+      facet_wrap(~rowname) +
+      scale_color_brewer(palette = "Dark2")+
+      theme_DEP1()+
+      theme(axis.title.x = element_blank())
+    }
+  
+  if(type=="boxplot"){
+    p<-ggplot(df_reps, aes(condition, val))+
+      geom_boxplot()+
+      geom_jitter(aes(color = factor(replicate)),
+                  size = 3, position = position_dodge(width=0.3)) +
+      labs(
+        y = expression(log[2]~"Intensity"),
+        col = "Replicates") +
+      facet_wrap(~rowname) +
+      scale_color_brewer(palette = "Dark2")+
+      theme_DEP1() +
+      theme(axis.title.x = element_blank())
+    }
+  
+  return(p)
+}

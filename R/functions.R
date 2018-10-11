@@ -156,10 +156,12 @@ p1 <-  ggplot(cvs_group, aes(cvs, color=condition, fill=condition)) +
     labs(title= 'Sample Coefficient of Variation', x="Coefficient of Variation", y="Count") +
     theme_DEP2() +
     theme(plot.title = element_text(hjust = 0.5,face = "bold")) 
+
 p1 +geom_text(aes(x=max(cvs_group$cvs)-0.6,
                   y=max(ggplot_build(p1)$data[[1]]$ymax*1.1), 
                   label=paste0("Median =",round(condition_median,2)*100,"%",by="")),
               show.legend = FALSE, size=4)
+
 }
 
 
