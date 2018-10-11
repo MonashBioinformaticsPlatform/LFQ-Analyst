@@ -203,8 +203,10 @@ plot_protein<-function(dep, protein, type){
   df_reps$rowname <- parse_factor(df_reps$rowname, levels = protein)
   if(type=="violin"){
     p<-ggplot(df_reps, aes(condition, val))+
-      geom_violin(fill="grey90", width= 0.8) +
-      geom_boxplot(width=0.1)+
+      geom_violin(fill="grey90", scale = "width",
+                  draw_quantiles = 0.5,
+                  trim =TRUE) +
+     # geom_boxplot(width=0.1)+
       geom_jitter(aes(color = factor(replicate)),
                   size = 3, position = position_dodge(width=0.3)) +
       labs(
