@@ -230,6 +230,20 @@ plot_protein<-function(dep, protein, type){
       scale_color_brewer(palette = "Dark2")+
       theme_DEP1() +
       theme(axis.title.x = element_blank())
+  }
+  
+  if(type=="interaction"){
+    p<-ggplot(df_reps, aes(condition, val))+
+      geom_point(aes(color = factor(replicate)),
+                 size = 3) +
+      geom_line(aes(group= factor(replicate), color= factor(replicate)))+
+      labs(
+        y = expression(log[2]~"Intensity"),
+        col = "Replicates") +
+      facet_wrap(~rowname) +
+      scale_color_brewer(palette = "Dark2")+
+      theme_DEP1()+
+      theme(axis.title.x = element_blank())
     }
   
   return(p)

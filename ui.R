@@ -161,12 +161,16 @@ ui <- shinyUI(
                      fluidRow(
                       box(radioButtons("type",
                                     "Plot type",
-                                    choices = c("Violin Plot"="violin", 
-                                                "Box Plot"= "boxplot"),
-                                    selected = "violin", 
+                                    choices = c("Interation Plot"= "interaction",
+                                                "Violin Plot"="violin", 
+                                                "Box Plot"= "boxplot"
+                                                ),
+                                    selected = "interaction", 
                                     inline = TRUE),
                           width = 12
-                        )
+                        ),
+                      tags$p("Select one of more rows from LFQ Results Table to plot individual 
+                             protein intesities across conditions and replicates")
                      ),
                      fluidRow(
                      plotOutput("protein_plot"),
