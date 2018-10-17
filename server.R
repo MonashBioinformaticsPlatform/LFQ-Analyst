@@ -502,12 +502,18 @@ server <- function(input, output) {
     )
   })
 
-   protein_name<- reactive({
+   protein_name_brush<- reactive({
      #protein_tmp<-nearPoints(volcano_df(), input$protein_click, maxpoints = 1)
      protein_tmp<-brushedPoints(volcano_df(), input$protein_brush, 
                                 xvar = "diff", yvar = "p_values")
      protein_selected<-protein_tmp$name
      }) 
+   protein_name_click<- reactive({
+     protein_tmp<-nearPoints(volcano_df(), input$protein_click, maxpoints = 1)
+    # protein_tmp<-brushedPoints(volcano_df(), input$protein_brush, 
+                                #xvar = "diff", yvar = "p_values")
+     protein_selected<-protein_tmp$name
+   }) 
  #   observeEvent(input$protein_brush,{
  # output$protein_info<-renderPrint({
  # #  protein_selected()
@@ -523,14 +529,21 @@ server <- function(input, output) {
   ## Select rows dynamically
  observeEvent(input$protein_brush,{
     output$contents <- DT::renderDataTable({
-      df<- data_result()[data_result()[["name"]] %in% protein_name(), ]
+      df<- data_result()[data_result()[["name"]] %in% protein_name_brush(), ]
       return(df)
     },
     options = list(scrollX= TRUE)
     )
   })
 
- 
+ observeEvent(input$protein_click,{
+   output$contents <- DT::renderDataTable({
+     df<- data_result()[data_result()[["name"]] %in% protein_name_click(), ]
+     return(df)
+   },
+   options = list(scrollX= TRUE)
+   )
+ })
   ## Render Result Plots
   output$pca_plot<-renderPlot({
     pca_input()

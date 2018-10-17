@@ -98,8 +98,8 @@ ui <- shinyUI(
         box(
           title = "LFQ Results Table",
         DT::dataTableOutput("contents"),
-        actionButton("clear", "Deselect Rows"),
-        actionButton("original", "Original Table"),
+      #  actionButton("clear", "Deselect Rows"),
+        actionButton("original", "Refresh Table"),
         width = 6,
         status = "success",
        #color=""
@@ -153,7 +153,8 @@ ui <- shinyUI(
                                  # hover = "protein_hover"),
                                   #),
                       # click = "protein_click"),
-                      brush = "protein_brush"),
+                      brush = "protein_brush",
+                      click = "protein_click"),
                        downloadButton('downloadVolcano', 'Save Highlighted Plot')
                      #)),
                      )),
@@ -161,11 +162,12 @@ ui <- shinyUI(
                      fluidRow(
                       box(radioButtons("type",
                                     "Plot type",
-                                    choices = c("Interation Plot"= "interaction",
+                                    choices = c("Box Plot"= "boxplot",
                                                 "Violin Plot"="violin", 
-                                                "Box Plot"= "boxplot"
+                                                "Interation Plot"= "interaction",
+                                                "Intensity Plot"="dot"
                                                 ),
-                                    selected = "interaction", 
+                                    selected = "boxplot", 
                                     inline = TRUE),
                           width = 12
                         ),
