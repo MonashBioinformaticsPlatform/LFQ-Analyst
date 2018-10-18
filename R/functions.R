@@ -651,8 +651,10 @@ get_results_proteins <- function(dep) {
   ids <- as.data.frame(row_data) %>% dplyr::select(name, ID)
   table<-dplyr::left_join(ids,ratio, by=c("name"="rowname"))
   table <- dplyr::left_join(table, pval, by = c("name" = "rowname"))
-  table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
-    dplyr::arrange(desc(significant))
+  # table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
+  #   dplyr::arrange(desc(significant))
+  table<-table %>% dplyr::arrange(desc(significant))
+  colnames(table)[1]<-c("Gene Name")
   # table$Gene_name<-table$name
   return(table)
 }

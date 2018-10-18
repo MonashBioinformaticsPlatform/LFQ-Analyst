@@ -267,7 +267,7 @@ plot_protein<-function(dep, protein, type){
         col = "Replicates") +
       facet_wrap(~rowname) +
       scale_color_brewer(palette = "Dark2")+
-      theme_DEP1()+
+      theme_DEP1() +
       theme(axis.title.x = element_blank())
   }
   

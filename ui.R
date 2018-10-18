@@ -188,7 +188,7 @@ ui <- shinyUI(
       fluidRow(
         shinyjs::hidden(div(id="qc_tab",
         column(
-          width=6,
+          width=12,
         tabBox(title = "QC Plots", width = 12,
                                  tabPanel(title="Sample Correlation",
                                            plotOutput("sample_corr", height = 600)
