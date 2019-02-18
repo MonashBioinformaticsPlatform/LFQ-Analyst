@@ -1,4 +1,4 @@
-Differential expression analysis label free proteomics data
+Differential expression analysis of label-free proteomics data
 ===========================================================
 
 # Introduction
