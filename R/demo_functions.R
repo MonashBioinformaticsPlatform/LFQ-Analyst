@@ -23,3 +23,4 @@ progress_indicator<-function(text_message){
                  }
                })
 }
+#env<-LoadToEnvironment("data/example_data.RData")

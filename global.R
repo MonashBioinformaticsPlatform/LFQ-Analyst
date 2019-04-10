@@ -1,7 +1,6 @@
 library("SummarizedExperiment")
 library("tidyverse")
 library("DEP")
-library("RColorBrewer")
 library("testthat")
 library("shiny")
 library("shinydashboard")
@@ -16,6 +15,5 @@ source("R/volcano_function.R")
 source("R/tests.R")
 source("R/demo_functions.R")
 
-#enableBookmarking("server")
 
 

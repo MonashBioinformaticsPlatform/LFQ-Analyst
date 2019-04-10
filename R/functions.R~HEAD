@@ -156,10 +156,12 @@ p1 <-  ggplot(cvs_group, aes(cvs, color=condition, fill=condition)) +
     labs(title= 'Sample Coefficient of Variation', x="Coefficient of Variation", y="Count") +
     theme_DEP2() +
     theme(plot.title = element_text(hjust = 0.5,face = "bold")) 
+
 p1 +geom_text(aes(x=max(cvs_group$cvs)-0.6,
                   y=max(ggplot_build(p1)$data[[1]]$ymax*1.1), 
                   label=paste0("Median =",round(condition_median,2)*100,"%",by="")),
               show.legend = FALSE, size=4)
+
 }
 
 
@@ -588,6 +590,10 @@ test_limma <- function(se, type = c("control", "all", "manual"),
   #return(table)
 }
 
+#######################################################
+#####======= PROTEIN RESULT TABLE ======= #########
+#######################################################
+
 get_results_proteins <- function(dep) {
   # Show error if inputs are not the required classes
   assertthat::assert_that(inherits(dep, "SummarizedExperiment"))
@@ -649,9 +655,113 @@ get_results_proteins <- function(dep) {
   ids <- as.data.frame(row_data) %>% dplyr::select(name, ID)
   table<-dplyr::left_join(ids,ratio, by=c("name"="rowname"))
   table <- dplyr::left_join(table, pval, by = c("name" = "rowname"))
-  table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
-    dplyr::arrange(desc(significant))
+  # table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
+  #   dplyr::arrange(desc(significant))
+  table<-table %>% dplyr::arrange(desc(significant))
+  colnames(table)[1]<-c("Gene Name")
   # table$Gene_name<-table$name
   return(table)
 }
 
+#######################################################
+          ## Plot Enrichment Results
+#######################################################
+
+plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
+                      contrasts = NULL, databases = NULL,
+                      nrow = 1,term_size = 8) {
+  assertthat::assert_that(is.data.frame(gsea_results),
+                          is.numeric(number),
+                          length(number) == 1,
+                          is.numeric(alpha),
+                          length(alpha) == 1,
+                          is.numeric(term_size),
+                          length(term_size) == 1,
+                          is.numeric(nrow),
+                          length(nrow) == 1)
+  
+  # Check gsea_results object
+  if(any(!c("Term", "var",
+            "contrast","Adjusted.P.value")
+         %in% colnames(gsea_results))) {
+    stop("'", deparse(substitute(gsea_results)),
+         "' does not contain the required columns",
+         "\nRun test_enrichment() to obtain the required columns",
+         call. = FALSE)
+  }
+  
+  if(!is.null(contrasts)) {
+    assertthat::assert_that(is.character(contrasts))
+    
+    valid_contrasts <- unique(gsea_results$contrast)
+    
+    if(!all(contrasts %in% valid_contrasts)) {
+      valid_cntrsts_msg <- paste0("Valid contrasts are: '",
+                                  paste0(valid_contrasts, collapse = "', '"),
+                                  "'")
+      stop("Not a valid contrast, please run `plot_gsea()`",
+           "with a valid contrast as argument\n",
+           valid_cntrsts_msg,
+           call. = FALSE)
+    }
+    if(!any(contrasts %in% valid_contrasts)) {
+      contrasts <- contrasts[contrasts %in% valid_contrasts]
+      message("Not all contrasts found",
+              "\nPlotting the following contrasts: '",
+              paste0(contrasts, collapse = "', '"), "'")
+    }
+    
+    gsea_results <- filter(gsea_results, contrast %in% contrasts)
+  }
+  if(!is.null(databases)) {
+    assertthat::assert_that(is.character(databases))
+    
+    valid_databases <- unique(gsea_results$var)
+    
+    if(all(!databases %in% valid_databases)) {
+      valid_cntrsts_msg <- paste0("Valid databases are: '",
+                                  paste0(valid_databases, collapse = "', '"),
+                                  "'")
+      stop("Not a valid database, please run `plot_gsea()`",
+           "with valid databases as argument\n",
+           valid_cntrsts_msg,
+           call. = FALSE)
+    }
+    if(any(!databases %in% valid_databases)) {
+      databases <- databases[databases %in% valid_databases]
+      message("Not all databases found",
+              "\nPlotting the following databases: '",
+              paste0(databases, collapse = "', '"), "'")
+    }
+    
+    gsea_results <- filter(gsea_results, var %in% databases)
+  }
+  
+  # Get top enriched gene sets
+  terms <- gsea_results %>%
+    dplyr::group_by(contrast, var) %>%
+    dplyr::filter(Adjusted.P.value <= alpha) %>%
+    dplyr::arrange(Adjusted.P.value) %>%
+    dplyr::slice(seq_len(number)) %>%
+    .$Term
+  subset <- gsea_results %>%
+    dplyr::filter(Term %in% terms) %>%
+    dplyr::arrange(var, Adjusted.P.value)
+  
+  subset$Term <- readr::parse_factor(subset$Term, levels = unique(subset$Term))
+  subset$var <- readr::parse_factor(subset$var, levels = unique(subset$var))
+  
+  # Plot top enriched gene sets
+  ggplot(subset, aes(Term,
+                     -log10(Adjusted.P.value))) +
+    geom_col(aes(fill = log_odds )) +
+    facet_wrap(~contrast, nrow = nrow) +
+    coord_flip() +
+    labs(y = "-Log10 adjusted P value",
+         fill = "Log2 odds ratio") +
+    theme_DEP1() +
+    theme(legend.position = "top",
+          axis.text.y = element_text(size = term_size),
+          legend.text = element_text(size = 9)) +
+    scale_fill_distiller(palette="Spectral")
+}
