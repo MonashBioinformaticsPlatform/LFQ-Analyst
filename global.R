@@ -1,6 +1,7 @@
 library("SummarizedExperiment")
 library("tidyverse")
 library("DEP")
+library("RColorBrewer")
 library("testthat")
 library("shiny")
 library("shinydashboard")
@@ -9,8 +10,12 @@ library("shinyalert")
 library("ComplexHeatmap")
 library("limma")
 library("DT")
-source("functions.R")
+library("ggrepel")
+source("R/functions.R")
+source("R/volcano_function.R")
+source("R/tests.R")
+source("R/demo_functions.R")
 
-
+#enableBookmarking("server")
 
 
