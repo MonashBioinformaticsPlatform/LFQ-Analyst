@@ -100,13 +100,6 @@ print(params$cvs_input())
 ```
 \pagebreak
 
-## _p value_ Distribution
-A histogram of distribution of _p values_ across the experiment
-
-```{r p_hist, echo=FALSE, warning=FALSE, results='hide'}
-print(params$p_hist_input())
-```
-\pagebreak
 
 ## Missing Value handling
 
@@ -122,7 +115,7 @@ params$missval_input()
 ### Missing value distribution
 What are the intensities for proteins with and without missing values in the dataset?
 
-```{r missing_value_distribution, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r missing_value_distribution, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 print(params$detect_input())
 ```
 \pagebreak
