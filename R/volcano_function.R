@@ -39,11 +39,7 @@ plot_volcano_new <- function(dep, contrast, label_size = 3,
   }
   
   # Show error if an unvalid contrast is given
-<<<<<<< HEAD
   if (length(grep(paste("^",contrast,"_diff", sep = ""),
-=======
-  if (length(grep(paste(contrast, "_diff", sep = ""),
->>>>>>> 5cb2d667e1353bae926eaac55a636303de8acc23
                   colnames(row_data))) == 0) {
     valid_cntrsts <- row_data %>%
       data.frame() %>%
@@ -59,7 +55,6 @@ plot_volcano_new <- function(dep, contrast, label_size = 3,
   }
   
   # Generate a data.frame containing all info for the volcano plot
-<<<<<<< HEAD
   diff <- grep(paste("^",contrast,"_diff", sep = ""),
                colnames(row_data))
   if(adjusted) {
@@ -70,18 +65,6 @@ plot_volcano_new <- function(dep, contrast, label_size = 3,
                      colnames(row_data))
   }
   signif <- grep(paste("^",contrast, "_significant", sep = ""),
-=======
-  diff <- grep(paste(contrast, "_diff", sep = ""),
-               colnames(row_data))
-  if(adjusted) {
-    p_values <- grep(paste(contrast, "_p.adj", sep = ""),
-                     colnames(row_data))
-  } else {
-    p_values <- grep(paste(contrast, "_p.val", sep = ""),
-                     colnames(row_data))
-  }
-  signif <- grep(paste(contrast, "_significant", sep = ""),
->>>>>>> 5cb2d667e1353bae926eaac55a636303de8acc23
                  colnames(row_data))
   df_tmp <- data.frame(diff = row_data[, diff],
                    p_values = -log10(row_data[, p_values]),
@@ -290,7 +273,6 @@ plot_protein<-function(dep, protein, type){
   
   return(p)
 }
-<<<<<<< HEAD
 
 plot_volcano_mod <- function(dep, contrast, label_size = 3,
                              add_names = TRUE, adjusted = FALSE, plot = TRUE) {
@@ -411,5 +393,3 @@ plot_volcano_mod <- function(dep, contrast, label_size = 3,
   }
 }
 
-=======
->>>>>>> 5cb2d667e1353bae926eaac55a636303de8acc23
