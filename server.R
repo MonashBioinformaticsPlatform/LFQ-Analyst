@@ -172,7 +172,7 @@ server <- function(input, output) {
                  fill= TRUE, # to fill any missing data
                  sep = "\t"
       )
-      maxquant_input_test(temp_data)
+      validate(maxquant_input_test(temp_data))
       return(temp_data)
     })
    
@@ -425,7 +425,7 @@ server <- function(input, output) {
       if(!is.null(input$volcano_cntrst)){
         proteins_selected<-data_result()[c(input$contents_rows_selected),] ## get all rows selected
        ## convert contrast to x and padj to y
-       diff_proteins <- grep(paste(input$volcano_cntrst, "_ratio", sep = ""),
+       diff_proteins <- grep(paste(input$volcano_cntrst, "_log2", sep = ""),
                     colnames(proteins_selected))
         if(input$p_adj=="FALSE"){
        padj_proteins <- grep(paste(input$volcano_cntrst, "_p.val", sep = ""),
@@ -583,7 +583,9 @@ server <- function(input, output) {
     df<- data_result()
     return(df)
   },
-  options = list(scrollX = TRUE)
+  options = list(scrollX = TRUE,
+autoWidth=TRUE,
+                columnDefs= list(list(width = '400px', targets = c(-1))))
   )
   
   ## Deselect all rows button
@@ -598,7 +600,9 @@ server <- function(input, output) {
       df<- data_result()
       return(df)
     },
-    options = list(scrollX = TRUE)
+    options = list(scrollX = TRUE,
+autoWidth=TRUE,
+                columnDefs= list(list(width = '400px', targets = c(-1))))
     )
   })
 
@@ -641,7 +645,9 @@ server <- function(input, output) {
      df<- data_result()[data_result()[["Gene Name"]] %in% protein_name_click(), ]
      return(df)
    },
-   options = list(scrollX= TRUE)
+   options = list(scrollX= TRUE,
+autoWidth=TRUE,
+                columnDefs= list(list(width = '400px', targets = c(-1))))
    )
  })
   ## Render Result Plots
@@ -731,7 +737,7 @@ server <- function(input, output) {
   ##### Download Functions
   datasetInput <- reactive({
     switch(input$dataset,
-           "Results" = get_results(dep()),
+           "Results" = get_results_proteins(dep()),
            "Original_matrix"= unimputed_table(),
            # "significant_proteins" = get_results(dep()) %>%
            #   filter(significant) %>%
@@ -1082,7 +1088,7 @@ comparisons_dm<-reactive({
    if(!is.null(input$volcano_cntrst_dm)){
      proteins_selected<-data_result_dm()[c(input$contents_dm_rows_selected),] ## get all rows selected
      ## convert contrast to x and padj to y
-     diff_proteins <- grep(paste(input$volcano_cntrst_dm, "_ratio", sep = ""),
+     diff_proteins <- grep(paste(input$volcano_cntrst_dm, "_log2", sep = ""),
                            colnames(proteins_selected))
      if(input$p_adj_dm=="FALSE"){
        padj_proteins <- grep(paste(input$volcano_cntrst_dm, "_p.val", sep = ""),
@@ -1257,7 +1263,9 @@ comparisons_dm<-reactive({
    df<- data_result_dm()
    return(df)
  },
- options = list(scrollX = TRUE)
+ options = list(scrollX = TRUE,
+	autoWidth=TRUE,
+                columnDefs= list(list(width = '400px', targets = c(-1))))
  )
  
  ## Deselect all rows button
@@ -1272,7 +1280,9 @@ comparisons_dm<-reactive({
      df<- data_result_dm()
      return(df)
    },
-   options = list(scrollX = TRUE)
+   options = list(scrollX = TRUE,
+	autoWidth=TRUE,
+                columnDefs= list(list(width = '400px', targets = c(-1))))
    )
  })
  
@@ -1296,7 +1306,9 @@ comparisons_dm<-reactive({
      df<- data_result_dm()[data_result_dm()[["Gene Name"]] %in% protein_name_brush_dm(), ]
      return(df)
    },
-   options = list(scrollX= TRUE)
+   options = list(scrollX= TRUE,
+autoWidth=TRUE,
+                columnDefs= list(list(width = '400px', targets = c(-1))))
    )
  })
  
@@ -1395,7 +1407,7 @@ comparisons_dm<-reactive({
  ##### Download Functions
  datasetInput_dm <- reactive({
    switch(input$dataset_dm,
-          "Results" = get_results(dep_dm()),
+          "Results" = get_results_proteins(dep_dm()),
           "Full dataset" = get_df_wide(dep_dm()))
  })
  
