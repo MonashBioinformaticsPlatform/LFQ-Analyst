@@ -630,7 +630,7 @@ get_results_proteins <- function(dep) {
     signif(., digits = 3) %>%
     tibble::rownames_to_column()
   colnames(ratio)[2:ncol(ratio)] <-
-    gsub("_diff", "_ratio", colnames(ratio)[2:ncol(ratio)])
+    gsub("_diff", "_log2 fold change", colnames(ratio)[2:ncol(ratio)])
  # df <- left_join(ratio, centered, by = "rowname")
   
   # Select the adjusted p-values and significance columns
@@ -653,8 +653,12 @@ get_results_proteins <- function(dep) {
   table <- dplyr::left_join(table, pval, by = c("name" = "rowname"))
   # table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
   #   dplyr::arrange(desc(significant))
+   table<-as.data.frame(row_data) %>% 
+    dplyr::select(name, imputed, num_NAs, Protein.names) %>%
+    dplyr::left_join(table, ., by = "name")
   table<-table %>% dplyr::arrange(desc(significant))
   colnames(table)[1]<-c("Gene Name")
+  colnames(table)[2]<-c("Protein IDs")
   # table$Gene_name<-table$name
   return(table)
 }
