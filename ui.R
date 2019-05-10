@@ -194,19 +194,6 @@ ui <- function(request){shinyUI(
                               tabBox(
                                 title = "Result Plots",
                                 width = 12,
-                                tabPanel(title = "PCA Plot",
-                                         plotOutput("pca_plot"), height=600),
-                                tabPanel(title= "Heatmap",
-                                         fluidRow(
-                                           plotOutput("heatmap", height = 600)
-                                         ),
-                                         fluidRow(
-                                           box(numericInput("cluster_number",
-                                                            "Cluster to download (1-6)",
-                                                            min=1, max=6, value = 1), width = 6),
-                                           box(downloadButton('downloadCluster',"Save Cluster"),width = 3)
-                                         )
-                                ),
                                 tabPanel(title = "Volcano plot",
                                          fluidRow(
                                            box(uiOutput("volcano_cntrst"), width = 5),
@@ -238,6 +225,17 @@ ui <- function(request){shinyUI(
                                            downloadButton('downloadVolcano', 'Save Highlighted Plot')
                                            #)),
                                          )),
+                                tabPanel(title= "Heatmap",
+                                         fluidRow(
+                                           plotOutput("heatmap", height = 600)
+                                         ),
+                                         fluidRow(
+                                           box(numericInput("cluster_number",
+                                                            "Cluster to download (1-6)",
+                                                            min=1, max=6, value = 1), width = 6),
+                                           box(downloadButton('downloadCluster',"Save Cluster"),width = 3)
+                                         )
+                                ),
                                 tabPanel(title = "Protein Plot",
                                          fluidRow(
                                            box(radioButtons("type",
@@ -270,6 +268,8 @@ ui <- function(request){shinyUI(
                             column(
                               width=6,
                               tabBox(title = "QC Plots", width = 12,
+                                tabPanel(title = "PCA Plot",
+                                         plotOutput("pca_plot"), height=600),
                                      tabPanel(title="Sample Correlation",
                                               plotOutput("sample_corr", height = 600)
                                      ),
@@ -398,19 +398,6 @@ ui <- function(request){shinyUI(
                               tabBox(
                                 title = "Result Plots",
                                 width = 12,
-                                tabPanel(title = "PCA Plot",
-                                         plotOutput("pca_plot_dm"), height=600),
-                                tabPanel(title= "Heatmap",
-                                         fluidRow(
-                                           plotOutput("heatmap_dm", height = 600)
-                                         ),
-                                         fluidRow(
-                                           box(numericInput("cluster_number_dm",
-                                                            "Cluster to download (1-6)",
-                                                            min=1, max=6, value = 1), width = 6),
-                                           box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3)
-                                         )
-                                ),
                                 tabPanel(title = "Volcano plot",
                                          fluidRow(
                                            box(uiOutput("volcano_cntrst_dm"), width = 5),
@@ -442,6 +429,17 @@ ui <- function(request){shinyUI(
                                            downloadButton('downloadVolcano_dm', 'Save Highlighted Plot')
                                            #)),
                                          )),
+                                tabPanel(title= "Heatmap",
+                                         fluidRow(
+                                           plotOutput("heatmap_dm", height = 600)
+                                         ),
+                                         fluidRow(
+                                           box(numericInput("cluster_number_dm",
+                                                            "Cluster to download (1-6)",
+                                                            min=1, max=6, value = 1), width = 6),
+                                           box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3)
+                                         )
+                                ),
                                 tabPanel(title = "Protein Plot",
                                          fluidRow(
                                            box(radioButtons("type_dm",
@@ -474,6 +472,8 @@ ui <- function(request){shinyUI(
                             column(
                               width=6,
                               tabBox(title = "QC Plots", width = 12,
+                                tabPanel(title = "PCA Plot",
+                                         plotOutput("pca_plot_dm"), height=600),
                                      tabPanel(title="Sample Correlation",
                                               plotOutput("sample_corr_dm", height = 600)
                                      ),
