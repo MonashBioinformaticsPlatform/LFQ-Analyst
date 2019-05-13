@@ -370,7 +370,7 @@ server <- function(input, output) {
 	pca_label<-SummarizedExperiment::colData(dep())$replicate
        pca_plot<-DEP::plot_pca(dep(), point_size = 4, indicate = "condition")
         pca_plot + geom_point(aes(label=pca_label))
-       pca_plot + ggrepel::geom_label_repel(aes(label=pca_label),
+       pca_plot + ggrepel::geom_text_repel(aes(label=pca_label),
                                            size = 5,
                                            box.padding = unit(0.1, 'lines'),
                                            point.padding = unit(0.1, 'lines'),
@@ -1043,7 +1043,7 @@ comparisons_dm<-reactive({
 	pca_label<-SummarizedExperiment::colData(dep_dm())$replicate
        pca_plot<-DEP::plot_pca(dep_dm(), point_size = 4, indicate = "condition")
 	pca_plot + geom_point(aes(label=pca_label))
-       pca_plot + ggrepel::geom_label_repel(aes(label=pca_label),
+       pca_plot + ggrepel::geom_text_repel(aes(label=pca_label),
                                            size = 5,
                                            box.padding = unit(0.1, 'lines'),
                                            point.padding = unit(0.1, 'lines'),
