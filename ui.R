@@ -122,18 +122,17 @@ ui <- function(request){shinyUI(
                     steps and statistical analysis implemented in LFQ-Analyst."),
                 
                  h4("What outputs user get?"),
-                 p("After finishing analysis using LFQ-Analyst user will get number of different outputs:"),
+                 p("After finishing analysis using LFQ-Analyst, user will get number of different outputs:"),
                  tags$li("Tabular Downloads"), 
-                 p("   Differential expression analysis result including imputed and unimputed data matrices"),
+                 p("   Differential expression analysis results including imputed and unimputed data matrices"),
                  
                  tags$li("Result plots"),
-                 p("  A number of differential expression analysis visualisation options 
-                   (i) Principle component analysis (PCA) plot,  (ii)  Expression Heatmap  (iii)  Volcano Plot,
-                     (iv)  Protein Expression across replicates"),
+                 p("  A number of interactive visualisation options for differential experssion outcomes including:   
+                   (i) Volcano Plot, (ii)  Expression Heatmap and  (iii) Protein expression across replicates"),
                  
                  tags$li("QC plots"), 
                  p(" LFQ-Analyst provides a variety of plots accessing quality of LFQ data. Some example graphs
-                   include sample correlation, sample correlation of variation, proteins quantified per sample,
+                   include PCA analysis,  sample correlation, sample correlation of variation, proteins quantified per sample,
                    missing value heatmap"),
                  
                  h4("Contact Us"),
