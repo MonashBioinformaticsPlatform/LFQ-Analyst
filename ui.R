@@ -110,35 +110,42 @@ ui <- function(request){shinyUI(
                 ),#box 1 closed
                box(
                  title = "Getting Started",
-                 h4("What input files are required?"),
-                 p("LFQ-Analyst accept two files as an input (a) 'ProteinGroups.txt' file produced by MaxQuant 
-                   (b) A file containing experimental design which includes three columns label, condition and 
-                   replicate which all are case sensitive."),
+                 h4("Which input files are required?"),
+                 p("LFQ-Analyst requires two input files: (a) the 'ProteinGroups.txt' file produced by MaxQuant and 
+		(b) a file outlining the experimental design, which includes the three following 
+		case-sensitive columns: label, condition and replicate. 
+		An example experimental design file can be downloaded at the bottom of the ‘Analysis’ sidebar tab."),
                  
                  h4("Where to start?"),
-                 p("The 'Demo' tab on sidebar will take you to pre-analysed results where you can get familiarise
-                   with different outputs and graphs.
-                   The 'User guide' tab on sidebar has detailed explaination of inputs, outputs, pre-processing 
-                    steps and statistical analysis implemented in LFQ-Analyst."),
+                 p("The 'Demo' tab on the sidebar will take you to pre-analysed results, 
+		which you can use to familiarise yourself with LFQ-Analyst’s outputs and graphics. 
+		The 'User guide' tab on the sidebar provides a link to download an in-depth manual to LFQ-Analyst."),
                 
-                 h4("What outputs user get?"),
-                 p("After finishing analysis using LFQ-Analyst, user will get number of different outputs:"),
+                 h4("Which output files and graphics does LFQ-Analyst provide"),
+                 p("LFQ-Analyst provides a number of different tabular and graphics outputs:"),
                  tags$li("Tabular Downloads"), 
-                 p("   Differential expression analysis results including imputed and unimputed data matrices"),
+                 p("   The results of the differential expression analysis can be downloaded in tabular format in 
+			addition to the imputed and unimputed data matrices."),
                  
                  tags$li("Result plots"),
-                 p("  A number of interactive visualisation options for differential experssion outcomes including:   
-                   (i) Volcano Plot, (ii)  Expression Heatmap and  (iii) Protein expression across replicates"),
+                 p("  The results of the differential expression analysis can be visualised as a fully interactive 
+		Volcano Plot or an expression heatmap. 
+		'Protein Expression Plots’ can be used to show individual protein expression levels across all replicates."),
                  
                  tags$li("QC plots"), 
-                 p(" LFQ-Analyst provides a variety of plots accessing quality of LFQ data. Some example graphs
-                   include PCA analysis,  sample correlation, sample correlation of variation, proteins quantified per sample,
-                   missing value heatmap"),
+                 p(" LFQ-Analyst offers a variety of QC plots, which provides information on quality control (QC) related aspects of the experiment  
+			including principal component analysis (PCA), sample correlations or coefficients of variation."),
                  
                  h4("Contact Us"),
-                 p("Contact the Monash Proteomics and Metabolomics Facility for any question regarding LFQ-Analyst"),
+                 p("For any feedback or question regarding LFQ-Analyst, please contact the Monash Proteomics and Metabolomics Facility:"),
                  tags$li("Anup Shah: anup.shah(at)monash.edu"),
                  tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
+		       
+		 h4("How to Cite LFQ-Analyst?"),
+		 p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
+		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
+		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX")      
+		      
                  width = 6,
                  solidHeader = TRUE,
                  status = "danger"
