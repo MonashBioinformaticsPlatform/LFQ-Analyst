@@ -144,7 +144,7 @@ ui <- function(request){shinyUI(
 		 h4("How to Cite LFQ-Analyst?"),
 		 p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
 		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
-		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX")      
+		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX"),      
 		      
                  width = 6,
                  solidHeader = TRUE,
