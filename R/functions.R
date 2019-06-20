@@ -663,3 +663,109 @@ get_results_proteins <- function(dep) {
   return(table)
 }
 
+                                  
+                                  
+#######################################################
+## Plot Enrichment Results
+#######################################################
+
+plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
+                            contrasts = NULL, databases = NULL,
+                            nrow = 1,term_size = 8) {
+  assertthat::assert_that(is.data.frame(gsea_results),
+                          is.numeric(number),
+                          length(number) == 1,
+                          is.numeric(alpha),
+                          length(alpha) == 1,
+                          is.numeric(term_size),
+                          length(term_size) == 1,
+                          is.numeric(nrow),
+                          length(nrow) == 1)
+  
+  # Check gsea_results object
+  if(any(!c("Term", "var",
+            "contrast","Adjusted.P.value")
+         %in% colnames(gsea_results))) {
+    stop("'", deparse(substitute(gsea_results)),
+         "' does not contain the required columns",
+         "\nRun test_enrichment() to obtain the required columns",
+         call. = FALSE)
+  }
+  
+  if(!is.null(contrasts)) {
+    assertthat::assert_that(is.character(contrasts))
+    
+    valid_contrasts <- unique(gsea_results$contrast)
+    
+    if(!all(contrasts %in% valid_contrasts)) {
+      valid_cntrsts_msg <- paste0("Valid contrasts are: '",
+                                  paste0(valid_contrasts, collapse = "', '"),
+                                  "'")
+      stop("Not a valid contrast, please run `plot_gsea()`",
+           "with a valid contrast as argument\n",
+           valid_cntrsts_msg,
+           call. = FALSE)
+    }
+    if(!any(contrasts %in% valid_contrasts)) {
+      contrasts <- contrasts[contrasts %in% valid_contrasts]
+      message("Not all contrasts found",
+              "\nPlotting the following contrasts: '",
+              paste0(contrasts, collapse = "', '"), "'")
+    }
+    
+    gsea_results <- filter(gsea_results, contrast %in% contrasts)
+  }
+  if(!is.null(databases)) {
+    assertthat::assert_that(is.character(databases))
+    
+    valid_databases <- unique(gsea_results$var)
+    
+    if(all(!databases %in% valid_databases)) {
+      valid_cntrsts_msg <- paste0("Valid databases are: '",
+                                  paste0(valid_databases, collapse = "', '"),
+                                  "'")
+      stop("Not a valid database, please run `plot_gsea()`",
+           "with valid databases as argument\n",
+           valid_cntrsts_msg,
+           call. = FALSE)
+    }
+    if(any(!databases %in% valid_databases)) {
+      databases <- databases[databases %in% valid_databases]
+      message("Not all databases found",
+              "\nPlotting the following databases: '",
+              paste0(databases, collapse = "', '"), "'")
+    }
+    
+    gsea_results <- filter(gsea_results, var %in% databases)
+  }
+  
+  # Get top enriched gene sets
+  terms <- gsea_results %>%
+    dplyr::group_by(contrast, var) %>%
+    dplyr::filter(Adjusted.P.value <= alpha) %>%
+    dplyr::arrange(Adjusted.P.value) %>%
+    dplyr::slice(seq_len(number)) %>%
+    .$Term
+  subset <- gsea_results %>%
+    dplyr::filter(Term %in% terms) %>%
+    dplyr::arrange(var, Adjusted.P.value)
+  
+  subset$Term <- readr::parse_factor(subset$Term, levels = unique(subset$Term))
+  subset$var <- readr::parse_factor(subset$var, levels = unique(subset$var))
+  
+  # Plot top enriched gene sets
+  ggplot(subset, aes(Term,
+                     y=IN)) +
+    geom_col(aes(fill = -log10(Adjusted.P.value) )) +
+    facet_wrap(~contrast, nrow = nrow) +
+    coord_flip() +
+    labs(y = "Number of proteins",
+         fill = "-Log10 adj. P-value") +
+    theme_bw() +
+    theme(legend.position = "top",
+          axis.text.y = element_text(size = term_size),
+          legend.text = element_text(size = 9)) +
+    scale_fill_distiller(palette="Spectral")
+}
+                                  
+                                  
