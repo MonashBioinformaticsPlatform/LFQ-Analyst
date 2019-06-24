@@ -1143,6 +1143,17 @@ comparisons_dm<-reactive({
  normalised_data_dm<-reactive({
    DEP::normalize_vsn(processed_data_dm())
  })
+	
+	
+imputed_data_dm<-reactive({
+   DEP::impute(processed_data_dm(),input$imputation)
+ })
+ 
+ 
+ diff_all_dm<-reactive({
+   test_diff(imputed_data_dm(),type = 'all')
+ })
+	
  ## QC Inputs
  norm_input_dm <- reactive({
    plot_normalization(processed_data_dm(),
@@ -1159,7 +1170,7 @@ comparisons_dm<-reactive({
  
  imputation_input_dm <- reactive({
    plot_imputation(normalised_data_dm(),
-                   diff_all())
+                   diff_all_dm())
  })
  
  p_hist_input_dm <- reactive({
