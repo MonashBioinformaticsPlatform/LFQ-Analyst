@@ -982,8 +982,7 @@ autoWidth=TRUE,
    if(!is.null(dep_dm())){
      selectizeInput("dataset_dm",
                     "Download data table" ,
-                    c("Results","Original matrix",
-                      "Imputed matrix",
+                    c("Results",
                       "Full dataset"))
    }
  })
