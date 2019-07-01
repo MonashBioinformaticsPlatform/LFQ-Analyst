@@ -688,7 +688,8 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
          %in% colnames(gsea_results))) {
     stop("'", deparse(substitute(gsea_results)),
          "' does not contain the required columns",
-         "\nRun test_enrichment() to obtain the required columns",
+         "\nMake sure that HGNC gene symbols are present",
+	"\n in your 'Gene Names' column of Results table",
          call. = FALSE)
   }
   
@@ -755,12 +756,12 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
   
   # Plot top enriched gene sets
   ggplot(subset, aes(Term,
-                     y=IN)) +
-    geom_col(aes(fill = -log10(Adjusted.P.value) )) +
+                     y=-log10(Adjusted.P.value))) +
+    geom_col(aes(fill = log_odds )) +
     facet_wrap(~contrast, nrow = nrow) +
     coord_flip() +
-    labs(y = "Number of proteins",
-         fill = "-Log10 adj. P-value") +
+    labs(y = "-Log10 adjusted p-value",
+         fill = "Log2 odds ratio (vs. current background)") +
     theme_bw() +
     theme(legend.position = "top",
           axis.text.y = element_text(size = term_size),
