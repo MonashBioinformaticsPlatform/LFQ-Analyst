@@ -200,6 +200,7 @@ server <- function(input, output) {
                           stringsAsFactors = FALSE)
       exp_design_test(temp_df)
       temp_df$label<-as.character(temp_df$label)
+      temp_df$condition<-trimws(temp_df$condition, which = "left")
       return(temp_df)
     })
    
