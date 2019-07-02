@@ -4,18 +4,15 @@ exp_design_test<-function(exp_design){
   col_names<-colnames(exp_design)
   ## 
   if(!"label" %in% col_names){
-    stop("The column 'label' is not found in the Experimental Design Matrix File",
-         call. = FALSE)
+    stop(safeError("The column 'label'(case sensitive) is not found in the Experimental Design File"))
   }
   
   else if (!"condition" %in% col_names){
-    stop("The column 'condition' is not found in the Experimental Design Matrix File",
-         call. = FALSE)
+    sstop(safeError("The column 'condition' (case sensitive) is not found in the Experimental Design File"))
   }
   
   else if (!"replicate" %in% col_names){
-    stop("The column 'replicate' is not found in the Experimental Design Matrix File",
-         call. = FALSE)
+    stop(safeError("The column 'replicate' (case sensitive) is not found in the Experimental Design File"))
   }
   
 }
@@ -35,5 +32,27 @@ maxquant_input_test<-function(maxquant_input){
   else if (!"Protein.IDs" %in% col_names){
     stop(safeError("The column 'Protein IDs' is not found in the MaxQuant proteinGroups File"))
   }
+  
+  else if (!"Reverse" %in% col_names){
+    stop(safeError("The column 'Reverse' is not found in the MaxQuant proteinGroups File"))
+  }
+  
+  else if (!"Potential.contaminant" %in% col_names){
+    stop(safeError("The column 'Potential contaminant' is not found in the MaxQuant proteinGroups File"))
+  }
+  
+  else if (!"Only.identified.by.site" %in% col_names){
+    stop(safeError("The column 'Only identified by site' is not found in the MaxQuant proteinGroups File"))
+  }
+  
+  else if (!"Razor...unique.peptides" %in% col_names){
+    stop(safeError("The column 'Razor + unique peptides' is not found in the MaxQuant proteinGroups File"))
+  }
+  
+  else if (!"Protein.names" %in% col_names){
+    stop(safeError("The column 'Protein names' is not found in the MaxQuant proteinGroups File"))
+  }
+  
+  
   
 }
