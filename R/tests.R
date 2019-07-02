@@ -25,18 +25,15 @@ maxquant_input_test<-function(maxquant_input){
   col_names<-colnames(maxquant_input)
   ## 
   if(!"Gene.names" %in% col_names){
-    stop(safeError("The column 'Gene names' is not found in the MaxQuant proteinGroups File",
-         call. = FALSE))
+    stop(safeError("The column 'Gene names' is not found in the MaxQuant proteinGroups File"))
   }
   
   else if (any(grepl("LFQ", col_names))==FALSE){
-    stop("Columns starting with 'LFQ' are not found in the MaxQuant proteinGroups File",
-         call. = FALSE)
+    stop(safeError("Columns starting with 'LFQ' are not found in the MaxQuant proteinGroups File"))
   }
   
   else if (!"Protein.IDs" %in% col_names){
-    stop("The column 'Protein IDs' is not found in the MaxQuant proteinGroups File",
-         call. = FALSE)
+    stop(safeError("The column 'Protein IDs' is not found in the MaxQuant proteinGroups File"))
   }
   
 }
