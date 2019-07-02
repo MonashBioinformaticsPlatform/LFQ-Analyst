@@ -452,14 +452,14 @@ ui <- function(request){shinyUI(
                                                             "Plot type",
                                                             choices = c("Box Plot"= "boxplot",
                                                                         "Violin Plot"="violin", 
-                                                                        "Interation Plot"= "interaction",
+                                                                        "Interaction Plot"= "interaction",
                                                                         "Intensity Plot"="dot"
                                                             ),
                                                             selected = "boxplot", 
                                                             inline = TRUE),
                                                width = 12
                                            ),
-                                           tags$p("Select one of more rows from LFQ Results Table to plot individual 
+                                           tags$p("Select one or more rows from LFQ Results Table to plot individual 
                                                   protein intesities across conditions and replicates")
                                            ),
                                          fluidRow(
