@@ -244,17 +244,11 @@ server <- function(input, output) {
      if(!is.null (maxquant_data_input() )){
        maxquant_data <- reactive({maxquant_data_input()})
      }
-     else if (!is.null (maxquant_data_example() )){
-       maxquant_data <-reactive({maxquant_data_example()})
-     }
      
      if(!is.null (exp_design_input() )){
        exp_design<-reactive({exp_design_input()})
      }
      
-    if(!is.null (exp_design_example())){
-       exp_design <-reactive({exp_design_example()})
-     }
      
      message(exp_design())
      if(grepl('+',maxquant_data()$Reverse)){
@@ -268,11 +262,12 @@ server <- function(input, output) {
        filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+", 
                                     Razor...unique.peptides>=2)
      }
-     #else{filtered_data<-maxquant_data()}
-     # filter<-dplyr::filter(maxquant_data(),Reverse!="+", Potential.contaminant!="+",
-     #                       Only.identified.by.site!="+", Razor...unique.peptides>=2)
+     
      data_unique<- DEP::make_unique(filtered_data,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))
+     
+     ## Check for matching columns in maxquant and experiment design file
+     test_match_lfq_column_design(data_unique,lfq_columns, exp_design())
      data_se<-DEP:::make_se(data_unique,lfq_columns,exp_design())
   
      # Check number of replicates

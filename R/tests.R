@@ -17,7 +17,7 @@ exp_design_test<-function(exp_design){
   
 }
 
-
+### Test if column names are proper in maxquant ProteinGroups file
 maxquant_input_test<-function(maxquant_input){
   col_names<-colnames(maxquant_input)
   ## 
@@ -53,6 +53,46 @@ maxquant_input_test<-function(maxquant_input){
     stop(safeError("The column 'Protein names' is not found in the MaxQuant proteinGroups File"))
   }
   
+}
+
+
+### Test if experimental design names and LFQ column names match
+
+test_match_lfq_column_design<-function(unique_data, lfq_columns, exp_design){
+  # Show error if inputs are not the required classes
+  assertthat::assert_that(is.data.frame(unique_data),
+                          is.integer(lfq_columns),
+                          is.data.frame(exp_design))
   
+  # Show error if inputs do not contain required columns
+  if(any(!c("name", "ID") %in% colnames(unique_data))) {
+    stop(safeError("'Gene name' and/or 'Protein ID' columns are not present in
+          protein groups input file"
+        ))
+  }
   
+  if(any(!c("label", "condition", "replicate") %in% colnames(exp_design))) {
+    stop(safeError("'label', 'condition' and/or 'replicate' columns
+         are not present in the experimental design"))
+  }
+  
+  if(any(!apply(unique_data[, lfq_columns], 2, is.numeric))) {
+    stop(safeError("specified 'columns' should be numeric
+         Run make_se_parse() with the appropriate columns as argument"))
+  }
+  
+  raw <- unique_data[, lfq_columns]
+  
+  expdesign <- mutate(exp_design, condition = make.names(condition)) %>%
+    unite(ID, condition, replicate, remove = FALSE)
+  rownames(expdesign) <- expdesign$ID
+  
+  matched <- match(make.names(delete_prefix(expdesign$label)),
+                   make.names(delete_prefix(colnames(raw))))
+  
+  if(any(is.na(matched))) {
+    stop(safeError("The labels/'run names' in the experimental design DID NOT match
+         with lfq column names in maxquants proteinGroups file
+         Run LFQ-Analyst with correct labels in the experimental design"))
+  }
 }

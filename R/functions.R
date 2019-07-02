@@ -769,4 +769,44 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
     scale_fill_distiller(palette="Spectral")
 }
                                   
-                                  
+#### ==== get prefix function 
+
+get_prefix <- function(words) {
+  # Show error if input is not the required class
+  assertthat::assert_that(is.character(words))
+  
+  # Show error if 'words' contains 1 or less elements
+  if(length(words) <= 1) {
+    stop("'words' should contain more than one element")
+  }
+  # Show error if 'words' contains NA
+  if(any(is.na(words))) {
+    stop("'words' contains NAs")
+  }
+  
+  # Truncate words to smallest name
+  minlen <- min(nchar(words))
+  truncated <- substr(words, 1, minlen)
+  
+  # Show error if one of the elements is shorter than one character
+  if(minlen < 1) {
+    stop("At least one of the elements is too short")
+  }
+  
+  # Get identifical characters
+  mat <- data.frame(strsplit(truncated, ""), stringsAsFactors = FALSE)
+  identical <- apply(mat, 1, function(x) length(unique(x)) == 1)
+  
+  # Obtain the longest common prefix
+  prefix <- as.logical(cumprod(identical))
+  paste(mat[prefix, 1], collapse = "")
+}
+
+#### ===== delete prefix function
+
+delete_prefix <- function(words) {
+  # Get prefix
+  prefix <- get_prefix(words)
+  # Delete prefix from words
+  gsub(paste0("^", prefix), "", words)
+}
