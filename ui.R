@@ -42,7 +42,10 @@ ui <- function(request){shinyUI(
                                        "Type of FDR correction",
                                        choices =  c("Benjamini Hochberg"="BH",
                                                     "t-statistics-based"="fdrtool"
-                                       ), selected= "BH")
+                                       ), selected= "BH"),
+                          numericInput("k_number",
+                                       "Number of clusters in heatmap",
+                                       min = 1, max = 20, value = 6)
                  ),
                tags$hr(),
                actionButton("analyze", "Start Analysis"),
