@@ -399,7 +399,7 @@ server <- function(input, output) {
      }
      get_cluster_heatmap(dep(),
                          type="centered",kmeans = TRUE,
-                         k=6, col_limit = 6,
+                         k=input$k_number, col_limit = 6,
                          indicate = "condition"
                          )
    })
