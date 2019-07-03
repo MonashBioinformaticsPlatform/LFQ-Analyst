@@ -273,13 +273,14 @@ server <- function(input, output) {
      # Check number of replicates
      if(max(exp_design()$replicate)<3){
        threshold<-0
-     }
-     else if (max(exp_design()$replicate)==3 | max(exp_design()$replicate)<6 ){
+     } else  if(max(exp_design()$replicate)==3){
        threshold<-1
-     }
-     else {
+     } else if(max(exp_design()$replicate)<6 ){
        threshold<-2
+     } else if (max(exp_design()$replicate)>=6){
+       threshold<-trunc(max(exp_design()$replicate)/2)
      }
+     
      
      filter_missval(data_se,thr = threshold)
    })
