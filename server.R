@@ -369,11 +369,11 @@ server <- function(input, output) {
          return(pca_plot)
        }
        else{
-	     pca_label<-SummarizedExperiment::colData(dep())$replicate
+	     #pca_label<-SummarizedExperiment::colData(dep())$replicate
        pca_plot<-DEP::plot_pca(dep(), point_size = 4, indicate = "condition")
        pca_plot<-pca_plot + geom_point()
-       pca_plot<-pca_plot + ggrepel::geom_text_repel(aes(label=pca_label),
-                                           size = 5,
+       pca_plot<-pca_plot + ggrepel::geom_text_repel(aes(rowname),
+                                           size = 4,
                                            box.padding = unit(0.1, 'lines'),
                                            point.padding = unit(0.1, 'lines'),
                                            segment.size = 0.5)
@@ -1053,11 +1053,11 @@ print(pca_label)
        pca_plot<-pca_plot + labs(title = "PCA plot")
        return(pca_plot)
      }else{
-	pca_label<-SummarizedExperiment::colData(dep_dm())$replicate
+       pca_label<-SummarizedExperiment::colData(dep_dm())$replicate
        pca_plot<-DEP::plot_pca(dep_dm(), point_size = 4, indicate = "condition")
        pca_plot<-pca_plot + geom_point()
-       pca_plot<-pca_plot + ggrepel::geom_label_repel(aes(label=pca_label),
-                                           size = 5,
+       pca_plot<-pca_plot + ggrepel::geom_text_repel(aes(label=factor(rowname)),
+                                           size = 4,
                                            box.padding = unit(0.1, 'lines'),
                                            point.padding = unit(0.1, 'lines'),
                                            segment.size = 0.5)
