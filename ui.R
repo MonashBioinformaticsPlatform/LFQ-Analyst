@@ -280,7 +280,8 @@ ui <- function(request){shinyUI(
                                                       # click = "protein_click"),
                                                       brush = "protein_brush",
                                                       click = "protein_click"),
-                                           downloadButton('downloadVolcano', 'Save Highlighted Plot')
+                                           downloadButton('downloadVolcano', 'Save Highlighted Plot'),
+                                           actionButton("resetPlot", "Clear Selection")
                                            #)),
                                          )),
                                 tabPanel(title= "Heatmap",
@@ -291,7 +292,8 @@ ui <- function(request){shinyUI(
                                            box(numericInput("cluster_number",
                                                             "Cluster to download (1-6)",
                                                             min=1, max=6, value = 1), width = 6),
-                                           box(downloadButton('downloadCluster',"Save Cluster"),width = 3)
+                                           box(downloadButton('downloadCluster',"Save Cluster"),
+                                                width = 3)
                                          )
                                 ),
                                 tabPanel(title = "Protein Plot",
