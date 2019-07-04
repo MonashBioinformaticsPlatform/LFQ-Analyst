@@ -7,6 +7,7 @@ server <- function(input, output) {
      if(input$analyze==0){
        return()
      }
+    shinyjs::hide("quickstart_info")
     shinyjs::show("downloadbox")
     })
    
