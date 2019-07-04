@@ -486,7 +486,8 @@ ui <- function(request){shinyUI(
                                                       # click = "protein_click"),
                                                       brush = "protein_brush_dm",
                                                       click = "protein_click_dm"),
-                                           downloadButton('downloadVolcano_dm', 'Save Highlighted Plot')
+                                           downloadButton('downloadVolcano_dm', 'Save Highlighted Plot'),
+                                           actionButton("resetPlot_dm", "Clear Selection")
                                            #)),
                                          )),
                                 tabPanel(title= "Heatmap",
