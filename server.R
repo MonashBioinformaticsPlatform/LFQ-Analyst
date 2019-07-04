@@ -1,7 +1,7 @@
 #Define server logic to read selected file ----
-server <- function(input, output) {
-  options(shiny.maxRequestSize=100*1024^2)  ## Set maximum upload size to 100MB
- # source("demo.R")
+server <- function(input, output, session) {
+  options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
+  
 #  Show elements on clicking Start analysis button
    observeEvent(input$analyze ,{ 
      if(input$analyze==0){
@@ -428,7 +428,14 @@ server <- function(input, output) {
     
     volcano_input_selected<-reactive({
       if(!is.null(input$volcano_cntrst)){
-        proteins_selected<-data_result()[c(input$contents_rows_selected),] ## get all rows selected
+        
+        if (!is.null(input$contents_rows_selected)){
+        proteins_selected<-data_result()[c(input$contents_rows_selected),]## get all rows selected
+        }
+        else if(!is.null(input$protein_brush)){
+        proteins_selected<-data_result()[data_result()[["Gene Name"]] %in% protein_name_brush(), ] 
+        }
+        
        ## convert contrast to x and padj to y
        diff_proteins <- grep(paste(input$volcano_cntrst, "_log2", sep = ""),
                     colnames(proteins_selected))
@@ -606,7 +613,7 @@ autoWidth=TRUE,
       return(df)
     },
     options = list(scrollX = TRUE,
-autoWidth=TRUE,
+     autoWidth=TRUE,
                 columnDefs= list(list(width = '400px', targets = c(-1))))
     )
   })
@@ -636,14 +643,75 @@ autoWidth=TRUE,
  #  })
   
   ## Select rows dynamically
- observeEvent(input$protein_brush,{
+   
+   brush <- NULL
+   makeReactiveBinding("brush")
+   
+  observeEvent(input$protein_brush,{
     output$contents <- DT::renderDataTable({
       df<- data_result()[data_result()[["Gene Name"]] %in% protein_name_brush(), ]
       return(df)
     },
     options = list(scrollX= TRUE)
     )
+    
+    proteins_selected<-data_result()[data_result()[["Gene Name"]] %in% protein_name_brush(), ] ## get all rows selected
+    ## convert contrast to x and padj to y
+    diff_proteins <- grep(paste(input$volcano_cntrst, "_log2", sep = ""),
+                          colnames(proteins_selected))
+    if(input$p_adj=="FALSE"){
+      padj_proteins <- grep(paste(input$volcano_cntrst, "_p.val", sep = ""),
+                            colnames(proteins_selected))
+    }
+    else{
+      padj_proteins <- grep(paste(input$volcano_cntrst, "_p.adj", sep = ""),
+                            colnames(proteins_selected))
+    }
+    df_protein <- data.frame(x = proteins_selected[, diff_proteins],
+                             y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,
+                             name = proteins_selected$`Gene Name`)
+    #print(df_protein)
+    
+    p<-plot_volcano_new(dep(),
+                        input$volcano_cntrst,
+                        input$fontsize,
+                        input$check_names,
+                        input$p_adj)
+    
+      p<- p + geom_point(data = df_protein, aes(x, y), color = "maroon", size= 3) +
+      ggrepel::geom_text_repel(data = df_protein,
+                               aes(x, y, label = name),
+                               size = 4,
+                               box.padding = unit(0.1, 'lines'),
+                               point.padding = unit(0.1, 'lines'),
+                               segment.size = 0.5)
+    
+    output$volcano <- renderPlot({
+      withProgress(message = 'Volcano Plot calculations are in progress',
+                   detail = 'Please wait for a while', value = 0, {
+                     for (i in 1:15) {
+                       incProgress(1/15)
+                       Sys.sleep(0.25)
+                     }
+                   })
+     p
+    })
+    return(p)
   })
+ 
+ observeEvent(input$resetPlot,{
+   session$resetBrush("protein_brush")
+   brush <<- NULL
+   
+   output$contents <- DT::renderDataTable({
+     df<- data_result()
+     return(df)
+   },
+   options = list(scrollX = TRUE,
+                  autoWidth=TRUE,
+                  columnDefs= list(list(width = '400px', targets = c(-1))))
+   )
+ })
 
  observeEvent(input$protein_click,{
    output$contents <- DT::renderDataTable({
@@ -651,14 +719,16 @@ autoWidth=TRUE,
      return(df)
    },
    options = list(scrollX= TRUE,
-autoWidth=TRUE,
+   autoWidth=TRUE,
                 columnDefs= list(list(width = '400px', targets = c(-1))))
    )
  })
+ 
   ## Render Result Plots
   output$pca_plot<-renderPlot({
     pca_input()
   })
+  
   output$heatmap<-renderPlot({
     withProgress(message = 'Heatmap rendering is in progress',
                  detail = 'Please wait for a while', value = 0, {
@@ -683,7 +753,7 @@ autoWidth=TRUE,
      }
     else if(!is.null(input$volcano_cntrst)){
       volcano_input_selected()
-      } # else close
+      }# else close
   })
   
   output$protein_plot<-renderPlot({
@@ -789,6 +859,9 @@ autoWidth=TRUE,
     },
     content = function(file) {
       pdf(file)
+      observeEvent(input$protein_brush,{
+        print(p)
+      })
       print(volcano_input_selected())
       dev.off()
     }
