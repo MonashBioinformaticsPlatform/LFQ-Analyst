@@ -156,6 +156,55 @@ ui <- function(request){shinyUI(
              ) #fluidrow close
             ), # home tab close
       tabItem(tabName = "analysis",
+      div(id="quickstart_info",
+                    fluidPage(
+                      box(
+                        title = "Getting Started",
+                        h4("Which input files are required?"),
+    p(" LFQ-Analyst requires two input files: (a) the 'ProteinGroups.txt' file produced by MaxQuant and 
+		(b) a file outlining the experimental design, which includes the three following 
+		case-sensitive columns: label, condition and replicate. 
+		An example experimental design file can be downloaded at the bottom of the ‘Analysis’ sidebar tab.",
+    span("NOTE: Experimental design file is not the 'mqpar.xlm' file from MaxQuant.", style = "color:blue"),
+   "Refer to the example files provided under upload files session"
+    ),
+                        
+                        h4("Where to start?"),
+                        p("The 'Demo' tab on the sidebar will take you to pre-analysed results, 
+		which you can use to familiarise yourself with LFQ-Analyst’s outputs and graphics. 
+		The 'User guide' tab on the sidebar provides a link to download an in-depth manual to LFQ-Analyst."),
+                        
+                        h4("Which output files and graphics does LFQ-Analyst provide"),
+                        p("LFQ-Analyst provides a number of different tabular and graphics outputs:"),
+                        tags$li("Tabular Downloads"), 
+                        p("   The results of the differential expression analysis can be downloaded in tabular format in 
+			addition to the imputed and unimputed data matrices."),
+                        
+                        tags$li("Result plots"),
+                        p("  The results of the differential expression analysis can be visualised as a fully interactive 
+		Volcano Plot or an expression heatmap. 
+		'Protein Expression Plots’ can be used to show individual protein expression levels across all replicates."),
+                        
+                        tags$li("QC plots"), 
+                        p(" LFQ-Analyst offers a variety of QC plots, which provides information on quality control (QC) related aspects of the experiment  
+			including principal component analysis (PCA), sample correlations or coefficients of variation."),
+                        
+                        h4("Contact Us"),
+                        p("For any feedback or question regarding LFQ-Analyst, please contact the Monash Proteomics and Metabolomics Facility:"),
+                        tags$li("Anup Shah: anup.shah(at)monash.edu"),
+                        tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
+                        
+                        h4("How to Cite LFQ-Analyst?"),
+                        p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
+		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
+		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX"),      
+                        
+                        width = 12,
+                        solidHeader = TRUE,
+                        status = "danger"
+                      )
+                    )
+        ), # QUICKSTART INFO CLOSE
       shinyjs::hidden(div(id="downloadbox",
                           fluidRow(
                             box(
