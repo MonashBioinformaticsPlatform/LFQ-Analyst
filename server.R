@@ -1178,7 +1178,7 @@ print(pca_label)
      if (!is.null(input$contents_dm_rows_selected)){
        proteins_selected<-data_result_dm()[c(input$contents_dm_rows_selected),]## get all rows selected
      }
-     else if(!is.null(input$protein_brush)){
+     else if(!is.null(input$protein_brush_dm)){
        proteins_selected<-data_result_dm()[data_result_dm()[["Gene Name"]] %in% protein_name_brush_dm(), ] 
      }
      ## convert contrast to x and padj to y
