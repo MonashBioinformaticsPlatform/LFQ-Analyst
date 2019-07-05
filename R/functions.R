@@ -755,8 +755,8 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
   subset$var <- readr::parse_factor(subset$var, levels = unique(subset$var))
   
   # Plot top enriched gene sets
-  ggplot(subset, aes(Term,
-                     y=-log10(Adjusted.P.value))) +
+  p<-ggplot(subset, aes(Term,
+                     y=-log10(`Adjusted.P.value`))) +
     geom_col(aes(fill = log_odds )) +
     facet_wrap(~contrast, nrow = nrow) +
     coord_flip() +
@@ -764,7 +764,6 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
          fill = "Log2 odds ratio (vs. current background)") +
     theme_bw() +
     theme(legend.position = "top",
-          axis.text.y = element_text(size = term_size),
           legend.text = element_text(size = 9)) +
     scale_fill_distiller(palette="Spectral")
 }

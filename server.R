@@ -543,7 +543,7 @@ server <- function(input, output, session) {
     enrichment_output_test(dep(), input$go_database)
     go_results<- test_gsea(dep(), databases = input$go_database, contrasts = TRUE)
     plot_go<- plot_enrichment(go_results, number = 5, alpha = 0.05, contrasts =input$contrast,
-    databases = input$go_database, nrow = 2, term_size = 8) + aes(stringr::str_wrap(Term, 60), log_odds) +
+    databases = input$go_database, nrow = 2, term_size = 8) + aes(stringr::str_wrap(Term, 60)) +
      xlab(NULL)
     go_list<-list("go_result"=go_results, "plot_go"=plot_go)
     return(go_list)
@@ -555,7 +555,7 @@ server <- function(input, output, session) {
      enrichment_output_test(dep(), input$pathway_database)
      pathway_results<- test_gsea(dep(), databases=input$pathway_database, contrasts = TRUE)
      plot_pathway<-plot_enrichment(pathway_results, number = 5, alpha = 0.05, contrasts =input$contrast_1,
-               databases=input$pathway_database, nrow = 3, term_size = 8) + aes(stringr::str_wrap(Term, 30), log_odds) +
+               databases=input$pathway_database, nrow = 3, term_size = 8) + aes(stringr::str_wrap(Term, 30)) +
        xlab(NULL)
      pathway_list<-list("pa_result"=pathway_results, "plot_pa"=plot_pathway)
      return(pathway_list)
@@ -1312,7 +1312,7 @@ imputed_data_dm<-reactive({
      go_results<- test_gsea(dep_dm(), databases = input$go_database_dm, contrasts = TRUE)
      plot_go<- plot_enrichment(go_results, number = 5, alpha = 0.05, contrasts =input$contrast_dm,
                                databases = input$go_database_dm, nrow = 2, term_size = 8) + 
-       aes(stringr::str_wrap(Term, 60), log_odds) +
+       aes(stringr::str_wrap(Term, 60)) +
        xlab(NULL)
      go_list<-list("go_result"=go_results, "plot_go"=plot_go)
      return(go_list)
@@ -1331,7 +1331,7 @@ imputed_data_dm<-reactive({
    pathway_results<- test_gsea(dep_dm(), databases=input$pathway_database_dm, contrasts = TRUE)
    plot_pathway<-plot_enrichment(pathway_results, number = 5, alpha = 0.05, contrasts =input$contrast_dm_1,
                                  databases=input$pathway_database_dm, nrow = 3, term_size = 8) + 
-     aes(stringr::str_wrap(Term, 30), log_odds) +
+     aes(stringr::str_wrap(Term, 30)) +
      xlab(NULL)
    pathway_list<-list("pa_result"=pathway_results, "plot_pa"=plot_pathway)
    return(pathway_list)
