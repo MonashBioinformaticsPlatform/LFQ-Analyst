@@ -8,7 +8,7 @@ exp_design_test<-function(exp_design){
   }
   
   else if (!"condition" %in% col_names){
-    sstop(safeError("The column 'condition' (case sensitive) is not found in the Experimental Design File"))
+    stop(safeError("The column 'condition' (case sensitive) is not found in the Experimental Design File"))
   }
   
   else if (!"replicate" %in% col_names){
