@@ -96,3 +96,18 @@ test_match_lfq_column_design<-function(unique_data, lfq_columns, exp_design){
          Run LFQ-Analyst with correct labels in the experimental design"))
   }
 }
+
+
+
+enrichment_output_test<-function(dep, database){
+  significant <- SummarizedExperiment::rowData(dep) %>%
+    as.data.frame() %>%
+    dplyr::select(name, significant) %>%
+    dplyr::filter(significant) %>%
+    dplyr::mutate(name = gsub("[.].*", "", name))
+  test_enrichment_output<-enrichR::enrichr(significant$name, databases = database)
+  if(nrow(test_enrichment_output[[1]])==0)
+    stop(safeError("Enrichment analysis failed. 
+                   Please check if the gene names are in Entrenz Gene Symbol format. 
+                   (eg. ASM24, MYO6)"))
+}

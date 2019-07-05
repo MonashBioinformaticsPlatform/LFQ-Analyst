@@ -540,6 +540,7 @@ server <- function(input, output, session) {
                   })
      
     if(!is.null(input$contrast)){
+    enrichment_output_test(dep(), input$go_database)
     go_results<- test_gsea(dep(), databases = input$go_database, contrasts = TRUE)
     plot_go<- plot_enrichment(go_results, number = 5, alpha = 0.05, contrasts =input$contrast,
     databases = input$go_database, nrow = 2, term_size = 8) + aes(stringr::str_wrap(Term, 60), log_odds) +
@@ -551,6 +552,7 @@ server <- function(input, output, session) {
 
    pathway_input<-eventReactive(input$pathway_analysis,{
      progress_indicator("Pathway Analysis is running....")
+     enrichment_output_test(dep(), input$pathway_database)
      pathway_results<- test_gsea(dep(), databases=input$pathway_database, contrasts = TRUE)
      plot_pathway<-plot_enrichment(pathway_results, number = 5, alpha = 0.05, contrasts =input$contrast_1,
                databases=input$pathway_database, nrow = 3, term_size = 8) + aes(stringr::str_wrap(Term, 30), log_odds) +
@@ -893,7 +895,8 @@ autoWidth=TRUE,
   
   ###### ==== DOWNLOAD PATHWAY TABLE ==== ####
   output$downloadPA <- downloadHandler(
-    filename = function() { paste("Pathway_enrichment_",input$pathway_database, ".csv", sep = "") }, ## use = instead of <-
+    filename = function() { paste("Pathway_enrichment_",input$pathway_database, ".csv", sep = "") }, 
+    ## use = instead of <-
     content = function(file) {
       write.table(pathway_input()$pa_result,
                   file,
@@ -954,7 +957,8 @@ autoWidth=TRUE,
         nrow()
       
       tested_contrasts<- gsub("_p.adj", "", 
-                              colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", colnames(SummarizedExperiment::rowData(dep())))])
+                              colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", 
+                              colnames(SummarizedExperiment::rowData(dep())))])
       pg_width<- ncol(imputed_data()) / 2.5
       # Set up parameters to pass to Rmd document
       params <- list(data = processed_data,
@@ -1098,7 +1102,7 @@ autoWidth=TRUE,
  
 comparisons_dm<-reactive({
   comparisons<-gsub("_p.adj", "", colnames(SummarizedExperiment::rowData(dep_dm()))[grep("p.adj", 
-                                                                                 colnames(SummarizedExperiment::rowData(dep_dm())))])
+                          colnames(SummarizedExperiment::rowData(dep_dm())))])
 })
  ## Results plot inputs
  
@@ -1304,9 +1308,11 @@ imputed_data_dm<-reactive({
                 })
    
    if(!is.null(input$contrast_dm)){
+     enrichment_output_test(dep_dm(), input$go_database_dm)
      go_results<- test_gsea(dep_dm(), databases = input$go_database_dm, contrasts = TRUE)
      plot_go<- plot_enrichment(go_results, number = 5, alpha = 0.05, contrasts =input$contrast_dm,
-                               databases = input$go_database_dm, nrow = 2, term_size = 8) + aes(stringr::str_wrap(Term, 60), log_odds) +
+                               databases = input$go_database_dm, nrow = 2, term_size = 8) + 
+       aes(stringr::str_wrap(Term, 60), log_odds) +
        xlab(NULL)
      go_list<-list("go_result"=go_results, "plot_go"=plot_go)
      return(go_list)
@@ -1321,10 +1327,11 @@ imputed_data_dm<-reactive({
                     Sys.sleep(0.25)
                   }
                 })
-   
+   enrichment_output_test(dep_dm(), input$pathway_database_dm)
    pathway_results<- test_gsea(dep_dm(), databases=input$pathway_database_dm, contrasts = TRUE)
    plot_pathway<-plot_enrichment(pathway_results, number = 5, alpha = 0.05, contrasts =input$contrast_dm_1,
-                                 databases=input$pathway_database_dm, nrow = 3, term_size = 8) + aes(stringr::str_wrap(Term, 30), log_odds) +
+                                 databases=input$pathway_database_dm, nrow = 3, term_size = 8) + 
+     aes(stringr::str_wrap(Term, 30), log_odds) +
      xlab(NULL)
    pathway_list<-list("pa_result"=pathway_results, "plot_pa"=plot_pathway)
    return(pathway_list)
@@ -1416,7 +1423,8 @@ autoWidth=TRUE,
                 columnDefs= list(list(width = '400px', targets = c(-1))))
    )
    
-   proteins_selected<-data_result_dm()[data_result_dm()[["Gene Name"]] %in% protein_name_brush_dm(), ] ## get all rows selected
+   proteins_selected<-data_result_dm()[data_result_dm()[["Gene Name"]] %in% protein_name_brush_dm(), ] #
+   # get all rows selected
    ## convert contrast to x and padj to y
    diff_proteins <- grep(paste(input$volcano_cntrst_dm, "_log2", sep = ""),
                          colnames(proteins_selected))
@@ -1640,7 +1648,8 @@ autoWidth=TRUE,
  
  ###### ==== DOWNLOAD PATHWAY TABLE ==== ####
  output$downloadPA_dm <- downloadHandler(
-   filename = function() { paste("Pathway_enrichment_",input$pathway_database_dm, ".csv", sep = "") }, ## use = instead of <-
+   filename = function() { paste("Pathway_enrichment_",input$pathway_database_dm, ".csv", sep = "") }, 
+   ## use = instead of <-
    content = function(file) {
      write.table(pathway_input_dm()$pa_result,
                  file,
@@ -1665,7 +1674,8 @@ autoWidth=TRUE,
      #   nrow()
      # 
      # tested_contrasts_dm<- gsub("_p.adj", "", 
-     #                            colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", colnames(SummarizedExperiment::rowData(dep_dm())))])
+     #                            colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", 
+     #    colnames(SummarizedExperiment::rowData(dep_dm())))])
      # pg_width_dm<- ncol(processed_data_dm()) / 2.5
      # # Set up parameters to pass to Rmd document
      # params <- list(data = processed_data_dm,
@@ -1700,7 +1710,7 @@ autoWidth=TRUE,
  #     
  #     tested_contrasts_dm<- gsub("_p.adj", "", 
  #                                colnames(SummarizedExperiment::rowData(dep_dm()))[grep("p.adj", 
- #                                                                                         colnames(SummarizedExperiment::rowData(dep_dm())))])
+ #                                  colnames(SummarizedExperiment::rowData(dep_dm())))])
  #     pg_width_dm<- ncol(processed_data_dm()) / 2.5
  #     
  #     # Set up parameters to pass to Rmd document
