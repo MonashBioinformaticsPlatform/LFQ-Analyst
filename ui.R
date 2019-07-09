@@ -383,7 +383,7 @@ ui <- function(request){shinyUI(
                                                             c("KEGG"="KEGG_2016",
                                                               "Reactome"="Reactome_2016")),
                                                 width= 5),
-                                              actionButton("pathway_analysis", "Run Analysis"),
+                                              actionButton("pathway_analysis", "Run Enrichment"),
                                               plotOutput("pathway_enrichment"),
                                               downloadButton('downloadPA', 'Download Table')
                                      )
@@ -588,7 +588,7 @@ ui <- function(request){shinyUI(
                                                             c("KEGG"="KEGG_2016",
                                                               "Reactome"="Reactome_2016")),
                                                 width= 5),
-                                              actionButton("pathway_analysis_dm", "Run Analysis"),
+                                              actionButton("pathway_analysis_dm", "Run Enrichment"),
                                               plotOutput("pathway_enrichment_dm"),
                                               downloadButton('downloadPA_dm', 'Download Table')
                                      ) #### Tab demo closed
