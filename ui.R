@@ -165,7 +165,7 @@ ui <- function(request){shinyUI(
 		(b) a file outlining the experimental design, which includes the three following 
 		case-sensitive columns: label, condition and replicate. 
 		An example experimental design file can be downloaded at the bottom of the ‘Analysis’ sidebar tab.",
-    span("NOTE: Experimental design file is not the 'mqpar.xlm' file from MaxQuant.", style = "color:blue"),
+    span("NOTE: Experimental design file is not the 'mqpar.xml' file from MaxQuant.", style = "color:blue"),
    "Refer to the example files provided under upload files session"
     ),
                         
