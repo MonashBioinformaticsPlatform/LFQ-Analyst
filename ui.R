@@ -109,7 +109,7 @@ ui <- function(request){shinyUI(
                 width = 6,
                 solidHeader = TRUE,
                 status = "primary",
-                HTML('<center><img src="./LFQ_analyst.png" width="500"></center>')
+                HTML('<center><img src="./LFQ_analyst.svg"></center>')
                 ),#box 1 closed
                box(
                  title = "Getting Started",
