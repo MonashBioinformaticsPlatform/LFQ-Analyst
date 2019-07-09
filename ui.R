@@ -401,9 +401,12 @@ ui <- function(request){shinyUI(
                box(
                    title = "User Guide",
                    h3("LFQ-Analyst: Manual"),
-                   div(p(HTML(paste0('A detail user manual can be accessed ',
+                   div(p(HTML(paste0('A detail online user manual can be accessed ',
 			a(href = 'https://monashbioinformaticsplatform.github.io/LFQ-Analyst/', 
-                                                                               target='_blank', 'here'))))),
+                                      target='_blank', 'here'))))),
+			          div(p(HTML(paste0("Alternatively a PDF version of manual can be accessed",
+			                            a(href = './LFQ-Analyst_manual.pdf', 
+			                              target='_blank', ' here'))))),               
                 width = 12,
                 solidHeader = TRUE,
                 status = "primary"
