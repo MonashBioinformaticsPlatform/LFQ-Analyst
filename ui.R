@@ -136,7 +136,7 @@ ui <- function(request){shinyUI(
                         HTML('<center><img src="./LFQ_analyst.svg" width="500px"></center>'),
                         width = 12,
                         solidHeader = TRUE,
-                        status = "primary"
+                        status = "danger"
                       )
                     )
         ), # QUICKSTART INFO CLOSE
