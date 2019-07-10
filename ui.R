@@ -91,68 +91,25 @@ ui <- function(request){shinyUI(
              fluidRow( 
                box(
                 title = "Overview",
-                  h3("LFQ-Analyst: A web platform to analyse label-free quantitative proteomics dataset"),
-                  p("Relative label-free quantification (LFQ) of shotgun proteomics data using precursor (MS1) 
-                    signal intensities is one of the most commonly used application to comprehensively and globally 
-                    quantify proteins across biological samples and conditions. Owing to the popularity of the technique,
-                    software suites like MaxQuant have been developed to extract, analyse and compare spectral features
-                    and report quantitative information of peptide, protein and even post-translationally modified (PTM)
-                    sites. There is still a lack of accessible tools for the interpretation and downstream statistical
-                    analysis of these complex datasets. Therefore, we developed LFQ-Analyst; a web application
-                    to streamline differential expression analysis and visualization of label-free quantitative
-                    proteomics datasets.  This tool provides a wealth of user-analytics features including differential
-                    expression, dimensionality reduction, clustering and different quality checks in tabular and 
-                    graphical forms to facilitate exploratory and statistical analysis of quantitative datasets produced 
-                    from proteomics investigations. LFQ-Analyst was designed to use sophisticated techniques for analysis, 
-                    yet be accessible to researchers without extensive proteomics experience. Furthermore, users can 
-                    automatically generate comprehensive analysis reports. "),
-                width = 6,
+                  h3("LFQ-Analyst: An easy-to-use interactive web-platform to analyze and visualize proteomics data 
+                     preprocessed with MaxQuant."),
+                p("LFQ-Analyst is an easy-to-use, interactive web application developed to perform 
+                  differential expression analysis with “one click” and to visualize label-free quantitative proteomic 
+                  datasets preprocessed with MaxQuant.  LFQ-Analyst provides a wealth of user-analytic features 
+                  and offers numerous publication-quality result output graphics and tables to facilitate statistical 
+                  and exploratory analysis of label-free quantitative datasets. "), 
+                br(),
+                HTML('<center><img src="./LFQ_analyst.svg" width="600px"></center>'),
+                br(),
+                h4("Sidebar tabs"),
+                tags$li(tags$b("Analysis: "),"perform your own analysis"), 
+                tags$li(tags$b("Demo: "),"familiarise yourself with LFQ-Analyst by browsing through pre-analysed results"), 
+                tags$li(tags$b("User Guide: "), "download an in-depth manual"), 
+                width = 12,
                 solidHeader = TRUE,
-                status = "primary",
-                HTML('<center><img src="./LFQ_analyst.svg"></center>')
-                ),#box 1 closed
-               box(
-                 title = "Getting Started",
-                 h4("Which input files are required?"),
-                 p("LFQ-Analyst requires two input files: (a) the 'ProteinGroups.txt' file produced by MaxQuant and 
-		(b) a file outlining the experimental design, which includes the three following 
-		case-sensitive columns: label, condition and replicate. 
-		An example experimental design file can be downloaded at the bottom of the ‘Analysis’ sidebar tab."),
-                 
-                 h4("Where to start?"),
-                 p("The 'Demo' tab on the sidebar will take you to pre-analysed results, 
-		which you can use to familiarise yourself with LFQ-Analyst’s outputs and graphics. 
-		The 'User guide' tab on the sidebar provides a link to download an in-depth manual to LFQ-Analyst."),
-                
-                 h4("Which output files and graphics does LFQ-Analyst provide"),
-                 p("LFQ-Analyst provides a number of different tabular and graphics outputs:"),
-                 tags$li("Tabular Downloads"), 
-                 p("   The results of the differential expression analysis can be downloaded in tabular format in 
-			addition to the imputed and unimputed data matrices."),
-                 
-                 tags$li("Result plots"),
-                 p("  The results of the differential expression analysis can be visualised as a fully interactive 
-		Volcano Plot or an expression heatmap. 
-		'Protein Expression Plots’ can be used to show individual protein expression levels across all replicates."),
-                 
-                 tags$li("QC plots"), 
-                 p(" LFQ-Analyst offers a variety of QC plots, which provides information on quality control (QC) related aspects of the experiment  
-			including principal component analysis (PCA), sample correlations or coefficients of variation."),
-                 
-                 h4("Contact Us"),
-                 p("For any feedback or question regarding LFQ-Analyst, please contact the Monash Proteomics and Metabolomics Facility:"),
-                 tags$li("Anup Shah: anup.shah(at)monash.edu"),
-                 tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
-		       
-		 h4("How to Cite LFQ-Analyst?"),
-		 p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
-		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
-		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX"),      
-		      
-                 width = 6,
-                 solidHeader = TRUE,
-                 status = "danger"
-               ) # box 2 close
+                status = "primary"
+                 )#box 1 closed
+               
              ) #fluidrow close
             ), # home tab close
       tabItem(tabName = "analysis",
@@ -160,48 +117,26 @@ ui <- function(request){shinyUI(
                     fluidPage(
                       box(
                         title = "Getting Started",
-                        h4("Which input files are required?"),
-    p(" LFQ-Analyst requires two input files: (a) the 'ProteinGroups.txt' file produced by MaxQuant and 
-		(b) a file outlining the experimental design, which includes the three following 
-		case-sensitive columns: label, condition and replicate. 
-		An example experimental design file can be downloaded at the bottom of the ‘Analysis’ sidebar tab.",
-    span("NOTE: Experimental design file is not the 'mqpar.xml' file from MaxQuant.", style = "color:blue"),
-   "Refer to the example files provided under upload files session"
-    ),
-                        
-                        h4("Where to start?"),
-                        p("The 'Demo' tab on the sidebar will take you to pre-analysed results, 
-		which you can use to familiarise yourself with LFQ-Analyst’s outputs and graphics. 
-		The 'User guide' tab on the sidebar provides a link to download an in-depth manual to LFQ-Analyst."),
-                        
-                        h4("Which output files and graphics does LFQ-Analyst provide"),
-                        p("LFQ-Analyst provides a number of different tabular and graphics outputs:"),
-                        tags$li("Tabular Downloads"), 
-                        p("   The results of the differential expression analysis can be downloaded in tabular format in 
-			addition to the imputed and unimputed data matrices."),
-                        
-                        tags$li("Result plots"),
-                        p("  The results of the differential expression analysis can be visualised as a fully interactive 
-		Volcano Plot or an expression heatmap. 
-		'Protein Expression Plots’ can be used to show individual protein expression levels across all replicates."),
-                        
-                        tags$li("QC plots"), 
-                        p(" LFQ-Analyst offers a variety of QC plots, which provides information on quality control (QC) related aspects of the experiment  
-			including principal component analysis (PCA), sample correlations or coefficients of variation."),
-                        
-                        h4("Contact Us"),
-                        p("For any feedback or question regarding LFQ-Analyst, please contact the Monash Proteomics and Metabolomics Facility:"),
-                        tags$li("Anup Shah: anup.shah(at)monash.edu"),
-                        tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
-                        
-                        h4("How to Cite LFQ-Analyst?"),
-                        p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
-		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
-		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX"),      
-                        
+                        h3(tags$b(span("Quick Start", style="text-decoration:underline"))),
+                        tags$li("Upload your ", tags$b("proteinGroups.txt "),"file of ", tags$b("Label-free quantitation (LFQ), "), 
+                        "generated by MaxQuant."),
+                        tags$li("Upload your ", tags$b(" experimental design "),"table. ", 
+                                span("NOTE: Experimental design file is not the 'mqpar.xml' file from MaxQuant.",
+                                style = "color:blue"), "Refer to the example files provided under upload files session" ),
+                        tags$li(tags$b("Advanced Options: "),"Adjust the p-value cut-off, the log2 fold change cut-off, 
+                                the imputation type, FDR correction method and/or number of clusters in heatmap", 
+                                tags$b("(Optional)")),
+                        tags$li("Press ", tags$b("Start Analysis "),"to perform differential expression analysis 
+                                and wait for the results to appear in the background."), 
+                        tags$li("To perform a Gene Ontology and/or Pathway Enrichment analysis on the 
+                                significantly regulated proteins press ", tags$b("Run Enrichment "),
+                                "in the bottom right section of the results."), 
+                        tags$li("Make use of the ", tags$b("User Guide ")," tab for a detailed explanation of inputs, advanced options and outputs"), 
+                          p("Note that the enrichment analysis step may take a while to complete. "),
+                        HTML('<center><img src="./LFQ_analyst.svg" width="500px"></center>'),
                         width = 12,
                         solidHeader = TRUE,
-                        status = "danger"
+                        status = "primary"
                       )
                     )
         ), # QUICKSTART INFO CLOSE
@@ -401,12 +336,22 @@ ui <- function(request){shinyUI(
                box(
                    title = "User Guide",
                    h3("LFQ-Analyst: Manual"),
-                   div(p(HTML(paste0('A detail online user manual can be accessed ',
-			a(href = 'https://monashbioinformaticsplatform.github.io/LFQ-Analyst/', 
-                                      target='_blank', 'here'))))),
-			          div(p(HTML(paste0("Alternatively a PDF version of manual can be accessed",
+#                    div(p(HTML(paste0('A detail online user manual can be accessed ',
+# 			a(href = 'https://monashbioinformaticsplatform.github.io/LFQ-Analyst/', 
+#                                       target='_blank', 'here'))))),
+			   div(p(HTML(paste0("A detailed user manual can be accessed",
 			                            a(href = './LFQ-Analyst_manual.pdf', 
-			                              target='_blank', ' here'))))),               
+			                              target='_blank', tags$b("here.")))))),  
+			h4("Contact Us"),
+			p("For any feedback or question regarding LFQ-Analyst, please contact the 
+			  Monash Proteomics and Metabolomics Facility:"),
+			tags$li("Anup Shah: anup.shah(at)monash.edu"),
+			tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
+			
+			h4("How to Cite LFQ-Analyst?"),
+			p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
+		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
+		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX"),   
                 width = 12,
                 solidHeader = TRUE,
                 status = "primary"
