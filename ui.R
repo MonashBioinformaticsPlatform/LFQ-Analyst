@@ -102,9 +102,11 @@ ui <- function(request){shinyUI(
                 HTML('<center><img src="./LFQ_analyst.svg" width="600px"></center>'),
                 br(),
                 h4("Sidebar tabs"),
+                tags$ul(
                 tags$li(tags$b("Analysis: "),"perform your own analysis"), 
                 tags$li(tags$b("Demo: "),"familiarise yourself with LFQ-Analyst by browsing through pre-analysed results"), 
-                tags$li(tags$b("User Guide: "), "download an in-depth manual"), 
+                tags$li(tags$b("User Guide: "), "download an in-depth manual") 
+                ),
                 width = 12,
                 solidHeader = TRUE,
                 status = "primary"
@@ -223,7 +225,7 @@ ui <- function(request){shinyUI(
                                          ),
                                          fluidRow(
                                            box(numericInput("cluster_number",
-                                                            "Cluster to download (1-6)",
+                                                            "Cluster to download",
                                                             min=1, max=6, value = 1), width = 6),
                                            box(downloadButton('downloadCluster',"Save Cluster"),
                                                 width = 3)
@@ -442,7 +444,7 @@ ui <- function(request){shinyUI(
                                          ),
                                          fluidRow(
                                            box(numericInput("cluster_number_dm",
-                                                            "Cluster to download (1-6)",
+                                                            "Cluster to download",
                                                             min=1, max=6, value = 1), width = 6),
                                            box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3)
                                          )
