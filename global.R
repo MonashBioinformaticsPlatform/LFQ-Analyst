@@ -10,10 +10,13 @@ library("ComplexHeatmap")
 library("limma")
 library("DT")
 library("ggrepel")
+library("httr")
+library("rjson")
 source("R/functions.R")
 source("R/volcano_function.R")
 source("R/tests.R")
 source("R/demo_functions.R")
+source("R/enrichment_functions.R")
 
 
 
