@@ -48,16 +48,37 @@ Statistical analysis was performed using an in-house generated R script based on
 \pagebreak
 
 
+
+## Exploratory Analysis (QC Plots)
+
+#### Principle Component Analysis (PCA) plot
+
+
+```{r pca_plot, echo=FALSE, fig.height= 4}
+print(params$pca_input())
+```
+\pagebreak
+
+#### Sample Correlation matrix
+
+```{r correlation_heatmap, echo=FALSE, fig.keep='first'}
+print(params$correlation_input())
+```
+\pagebreak
+
+#### Sample Coefficient of variation (CVs)
+
+```{r sample_cv,  echo=FALSE, warning=FALSE }
+print(params$cvs_input())
+```
+\pagebreak
+
 ### Proteomics Experiment Summary
 
-Protein identifications per sample.
+Protein quantified per sample (after pre-processing).
 
-
-
-```{r numbers, echo=FALSE, warning=FALSE }
-#str(data_filter)
+```{r numbers, echo=FALSE, warning=FALSE, results='hide', message=FALSE }
 print(params$numbers_input())
-#plot_numbers(params$data_filter)
 ```
 \pagebreak
 
@@ -67,38 +88,8 @@ Protein overlap in all samples.
 ```{r coverage, echo=FALSE, warning=FALSE}
 print(params$coverage_input())
 ```
-
-
 \pagebreak
 
-## Exploratory Analysis
-
-#### Principle Component Analysis (PCA) plot
-
-```{r, echo=FALSE}
-num = 400
-#if (nrow(params$dep) < 400) num = nrow(params$dep)
-```
-
-
-```{r pca_plot, echo=FALSE, fig.height= 4}
-print(params$pca_input())
-```
-
-
-#### Sample Correlation matrix
-
-```{r correlation_heatmap, echo=FALSE,   fig.height= 4}
-print(params$correlation_input())
-```
-
-
-#### Sample Coefficient of variation (CVs)
-
-```{r sample_cv,  echo=FALSE, warning=FALSE }
-print(params$cvs_input())
-```
-\pagebreak
 
 
 ## Missing Value handling
@@ -112,26 +103,18 @@ params$missval_input()
 ```
 \pagebreak
 
-### Missing value distribution
-What are the intensities for proteins with and without missing values in the dataset?
-
-```{r missing_value_distribution, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
-print(params$detect_input())
-```
-\pagebreak
-
-### Protein expression distribution before and after imputation
-Effect of imputation on protein expression distribution
+#### Missing value distribution
+Protein expression distribution before and after imputation. The plot showing the effect of imputation on protein expression distribution.
 
 ```{r imputation_effect, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 print(params$imputation_input())
 ```
 \pagebreak
 
-## Differential Expression Analysis
+## Differential Expression Analysis (Results Plots) 
 
 #### Heatmap
-  A plot representing an overview of expression of all significant(differencially expressed) proteins (rows) in all samples (columns).
+  A plot representing an overview of expression of all significant (differencially expressed) proteins (rows) in all samples (columns).
 
  
 ```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep='all'}
@@ -140,16 +123,13 @@ print(params$heatmap_input())
 
 #### Volcano Plots
 
-```{r volcano,  echo=FALSE, fig.cap='volcano plots for analysis', warning=FALSE, comment=NA}
+```{r volcano,  echo=FALSE, warning=FALSE, comment=NA}
 for(i in params$tested_contrasts){
-  print(paste0('volcano_plot_',i,sep=""))
+ # print(paste0('volcano_plot_',i,sep=""))
   print(plot_volcano_new(params$dep(),contrast = i,label_size = 2, add_names = F))
   }
 ```
 
-```{r systemsInfo, warning=FALSE}
-print(sessionInfo())
-```
 
 
 
