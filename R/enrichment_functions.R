@@ -131,7 +131,7 @@ test_gsea_mod <- function(dep,
     
     # Run enrichR
     genes <- significant$name
-    enriched <- enrichR::enrichr(genes, databases)
+    enriched <- enrichr_mod(genes, databases)
     
     # Tidy output
     df_enrich <- NULL
