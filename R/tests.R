@@ -111,3 +111,14 @@ enrichment_output_test<-function(dep, database){
                    Please check if the gene names are in Entrenz Gene Symbol format. 
                    (eg. ASM24, MYO6)"))
 }
+
+null_enrichment_test<-function(gsea_result,alpha=0.05){
+  gsea_df<-gsea_result %>% group_by(contrast, var) %>% dplyr::filter(Adjusted.P.value <= alpha)
+  if(nrow(gsea_df)==0){
+    stop(safeError("No enriched term found at FDR cutoff 0.05. 
+                   Enrichment plot could not be displayed. 
+                   However, the results (non-significant hits) can still be accessed 
+                   through 'Download table' tab."))
+  }
+}
+
