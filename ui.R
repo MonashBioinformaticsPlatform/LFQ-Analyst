@@ -33,6 +33,9 @@ ui <- function(request){shinyUI(
                           numericInput("lfc",
                                        "Log2 fold change cutoff",
                                        min = 0, max = 10, value = 1),
+                          checkboxInput("paired",
+                                        "Paired test", FALSE),
+                          
                           radioButtons("imputation",
                                        "Imputation type",
                                        choices = c("Perseus-type"="man", MSnbase::imputeMethods())[1:9],
@@ -43,6 +46,8 @@ ui <- function(request){shinyUI(
                                        choices =  c("Benjamini Hochberg"="BH",
                                                     "t-statistics-based"="fdrtool"
                                        ), selected= "BH"),
+                          checkboxInput("single_peptide",
+                                        "Include single peptide identifications", FALSE),
                           numericInput("k_number",
                                        "Number of clusters in heatmap",
                                        min = 1, max = 20, value = 6)
