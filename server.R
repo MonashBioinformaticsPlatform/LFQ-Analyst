@@ -260,9 +260,12 @@ server <- function(input, output, session) {
        filtered_data<-dplyr::filter(filtered_data,Potential.contaminant!="+")
      }
      if(grepl('+',filtered_data$Only.identified.by.site)){
-       filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+", 
-                                    Razor...unique.peptides>=2)
+       filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+") 
      }
+     if(input$single_peptide==TRUE){
+       filtered_data <-filtered_data
+     }
+     else{filtered_data<-dplyr::filter(filtered_data,Razor...unique.peptides>=2)}
      
      data_unique<- DEP::make_unique(filtered_data,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))
@@ -318,7 +321,7 @@ server <- function(input, output, session) {
 
    dep<-reactive({
      if(input$fdr_correction=="BH"){
-       diff_all<-test_limma(imputed_data(),type='all')
+       diff_all<-test_limma(imputed_data(),type='all', paired = input$paired)
        add_rejections(diff_all,alpha = input$p, lfc= input$lfc)
      }
      else{
