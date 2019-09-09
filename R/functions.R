@@ -420,13 +420,20 @@ get_annotation <- function(dep, indicate) {
 
 test_limma <- function(se, type = c("control", "all", "manual"),
                        control = NULL, test = NULL,
-                       design_formula = formula(~ 0 + condition)) {
+                       design_formula = formula(~ 0 + condition),
+                       paired = FALSE) {
   #require("dplyr", "tidyr", "purrr")
   
   # Show error if inputs are not the required classes
   assertthat::assert_that(inherits(se, "SummarizedExperiment"),
                           is.character(type),
                           class(design_formula) == "formula")
+  if (paired == FALSE){
+    design_formula <- design_formula
+  }else{
+    design_formula<-formula(~ 0 + condition + replicate)
+  }
+  
   
   # Show error if inputs do not contain required columns
   type <- match.arg(type)
