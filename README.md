@@ -8,9 +8,7 @@ A tool for analysing label-free quantitative proteomics dataset https://bioinfor
 
 
 
-# Label free proteomics data analysis pipeline
 
-Repository for quantitative proteomics (MaxQuant output) data analysis pipeline 
 
 ## Motivation
 
