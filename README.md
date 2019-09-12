@@ -77,5 +77,6 @@ at least 2 out of three replicates)
 4.  Full results: Combined table of all above data outputs i.e. with and
     without imputation information, along with fold change and p-values.
 
-**Download Report** (word format) A summary report document
-    including method, summary statistics and plots.
+**Download Report** 
+- A summary report for each analysis that
+    includes method, summary statistics and plots.
