@@ -1,3 +1,7 @@
+// ============ NOTE =================
+// Users of this app are encouraged to keep this analytics script in the app directory
+// This will help developer track the usage for future funding persective.
+
 // Initial Tracking Code
 (function(i,s,o,g,r,a,m){
   i['GoogleAnalyticsObject']=r;
