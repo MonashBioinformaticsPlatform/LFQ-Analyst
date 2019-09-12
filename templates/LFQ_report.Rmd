@@ -1,0 +1,164 @@
+---
+title: "LFQ-Analyst report"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  data: NA
+  alpha: NA
+  lfc: NA
+  num_signif: NA
+  tested_contrasts: NA
+  numbers_input: NA
+  coverage_input: NA
+  pca_input: NA
+  correlation_input: NA
+  missval_input: NA
+  detect_input: NA
+  imputation_input: NA
+  p_hist_input: NA
+  heatmap_input: NA
+  dep: NA
+  pg_width: NA
+  cvs_input: NA
+output: 
+  pdf_document:
+    fig_caption: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(opts.label="kill_prefix") # Remove line number and Comment "##" from printing
+```
+
+## Method details
+
+The raw data files were analyzed using MaxQuant to obtain protein identifications and their respective label-free quantification values using in-house standard parameters. Of note, the data were normalization based on the assumption that the majority of proteins do not change between the different conditions. 
+Statistical analysis was performed using an in-house generated R script based on the ProteinGroup.txt file. First, contaminant proteins, reverse sequences and proteins identified “only by site” were filtered out. In addition, proteins that have been only identified by a single peptide and proteins not identified/quantified consistantly in same condition have been removed as well. The LFQ data was converted to log2 scale, samples were grouped by conditions and missing values were imputed using the ‘Missing not At Random’ (MNAR) method, which uses random draws from a left-shifted Gaussian distribution of 1.8 StDev (standard deviation) apart with a width of 0.3. Protein-wise linear models combined with empirical Bayes statistics were used for the differential expression analyses. The _limma_ package from R Bioconductor was used to generate a list of differentially expressed proteins for each pair-wise comparison. A cutoff of the _adjusted p-value_ of 0.05 (Benjamini-Hochberg method) along with a |log2 fold change| of 1 has been applied to determine significantly regulated proteins in each pairwise comparison.
+
+
+### Quick summary of parameters used:
+
+* Tested pairwise comparisons = <span style="color:blue">`r params$tested_contrasts`</span>  
+* Adjusted _p-value_ cutoff <= <span style="color:blue">`r params$alpha`</span>  
+* Log fold change cutoff >= <span style="color:blue">`r params$lfc`</span>  
+
+## Results
+
+#### MaxQuant result output contains `r nrow(params$data)` proteins groups of which _`r nrow(params$dep())`_ proteins were reproducibly quantified.
+
+#### `r params$num_signif` proteins differ significantly between samples.
+
+\pagebreak
+
+
+### Proteomics Experiment Summary
+
+Protein identifications per sample.
+
+
+
+```{r numbers, echo=FALSE, warning=FALSE }
+#str(data_filter)
+print(params$numbers_input())
+#plot_numbers(params$data_filter)
+```
+\pagebreak
+
+Protein overlap in all samples.
+
+
+```{r coverage, echo=FALSE, warning=FALSE}
+print(params$coverage_input())
+```
+
+
+\pagebreak
+
+## Exploratory Analysis
+
+#### Principle Component Analysis (PCA) plot
+
+```{r, echo=FALSE}
+num = 400
+#if (nrow(params$dep) < 400) num = nrow(params$dep)
+```
+
+
+```{r pca_plot, echo=FALSE, fig.height= 4}
+print(params$pca_input())
+```
+
+
+#### Sample Correlation matrix
+
+```{r correlation_heatmap, echo=FALSE,   fig.height= 4}
+print(params$correlation_input())
+```
+
+
+#### Sample Coefficient of variation (CVs)
+
+```{r sample_cv,  echo=FALSE, warning=FALSE }
+print(params$cvs_input())
+```
+\pagebreak
+
+## _p value_ Distribution
+A histogram of distribution of _p values_ across the experiment
+
+```{r p_hist, echo=FALSE, warning=FALSE, results='hide'}
+print(params$p_hist_input())
+```
+\pagebreak
+
+## Missing Value handling
+
+#### Missing value heatmap
+A heatmap for proteins with missing value in each dataset. Each row represent a protein with missing value in one or more replicate. Each replicate is clustered based on presence of missing values in the sample. 
+
+
+```{r missing_value_heatmap, echo=FALSE, message=FALSE, results='hide',warning=FALSE, tidy=TRUE}
+params$missval_input()
+```
+\pagebreak
+
+### Missing value distribution
+What are the intensities for proteins with and without missing values in the dataset?
+
+```{r missing_value_distribution, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+print(params$detect_input())
+```
+\pagebreak
+
+### Protein expression distribution before and after imputation
+Effect of imputation on protein expression distribution
+
+```{r imputation_effect, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+print(params$imputation_input())
+```
+\pagebreak
+
+## Differential Expression Analysis
+
+#### Heatmap
+  A plot representing an overview of expression of all significant(differencially expressed) proteins (rows) in all samples (columns).
+
+ 
+```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep='all'}
+print(params$heatmap_input())
+```
+
+#### Volcano Plots
+
+```{r volcano,  echo=FALSE, fig.cap='volcano plots for analysis', warning=FALSE, comment=NA}
+for(i in params$tested_contrasts){
+  print(paste0('volcano_plot_',i,sep=""))
+  print(plot_volcano_new(params$dep(),contrast = i,label_size = 2, add_names = F))
+  }
+```
+
+```{r systemsInfo, warning=FALSE}
+print(sessionInfo())
+```
+
+
+
+
+

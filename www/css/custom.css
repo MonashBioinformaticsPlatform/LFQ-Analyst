@@ -1,0 +1,51 @@
+/*.main-header .logo {
+font-family: "Georgia", Times, "Times New Roman", serif;
+font-weight: bold;
+font-size: 24px;
+} 
+*/
+
+/* navbar (rest of the header) */
+.skin-blue .main-header .logo {
+                                background-color: #4054b3;
+                                }
+                                
+.skin-blue .main-header .logo:hover {
+                                background-color: #4054b3;
+                                } 
+                                  
+.skin-blue .main-header .navbar {
+                                background-color: #4054b3;
+                                }
+
+
+.box.box-solid.box-primary>.box-header {
+  color:#fff;
+  background:#D32D41
+                    }
+
+.box.box-solid.box-primary{
+border-bottom-color:#D32D41;
+border-left-color:#D32D41;
+border-right-color:#D32D41;
+border-top-color:#D32D41;
+}
+
+.box.box-solid.box-danger>.box-header {
+  color:#fff;
+  background:#6AB187
+                    }
+
+.box.box-solid.box-danger{
+border-bottom-color:#6AB187;
+border-left-color:#6AB187;
+border-right-color:#6AB187;
+border-top-color:#6AB187;
+}
+
+.responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+
