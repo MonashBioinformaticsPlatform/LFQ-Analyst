@@ -3,6 +3,9 @@
 # LFQ-Analyst
 A tool for analysing label-free quantitative proteomics dataset https://bioinformatics.erc.monash.edu/apps/LFQ-Analyst/
 
+![LFQ-analyst_pipeline](./www/LFQ_analyst.svg)
+
+
 
 
 # Label free proteomics data analysis pipeline
