@@ -4,8 +4,6 @@ os:
   - linux
 r:
   - release
-  - devel
-  - oldrel
   - bioc-release
   
 r_packages:
