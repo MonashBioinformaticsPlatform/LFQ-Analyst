@@ -1,0 +1,19 @@
+language: r
+warnings_are_errors: true
+os:
+  - linux
+r:
+  - release
+  - devel
+  - oldrel
+  - bioc-release
+  
+r_packages:
+  - testthat
+  - dplyr
+  - DT
+  
+addons:
+  apt:
+    packages:
+      - libnetcdf-dev
