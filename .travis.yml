@@ -4,7 +4,6 @@ os:
   - linux
 r:
   - release
-  - bioc-release
   
 r_packages:
   - testthat
