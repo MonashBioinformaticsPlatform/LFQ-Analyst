@@ -234,7 +234,8 @@ ui <- function(request){shinyUI(
                                                             "Cluster to download",
                                                             min=1, max=6, value = 1), width = 6),
                                            box(downloadButton('downloadCluster',"Save Cluster"),
-                                                width = 3)
+                                               downloadButton('download_hm_svg', "Save svg"),
+                                                width = 5)
                                          )
                                 ),
                                 tabPanel(title = "Protein Plot",
@@ -269,32 +270,41 @@ ui <- function(request){shinyUI(
                             column(
                               width=6,
                               tabBox(title = "QC Plots", width = 12,
-                                tabPanel(title = "PCA Plot",
-                                         plotOutput("pca_plot"), height=600),
+                                     tabPanel(title = "PCA Plot",
+                                         plotOutput("pca_plot", height=600),
+                                         downloadButton('download_pca_svg', "Save svg")
+                                     ),
                                      tabPanel(title="Sample Correlation",
-                                              plotOutput("sample_corr", height = 600)
+                                              plotOutput("sample_corr", height = 600),
+                                              downloadButton('download_corr_svg', "Save svg")
                                      ),
                                      tabPanel(title= "Sample CVs",
-                                              plotOutput("sample_cvs", height = 600)
+                                              plotOutput("sample_cvs", height = 600),
+                                              downloadButton('download_cvs_svg', "Save svg")
                                      ),
                                      tabPanel(title = "Protein Numbers",
-                                              plotOutput("numbers", height = 600)
+                                              plotOutput("numbers", height = 600),
+                                              downloadButton('download_num_svg', "Save svg")
                                      ),
                                      
                                      tabPanel(title = "Sample coverage",
-                                              plotOutput("coverage", height = 600)
+                                              plotOutput("coverage", height = 600),
+                                              downloadButton('download_cov_svg', "Save svg")
                                      ),
                                      tabPanel(title = "Normalization",
-                                              plotOutput("norm", height = 600)
+                                              plotOutput("norm", height = 600),
+                                              downloadButton('download_norm_svg', "Save svg")
                                      ),
                                      # tabPanel(title = "Missing values - Quant",
                                      #          plotOutput("detect", height = 600)
                                      # ),
                                      tabPanel(title = "Missing values - Heatmap",
-                                              plotOutput("missval", height = 600)
+                                              plotOutput("missval", height = 600),
+                                              downloadButton('download_missval_svg', "Save svg")
                                      ),
                                      tabPanel(title = "Imputation",
-                                              plotOutput("imputation", height = 600)
+                                              plotOutput("imputation", height = 600),
+                                              downloadButton('download_imp_svg', "Save svg")
                                      )#,
                                      # tabPanel(title = "p-value Histogram",
                                      #          plotOutput("p_hist", height = 600)

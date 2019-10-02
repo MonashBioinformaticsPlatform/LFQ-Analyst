@@ -910,41 +910,20 @@ autoWidth=TRUE,
                   sep =",") }
   )
   
- output$downloadZip1<-downloadHandler(
-   # filename = function() {
-   #   "Result_plots.pdf"
-   # },
-   # content = function(file) {
-   #   pdf(file)
-   #   print( pca_input() )
-   #   print( heatmap_input() )
-    # print( volcano_input() )
+output$download_hm_svg<-downloadHandler(
+  filename = function() { "heatmap.svg" }, 
+  ## use = instead of <-
+  content = function(file) {
+    heatmap_plot<-DEP::plot_heatmap(dep(),"centered", k=6, indicate = "condition")
+    svg(file)
+    print(heatmap_plot)
+    
 
-     # for(i in input$volcano_cntrst){
-     #   print(plot_volcano(dep(),contrast = i,label_size = 2,add_names = T, adjusted=T))
-     # }
-    # print( age_plot() )
-   #   dev.off()
-   # }
- filename = function() {
-   paste("output", "zip", sep=".")
- },
- content= function(fname){
-   fs<-c()
-   tmpdir<-tempdir()
-   setwd(tempdir())
-   for (i in c("pca_input","heatmap_input")){
-     path<-paste0(i,".png",sep="")
-     fs<- c(fs,path)
-     png(paste0(i,".png",sep=""))
-     print(i())
-     dev.off()
-   }
-   print(fs)
-   zip(zipfile = fname, files = fs)
- },
- contentType = "applications/zip"
- )
+
+
+    dev.off()
+  }
+)
   
 #####===== Download Report =====#####
   output$downloadReport <- downloadHandler(
@@ -993,42 +972,80 @@ autoWidth=TRUE,
     }
   )
   
-  
-### ===== Download Plots ===== #####
-  # output$downloadPlots1 <- downloadHandler(
-  #   filename = "Plots.pdf",
-  #   content = function(file) {
-  #     tempReport <- file.path(tempdir(), "Plots.Rmd")
-  #     file.copy("templates/Plots.Rmd", tempReport, overwrite = TRUE)
-  #     
-  #     tested_contrasts<- gsub("_p.adj", "", 
-  #                             colnames(SummarizedExperiment::rowData(dep()))[grep("p.adj", 
-  #                                                                                 colnames(SummarizedExperiment::rowData(dep())))])
-  #     pg_width<- ncol(imputed_data()) / 2.5
-  #     
-  #     # Set up parameters to pass to Rmd document
-  #     params <- list(tested_contrasts= tested_contrasts,
-  #                    pg_width = pg_width,
-  #                    numbers_input= numbers_input,
-  #                    detect_input = detect_input,
-  #                    imputation_input = imputation_input,
-  #                    missval_input = missval_input,
-  #                    p_hist_input = p_hist_input,
-  #                    pca_input = pca_input,
-  #                    coverage_input= coverage_input,
-  #                    correlation_input =correlation_input,
-  #                    heatmap_input = heatmap_input,
-  #                    cvs_input= cvs_input,
-  #                    dep = dep
-  #     )
-  #     
-  #     # Knit the document, passing in the `params` list
-  #     rmarkdown::render(tempReport, output_file = file,
-  #                       params = params,
-  #                       envir = new.env(parent = globalenv())
-  #     )
-  #   }
-  # )
+###### ==== DOWNLOAD QC plots svg ==== ####
+
+output$download_pca_svg<-downloadHandler(
+  filename = function() { "PCA_plot.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(pca_input())
+    dev.off()
+  }
+)
+
+output$download_corr_svg<-downloadHandler(
+  filename = function() { "Correlation_plot.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(correlation_input())
+    dev.off()
+  }
+)
+
+output$download_cvs_svg<-downloadHandler(
+  filename = function() { "Sample_CV.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(cvs_input())
+    dev.off()
+  }
+)
+
+output$download_num_svg<-downloadHandler(
+  filename = function() { "Proteins_plot.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(numbers_input())
+    dev.off()
+  }
+)
+
+output$download_cov_svg<-downloadHandler(
+  filename = function() { "Coverage_plot.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(coverage_input())
+    dev.off()
+  }
+)
+
+output$download_norm_svg<-downloadHandler(
+  filename = function() { "Normalization_plot.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(norm_input())
+    dev.off()
+  }
+)
+
+output$download_missval_svg<-downloadHandler(
+  filename = function() { "Missing_value_heatmap.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(missval_input())
+    dev.off()
+  }
+)
+
+output$download_imp_svg<-downloadHandler(
+  filename = function() { "Imputation_plot.svg" }, 
+  content = function(file) {
+    svg(file)
+    print(imputation_input())
+    dev.off()
+  }
+)
+
  
  
  #### Demo logic ========== #############
