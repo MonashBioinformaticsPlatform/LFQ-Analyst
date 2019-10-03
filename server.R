@@ -866,11 +866,17 @@ autoWidth=TRUE,
     },
     content = function(file) {
       pdf(file)
+      if(is.null(input$protein_brush)){
+        print(volcano_input())
+        dev.off()
+      }
+      else{
       observeEvent(input$protein_brush,{
         print(p)
       })
       print(volcano_input_selected())
       dev.off()
+      }
     }
   )
   
