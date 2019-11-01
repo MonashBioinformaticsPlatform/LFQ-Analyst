@@ -72,7 +72,7 @@ at least 2 out of three replicates)
   6. Missing value heatmap
   7. Imputation effect on sample distribution
 
-## Download options
+### Download options
 
 **Download tables** (csv format)
 
@@ -89,12 +89,13 @@ at least 2 out of three replicates)
     includes method, summary statistics and plots.
 
 
-## Local installation
+### Local installation
 
 The current version of LFQ-Analyst is hosted on `R - 3.4.3`. The detailed dependency information can be found in the `dependencies.txt` file.
 
-If you are using more recent versions of R i.e `R > 3.5.0`, please clone the **dev** branch. 
+If you are using more recent versions of R i.e `R  3.6.0`, please clone the **dev** branch. 
 
 ```
-
+# cloning single branch
+git clone https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst.git -b dev --single-branch /your_folder/location/
 ```
