@@ -3,6 +3,9 @@
 ![R](https://img.shields.io/badge/-%3E3.4.0%3C3.5.0-brightgreen)
 
 # LFQ-Analyst
+
+**You are currently on the dev branch of LFQ-Analyst**
+
 A tool for analysing label-free quantitative proteomics dataset https://bioinformatics.erc.monash.edu/apps/LFQ-Analyst/
 
 ![LFQ-analyst_pipeline](./www/LFQ_analyst.svg)
@@ -91,11 +94,4 @@ at least 2 out of three replicates)
 
 ### Local installation
 
-The current version of LFQ-Analyst is hosted on `R - 3.4.3`. The detailed dependency information can be found in the `dependencies.txt` file.
-
-If you are using more recent versions of R i.e `R  3.6.0`, please clone the **dev** branch. 
-
-```
-# cloning single branch
-git clone https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst.git -b dev --single-branch /your_folder/location/
-```
+The current version of LFQ-Analyst is hosted on **R - 3.4.3**. The detailed dependency information for `R 3.6.0` in **dev branch** can be found in the `dependencies.txt` file.
