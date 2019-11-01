@@ -134,7 +134,7 @@ get_cluster_heatmap <- function(dep, type = c("contrast", "centered"),
   # Get contrast fold changes ('contrast')
   if(type == "contrast") {
     df <- rowData(filtered) %>%
-      data.frame() %>%
+      data.frame(.) %>%
       column_to_rownames(var = "name") %>%
       select(dplyr::ends_with("_diff"))
     colnames(df) <-
@@ -513,7 +513,7 @@ get_results_proteins <- function(dep) {
   
   # Obtain average enrichments of conditions versus the control condition
   ratio <- as.data.frame(row_data) %>%
-    tibble::column_to_rownames("name") %>%
+    #tibble::column_to_rownames("name") %>%
     dplyr::select(dplyr::ends_with("diff")) %>%
     signif(., digits = 3) %>%
     tibble::rownames_to_column()
@@ -523,7 +523,7 @@ get_results_proteins <- function(dep) {
   
   # Select the adjusted p-values and significance columns
   pval <- as.data.frame(row_data) %>%
-    tibble::column_to_rownames("name") %>%
+    #tibble::column_to_rownames("name") %>%
     dplyr::select(dplyr::ends_with("p.val"),
                   dplyr::ends_with("p.adj"),
                   dplyr::ends_with("significant")) %>%
