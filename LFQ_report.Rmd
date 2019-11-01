@@ -98,7 +98,7 @@ print(params$coverage_input())
 A heatmap for proteins with missing value in each dataset. Each row represent a protein with missing value in one or more replicate. Each replicate is clustered based on presence of missing values in the sample. 
 
 
-```{r missing_value_heatmap, echo=FALSE, message=FALSE, results='hide',warning=FALSE, tidy=TRUE}
+```{r missing_value_heatmap, echo=FALSE, message=FALSE, results='hide',warning=FALSE, fig.keep='first', tidy=TRUE}
 params$missval_input()
 ```
 \pagebreak
@@ -117,7 +117,7 @@ print(params$imputation_input())
   A plot representing an overview of expression of all significant (differencially expressed) proteins (rows) in all samples (columns).
 
  
-```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep='all'}
+```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep="first"}
 print(params$heatmap_input())
 ```
 
