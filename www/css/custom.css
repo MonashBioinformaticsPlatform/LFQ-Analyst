@@ -48,4 +48,14 @@ border-top-color:#6AB187;
   height: auto;
 }
 
+.footer {
+position:absolute;
+bottom:10;
+width:80%;
+height:20px; /* Height of the footer */
+color: white;
+background-color: #4054b3;
+z-index: 1000;
+}
+
 
