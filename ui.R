@@ -367,10 +367,11 @@ ui <- function(request){shinyUI(
       ),
 			
 			h4("How to Cite LFQ-Analyst?"),
-			p(" Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
+			div(p(HTML(paste0("Please Cite: Shah AD, Goode RJA, Huang C, Powell DR, Schittenhelm RB. 
 		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
-		visualize proteomics data preprocessed with MaxQuant. DOI:XXXX"),   
-                width = 12,
+		visualize proteomics data preprocessed with MaxQuant. DOI:",
+			                            a(href = 'https://pubs.acs.org/doi/10.1021/acs.jproteome.9b00496', 
+			                              target='_blank', tags$b("0.1021/acs.jproteome.9b00496")))))),
                 solidHeader = TRUE,
                 status = "primary"
                 ) #includeMarkdown("www/Info.md")
