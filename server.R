@@ -267,13 +267,7 @@ server <- function(input, output, session) {
      }
      else{filtered_data<-dplyr::filter(filtered_data,Razor...unique.peptides>=2)}
 
-     if("Evidence.IDs" %in% colnames(filtered_data)){
-      filtered_data$`Evidence.IDs`<-stringr::str_trunc(as.character(filtered_data$`Evidence.IDs`), 25000)
-
-     }
-     if("MS.MS.IDs" %in% colnames(filtered_data)){
-       filtered_data$`MS.MS.IDs`<-stringr::str_trunc(as.character(filtered_data$`MS.MS.IDs`), 25000)
-     }
+     filtered_data<-ids_test(filtered_data)
      
      data_unique<- DEP::make_unique(filtered_data,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))

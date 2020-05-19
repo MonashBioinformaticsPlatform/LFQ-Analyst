@@ -122,3 +122,15 @@ null_enrichment_test<-function(gsea_result,alpha=0.05){
   }
 }
 
+ids_test<-function(filtered_data){
+  if("Evidence.IDs" %in% colnames(filtered_data)){
+    filtered_data$`Evidence.IDs`<-stringr::str_trunc(as.character(filtered_data$`Evidence.IDs`), 25000)
+  }
+  if("MS.MS.IDs" %in% colnames(filtered_data)){
+    filtered_data$`MS.MS.IDs`<-stringr::str_trunc(as.character(filtered_data$`MS.MS.IDs`), 25000)
+  }
+  
+  return(filtered_data)
+  
+}
+
