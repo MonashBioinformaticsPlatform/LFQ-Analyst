@@ -521,7 +521,7 @@ server <- function(input, output, session) {
    })
    
    correlation_input<-reactive({
-     plot_cor(dep())
+     plot_cor(dep(),significant = FALSE)
    })
    
    cvs_input<-reactive({
