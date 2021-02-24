@@ -372,7 +372,24 @@ ui <- function(request){shinyUI(
 		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
 		visualize proteomics data preprocessed with MaxQuant. DOI:",
 			                            a(href = 'https://pubs.acs.org/doi/10.1021/acs.jproteome.9b00496', 
-			                              target='_blank', tags$b("0.1021/acs.jproteome.9b00496")))))),   
+			                              target='_blank', tags$b("0.1021/acs.jproteome.9b00496")))))),
+
+
+      h4("News and Updates"),
+			
+      tags$ul(
+
+      tags$li("24-02-2021: Correlation plot now use all protein expression data"),
+      tags$li("25-11-2020: LFQ-Analyst being accessed by 2000 users worldwide"),
+			tags$li("11-2020: LFQ-Analyst crossed 1000 article views"),
+			tags$li("07-04-2020: LFQ-Analyst being accessed by 1000 users worldwide"),
+      tags$li("03-01-2020: LFQ-Analyst manuscript published in volume 19 of JPR"),
+      tags$li("28-10-2019: LFQ-Analyst paper published online in Journal of Proteome Research (JPR)"),
+      tags$li("02-10-2019: Svg figures download feature added"),
+      tags$li("09-09-2020: Paired test support added"),
+      tags$li("09-09-2020: Option to include single peptide observations in the analysis"),
+      tags$li("19-02-2019: LFQ-Analyst made public")
+      ),   
                 width = 12,
                 solidHeader = TRUE,
                 status = "primary"
