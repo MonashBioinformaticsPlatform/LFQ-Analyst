@@ -386,8 +386,8 @@ ui <- function(request){shinyUI(
       tags$li("03-01-2020: LFQ-Analyst manuscript published in volume 19 of JPR"),
       tags$li("28-10-2019: LFQ-Analyst paper published online in Journal of Proteome Research (JPR)"),
       tags$li("02-10-2019: Svg figures download feature added"),
-      tags$li("09-09-2020: Paired test support added"),
-      tags$li("09-09-2020: Option to include single peptide observations in the analysis"),
+      tags$li("09-09-2019: Paired test support added"),
+      tags$li("09-09-2019: Option to include single peptide observations in the analysis"),
       tags$li("19-02-2019: LFQ-Analyst made public")
       ),   
                 width = 12,
