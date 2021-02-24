@@ -381,7 +381,6 @@ ui <- function(request){shinyUI(
 
       tags$li("24-02-2021: Correlation plot now use all protein expression data"),
       tags$li("25-11-2020: LFQ-Analyst being accessed by 2000 users worldwide"),
-			tags$li("11-2020: LFQ-Analyst crossed 1000 article views"),
 			tags$li("07-04-2020: LFQ-Analyst being accessed by 1000 users worldwide"),
       tags$li("03-01-2020: LFQ-Analyst manuscript published in volume 19 of JPR"),
       tags$li("28-10-2019: LFQ-Analyst paper published online in Journal of Proteome Research (JPR)"),
