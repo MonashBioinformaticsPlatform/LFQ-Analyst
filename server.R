@@ -378,7 +378,7 @@ server <- function(input, output, session) {
        else{
 	     #pca_label<-SummarizedExperiment::colData(dep())$replicate
        pca_plot<-DEP::plot_pca(dep(), point_size = 4, indicate = "condition")
-       pca_plot<-pca_plot + geom_point()
+       #pca_plot<-pca_plot + geom_point()
        pca_plot<-pca_plot + ggrepel::geom_text_repel(aes(label=factor(rowname)),
                                            size = 4,
                                            box.padding = unit(0.1, 'lines'),
