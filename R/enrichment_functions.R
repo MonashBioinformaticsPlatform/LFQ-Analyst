@@ -2,23 +2,23 @@ enrichr_mod <- function(genes, databases = NULL) {
   
   cat("Uploading data to Enrichr... ")
   if (is.vector(genes) & ! all(genes == "") & length(genes) != 0) {
-    temp <- POST(url="http://amp.pharm.mssm.edu/Enrichr/enrich",
+    temp <- POST(url="http://maayanlab.cloud/Enrichr/enrich",
                  body=list(list=paste(genes, collapse="\n")))
   } else if (is.data.frame(genes)) {
-    temp <- POST(url="http://amp.pharm.mssm.edu/Enrichr/enrich",
+    temp <- POST(url="http://maayanlab.cloud/Enrichr/enrich",
                  body=list(list=paste(paste(genes[,1], genes[,2], sep=","),
                                       collapse="\n")))
   } else {
     warning("genes must be a non-empty vector of gene names or a dataframe with genes and score.")
   }
-  GET(url="http://amp.pharm.mssm.edu/Enrichr/share")
+  GET(url="http://maayanlab.cloud/Enrichr/share")
   cat("Done.\n")
   dbs <- as.list(databases)
   dfSAF <- options()$stringsAsFactors
   options(stringsAsFactors = FALSE)
   result <- lapply(dbs, function(x) {
     cat("  Querying ", x, "... ", sep="")
-    r <- GET(url="http://amp.pharm.mssm.edu/Enrichr/export",
+    r <- GET(url="http://maayanlab.cloud/Enrichr/export",
              query=list(file="API", backgroundType=x))
     r <- gsub("&#39;", "'", intToUtf8(r$content))
     tc <- textConnection(r)
