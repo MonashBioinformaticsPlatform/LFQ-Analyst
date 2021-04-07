@@ -265,7 +265,7 @@ server <- function(input, output, session) {
      if(input$single_peptide==TRUE){
        filtered_data <-filtered_data
      }
-     else{filtered_data<-dplyr::filter(filtered_data,Razor...unique.peptides>=2)}
+     else{filtered_data<-dplyr::filter(filtered_data,as.numeric(Razor...unique.peptides)>=2)}
 
      filtered_data<-ids_test(filtered_data)
      
