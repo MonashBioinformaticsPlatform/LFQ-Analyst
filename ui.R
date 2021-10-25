@@ -378,10 +378,11 @@ ui <- function(request){shinyUI(
       h4("News and Updates"),
 			
       tags$ul(
-
+      tags$li("30-09-2021: LFQ-Analyst being accessed by more than 4000 users worldwide"),
+      tags$li("03-05-2021: LFQ-Analyst being accessed by more than 3000 users worldwide"),
       tags$li("24-02-2021: Correlation plot now use all protein expression data"),
-      tags$li("25-11-2020: LFQ-Analyst being accessed by 2000 users worldwide"),
-			tags$li("07-04-2020: LFQ-Analyst being accessed by 1000 users worldwide"),
+      tags$li("25-11-2020: LFQ-Analyst being accessed by more than 2000 users worldwide"),
+			tags$li("07-04-2020: LFQ-Analyst being accessed by more than 1000 users worldwide"),
       tags$li("03-01-2020: LFQ-Analyst manuscript published in volume 19 of JPR"),
       tags$li("28-10-2019: LFQ-Analyst paper published online in Journal of Proteome Research (JPR)"),
       tags$li("02-10-2019: Svg figures download feature added"),
