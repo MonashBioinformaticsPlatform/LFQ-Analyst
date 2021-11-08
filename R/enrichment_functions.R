@@ -1,5 +1,5 @@
 enrichr_mod <- function(genes, databases = NULL) {
-  
+httr::set_config(httr::config(ssl_verifypeer = 0L))    
   cat("Uploading data to Enrichr... ")
   if (is.vector(genes) & ! all(genes == "") & length(genes) != 0) {
     temp <- POST(url="http://maayanlab.cloud/Enrichr/enrich",
