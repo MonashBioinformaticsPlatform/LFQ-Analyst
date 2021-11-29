@@ -526,7 +526,7 @@ server <- function(input, output, session) {
    })
    
    correlation_input<-reactive({
-     plot_cor(dep())
+     plot_cor(dep(), significant=FALSE, indicate="condition")
    })
    
    cvs_input<-reactive({
@@ -1319,7 +1319,7 @@ imputed_data_dm<-reactive({
  })
  
  correlation_input_dm<-reactive({
-   plot_cor(dep_dm())
+   plot_cor(dep_dm(), significant=TRUE, indicate="condition")
  })
  
  cvs_input_dm<-reactive({
