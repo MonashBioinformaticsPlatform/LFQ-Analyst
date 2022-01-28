@@ -378,6 +378,7 @@ ui <- function(request){shinyUI(
       h4("News and Updates"),
 			
       tags$ul(
+      tags$li("27-12-2021: LFQ-Analyst being accessed by more than 5000 users worldwide"),
       tags$li("30-09-2021: LFQ-Analyst being accessed by more than 4000 users worldwide"),
       tags$li("03-05-2021: LFQ-Analyst being accessed by more than 3000 users worldwide"),
       tags$li("24-02-2021: Correlation plot now use all protein expression data"),
