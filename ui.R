@@ -372,7 +372,7 @@ ui <- function(request){shinyUI(
 		LFQ-Analyst: An easy-to-use interactive web-platform to analyze and 
 		visualize proteomics data preprocessed with MaxQuant. DOI:",
 			                            a(href = 'https://pubs.acs.org/doi/10.1021/acs.jproteome.9b00496', 
-			                              target='_blank', tags$b("0.1021/acs.jproteome.9b00496")))))),
+			                              target='_blank', tags$b("10.1021/acs.jproteome.9b00496")))))),
 
 
       h4("News and Updates"),
