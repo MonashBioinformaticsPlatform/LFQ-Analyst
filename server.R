@@ -442,14 +442,14 @@ server <- function(input, output, session) {
         }
         
        ## convert contrast to x and padj to y
-       diff_proteins <- grep(paste(input$volcano_cntrst, "_log2", sep = ""),
+       diff_proteins <- grep(paste("^",input$volcano_cntrst, "_log2", sep = ""),
                     colnames(proteins_selected))
         if(input$p_adj=="FALSE"){
-       padj_proteins <- grep(paste(input$volcano_cntrst, "_p.val", sep = ""),
+       padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.val", sep = ""),
                                      colnames(proteins_selected))
         }
        else{
-         padj_proteins <- grep(paste(input$volcano_cntrst, "_p.adj", sep = ""),
+         padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.adj", sep = ""),
                                colnames(proteins_selected))
        }
 
@@ -666,14 +666,14 @@ autoWidth=TRUE,
     
     proteins_selected<-data_result()[data_result()[["Gene Name"]] %in% protein_name_brush(), ] ## get all rows selected
     ## convert contrast to x and padj to y
-    diff_proteins <- grep(paste(input$volcano_cntrst, "_log2", sep = ""),
+    diff_proteins <- grep(paste("^",input$volcano_cntrst, "_log2", sep = ""),
                           colnames(proteins_selected))
     if(input$p_adj=="FALSE"){
-      padj_proteins <- grep(paste(input$volcano_cntrst, "_p.val", sep = ""),
+      padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.val", sep = ""),
                             colnames(proteins_selected))
     }
     else{
-      padj_proteins <- grep(paste(input$volcano_cntrst, "_p.adj", sep = ""),
+      padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.adj", sep = ""),
                             colnames(proteins_selected))
     }
     df_protein <- data.frame(x = proteins_selected[, diff_proteins],
