@@ -252,14 +252,14 @@ server <- function(input, output, session) {
      
      
      message(exp_design())
-     if(grepl('+',maxquant_data()$Reverse)){
+     if(any(grepl('+',maxquant_data()$Reverse))){
      filtered_data<-dplyr::filter(maxquant_data(),Reverse!="+")
      }
      else{filtered_data<-maxquant_data()}
-     if(grepl('+',filtered_data$Potential.contaminant)){
+     if(any(grepl('+',filtered_data$Potential.contaminant))){
        filtered_data<-dplyr::filter(filtered_data,Potential.contaminant!="+")
      }
-     if(grepl('+',filtered_data$Only.identified.by.site)){
+     if(any(grepl('+',filtered_data$Only.identified.by.site))){
        filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+") 
      }
      if(input$single_peptide==TRUE){
@@ -272,6 +272,8 @@ server <- function(input, output, session) {
      data_unique<- DEP::make_unique(filtered_data,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))
      
+     # ensure all intensity columns are numeric type
+     data_unique[,lfq_columns] <- sapply(data_unique[,lfq_columns],as.numeric)
      ## Check for matching columns in maxquant and experiment design file
      test_match_lfq_column_design(data_unique,lfq_columns, exp_design())
      data_se<-DEP:::make_se(data_unique,lfq_columns,exp_design())
