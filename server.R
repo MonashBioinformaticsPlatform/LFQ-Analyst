@@ -171,7 +171,8 @@ server <- function(input, output, session) {
       temp_data<-read.table(inFile$datapath,
                  header = TRUE,
                  fill= TRUE, # to fill any missing data
-                 sep = "\t"
+                 sep = "\t",
+                 quote = ""
       )
       validate(maxquant_input_test(temp_data))
       return(temp_data)
