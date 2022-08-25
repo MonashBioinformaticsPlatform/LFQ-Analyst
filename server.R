@@ -272,6 +272,8 @@ server <- function(input, output, session) {
      data_unique<- DEP::make_unique(filtered_data,"Gene.names","Protein.IDs",delim=";")
      lfq_columns<-grep("LFQ.", colnames(data_unique))
      
+     # ensure all intensity columns are numeric type
+     data_unique[,lfq_columns] <- sapply(data_unique[,lfq_columns],as.numeric)
      ## Check for matching columns in maxquant and experiment design file
      test_match_lfq_column_design(data_unique,lfq_columns, exp_design())
      data_se<-DEP:::make_se(data_unique,lfq_columns,exp_design())
