@@ -363,7 +363,8 @@ ui <- function(request){shinyUI(
 			  Monash Proteomics and Metabolomics Facility:"),
       tags$ul(
 			tags$li("Anup Shah: anup.shah(at)monash.edu"),
-			tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu")
+			tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
+			tags$li("Haijian Zhang: hailey.zhang1(at)monash.edu")
       ),
 			
 			h4("How to Cite LFQ-Analyst?"),
