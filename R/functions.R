@@ -660,8 +660,7 @@ get_results_proteins <- function(dep) {
   table <- dplyr::left_join(table, pval, by = c("name" = "rowname"))
   # table <- dplyr::left_join(table, centered, by = c("name" = "rowname")) %>%
   #   dplyr::arrange(desc(significant))
-   table<-as.data.frame(row_data) %>% 
-    dplyr::select(name, imputed, num_NAs, Protein.names) %>%
+   table<-as.data.frame(row_data)[, colnames(row_data) %in% c("name", "imputed", "num_NAs", "Protein.names")] %>%
     dplyr::left_join(table, ., by = "name")
   table<-table %>% dplyr::arrange(desc(significant))
   colnames(table)[1]<-c("Gene Name")
