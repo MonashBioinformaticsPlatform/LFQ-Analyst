@@ -253,14 +253,14 @@ server <- function(input, output, session) {
      
      
      message(exp_design())
-     if(grepl('+',maxquant_data()$Reverse)){
+     if(any(grepl('+',maxquant_data()$Reverse))){
      filtered_data<-dplyr::filter(maxquant_data(),Reverse!="+")
      }
      else{filtered_data<-maxquant_data()}
-     if(grepl('+',filtered_data$Potential.contaminant)){
+     if(any(grepl('+',filtered_data$Potential.contaminant))){
        filtered_data<-dplyr::filter(filtered_data,Potential.contaminant!="+")
      }
-     if(grepl('+',filtered_data$Only.identified.by.site)){
+     if(any(grepl('+',filtered_data$Only.identified.by.site))){
        filtered_data<-dplyr::filter(filtered_data,Only.identified.by.site!="+") 
      }
      if(input$single_peptide==TRUE){
@@ -813,12 +813,24 @@ autoWidth=TRUE,
   })
   
   ## Enrichment Outputs
+  output$spinner_go <- renderUI({
+    req(input$go_analysis)
+    shinycssloaders::withSpinner(plotOutput("go_enrichment"), color = "#3c8dbc")
+  })
+  
   output$go_enrichment<-renderPlot({
+    Sys.sleep(2)
     go_input()$plot_go
   })
   
+  output$spinner_pa <- renderUI({
+    req(input$pathway_analysis)
+    shinycssloaders::withSpinner(plotOutput("pathway_enrichment"), color = "#3c8dbc")
+  })
+  
   output$pathway_enrichment<-renderPlot({
-   pathway_input()$plot_pa
+    Sys.sleep(2)
+    pathway_input()$plot_pa
   })
   
   ##### Download Functions
@@ -1599,11 +1611,23 @@ autoWidth=TRUE,
  })
  
  ## Enrichment Outputs
+ output$spinner_go_dm <- renderUI({
+   req(input$go_analysis_dm)
+   shinycssloaders::withSpinner(plotOutput("go_enrichment_dm"),color = "#3c8dbc")
+ })
+ 
  output$go_enrichment_dm<-renderPlot({
+   Sys.sleep(2)
    go_input_dm()$plot_go
  })
  
+ output$spinner_pa_dm <- renderUI({
+   req(input$pathway_analysis_dm)
+   shinycssloaders::withSpinner(plotOutput("pathway_enrichment_dm"),color = "#3c8dbc")
+ })
+ 
  output$pathway_enrichment_dm<-renderPlot({
+   Sys.sleep(2)
    pathway_input_dm()$plot_pa
  })
  

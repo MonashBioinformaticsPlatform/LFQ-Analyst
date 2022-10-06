@@ -200,7 +200,7 @@ plot_protein<-function(dep, protein, type){
     rownames_to_column() %>%
     gather(ID, val, -rowname) %>%
     left_join(., data.frame(colData(subset)), by = "ID")
-  df_reps$rowname <- parse_factor(df_reps$rowname, levels = protein)
+  df_reps$rowname <- parse_factor(as.character(df_reps$rowname), levels = protein)
   
   df_CI<- df_reps %>%
     group_by(condition, rowname) %>%
@@ -211,7 +211,7 @@ plot_protein<-function(dep, protein, type){
            CI.L = mean - error,
            CI.R = mean + error) %>%
     as.data.frame()
-  df_CI$rowname <- parse_factor(df_CI$rowname, levels = protein)
+  df_CI$rowname <- parse_factor(as.character(df_CI$rowname), levels = protein)
   
   if(type=="violin"){
     p<-ggplot(df_reps, aes(condition, val))+

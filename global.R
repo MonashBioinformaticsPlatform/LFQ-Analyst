@@ -13,6 +13,7 @@ library("ggrepel")
 library("httr")
 library("rjson")
 library("svglite")
+library("shinycssloaders")  # new added
 source("R/functions.R")
 source("R/volcano_function.R")
 source("R/tests.R")
