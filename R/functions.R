@@ -632,7 +632,7 @@ get_results_proteins <- function(dep) {
   
   # Obtain average enrichments of conditions versus the control condition
   ratio <- as.data.frame(row_data) %>%
-    tibble::column_to_rownames("name") %>%
+    # tibble::column_to_rownames("name") %>%
     dplyr::select(dplyr::ends_with("diff")) %>%
     signif(., digits = 3) %>%
     tibble::rownames_to_column()
@@ -642,7 +642,7 @@ get_results_proteins <- function(dep) {
   
   # Select the adjusted p-values and significance columns
   pval <- as.data.frame(row_data) %>%
-    tibble::column_to_rownames("name") %>%
+    # tibble::column_to_rownames("name") %>%
     dplyr::select(dplyr::ends_with("p.val"),
                   dplyr::ends_with("p.adj"),
                   dplyr::ends_with("significant")) %>%
@@ -665,6 +665,7 @@ get_results_proteins <- function(dep) {
   table<-table %>% dplyr::arrange(desc(significant))
   colnames(table)[1]<-c("Gene Name")
   colnames(table)[2]<-c("Protein IDs")
+  table <- table %>% dplyr::select(grep("[^Protein.names]",colnames(table)), "Protein.names")
   # table$Gene_name<-table$name
   return(table)
 }
