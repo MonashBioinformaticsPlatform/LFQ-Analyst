@@ -342,7 +342,7 @@ get_cluster_heatmap <- function(dep, type = c("contrast", "centered"),
                 ...)
   # return (row_order(ht1))
   # Return data.frame
-  draw(ht1, heatmap_legend_side = "top")
+  p <- draw(ht1, heatmap_legend_side = "top")
   row_clusters<- row_order(ht1)
   #mat<-as.matrix(df)
   
@@ -358,7 +358,8 @@ get_cluster_heatmap <- function(dep, type = c("contrast", "centered"),
   #     out <- cbind(out, clu)
   #   }
   # }
-  return(row_clusters)
+  heatmap_list <- list(p, row_clusters)
+  return(heatmap_list)
 }
 
 # Internal function to get ComplexHeatmap::HeatmapAnnotation object

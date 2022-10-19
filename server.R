@@ -406,11 +406,13 @@ server <- function(input, output, session) {
      if(input$analyze==0 ){
        return()
      }
-     get_cluster_heatmap(dep(),
+     
+     heatmap_list <-get_cluster_heatmap(dep(),
                          type="centered",kmeans = TRUE,
                          k=input$k_number, col_limit = 6,
                          indicate = "condition"
                          )
+     heatmap_list[[1]]
    })
    
    ### Volcano Plot
@@ -859,7 +861,12 @@ autoWidth=TRUE,
   
   individual_cluster <- reactive({
       cluster_number <- input$cluster_number
-      cluster_all <- heatmap_input()
+      heatmap_list <- get_cluster_heatmap(dep(),
+                                          type="centered",kmeans = TRUE,
+                                          k=input$k_number, col_limit = 6,
+                                          indicate = "condition"
+      )
+      cluster_all <- heatmap_list[[2]]
       data_result()[cluster_all[[cluster_number]],]
     })
   
@@ -937,13 +944,9 @@ output$download_hm_svg<-downloadHandler(
   filename = function() { "heatmap.svg" }, 
   ## use = instead of <-
   content = function(file) {
-    heatmap_plot<-DEP::plot_heatmap(dep(),"centered", k=6, indicate = "condition")
+    # heatmap_plot<-DEP::plot_heatmap(dep(),"centered", k=6, indicate = "condition")
     svg(file)
-    print(heatmap_plot)
-    
-
-
-
+    print(heatmap_input())
     dev.off()
   }
 )
