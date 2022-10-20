@@ -43,10 +43,9 @@ Statistical analysis was performed using an in-house generated R script based on
 
 #### MaxQuant result output contains `r nrow(params$data)` proteins groups of which _`r nrow(params$dep())`_ proteins were reproducibly quantified.
 
-#### `r params$num_signif` proteins differ significantly between samples.
+#### `r params$num_signif` proteins differ significantly between samples.  
 
 \pagebreak
-
 
 
 ## Exploratory Analysis (QC Plots)
@@ -54,21 +53,21 @@ Statistical analysis was performed using an in-house generated R script based on
 #### Principle Component Analysis (PCA) plot
 
 
-```{r pca_plot, echo=FALSE, fig.height= 4}
+```{r pca_plot, echo=FALSE, fig.height= 4, fig.align='center', warning=FALSE}
 print(params$pca_input())
 ```
 \pagebreak
 
 #### Sample Correlation matrix
 
-```{r correlation_heatmap, echo=FALSE, fig.keep='first'}
+```{r correlation_heatmap, echo=FALSE, fig.keep='first',fig.align='center'}
 print(params$correlation_input())
 ```
 \pagebreak
 
 #### Sample Coefficient of variation (CVs)
 
-```{r sample_cv,  echo=FALSE, warning=FALSE }
+```{r sample_cv,  echo=FALSE, warning=FALSE, message=FALSE, fig.align='center'}
 print(params$cvs_input())
 ```
 \pagebreak
@@ -117,13 +116,15 @@ print(params$imputation_input())
   A plot representing an overview of expression of all significant (differencially expressed) proteins (rows) in all samples (columns).
 
  
-```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep='all'}
+```{r heatmap_2,  echo=FALSE, warning=FALSE, results='hide', fig.keep='first',fig.align='center'}
 print(params$heatmap_input())
 ```
 
+\pagebreak
+
 #### Volcano Plots
 
-```{r volcano,  echo=FALSE, warning=FALSE, comment=NA}
+```{r volcano,  echo=FALSE, warning=FALSE, comment=NA,fig.align='center'}
 for(i in params$tested_contrasts){
  # print(paste0('volcano_plot_',i,sep=""))
   print(plot_volcano_new(params$dep(),contrast = i,label_size = 2, add_names = F))
