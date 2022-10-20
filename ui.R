@@ -242,7 +242,10 @@ ui <- function(request){shinyUI(
                                                             min=1, max=6, value = 1), width = 6),
                                            box(downloadButton('downloadCluster',"Save Cluster"),
                                                downloadButton('download_hm_svg', "Save svg"),
-                                                width = 5)
+                                                width = 5),
+                                           # align save button
+                                           tags$style(type='text/css', "#downloadCluster {margin-top: 25px;}"),
+                                           tags$style(type='text/css', "#download_hm_svg {margin-top: 25px;}")
                                          )
                                 ),
                                 tabPanel(title = "Protein Plot",
@@ -502,7 +505,9 @@ ui <- function(request){shinyUI(
                                            box(numericInput("cluster_number_dm",
                                                             "Cluster to download",
                                                             min=1, max=6, value = 1), width = 6),
-                                           box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3)
+                                           box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3),
+                                           # align save button
+                                           tags$style(type='text/css', "#downloadCluster_dm {margin-top: 25px;}"),
                                          )
                                 ),
                                 tabPanel(title = "Protein Plot",

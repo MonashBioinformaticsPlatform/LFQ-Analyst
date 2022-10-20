@@ -402,18 +402,36 @@ server <- function(input, output, session) {
    })
    
    ### Heatmap Differentially expressed proteins
-   heatmap_input<-eventReactive(input$analyze ,{ 
+   heatmap_cluster <- eventReactive(input$analyze ,{ 
      if(input$analyze==0 ){
        return()
      }
-     
-     heatmap_list <-get_cluster_heatmap(dep(),
-                         type="centered",kmeans = TRUE,
-                         k=input$k_number, col_limit = 6,
-                         indicate = "condition"
-                         )
+     heatmap_list <- get_cluster_heatmap(dep(),
+                                         type="centered",kmeans = TRUE,
+                                         k=input$k_number, col_limit = 6,
+                                         indicate = "condition"
+     )
+     return(heatmap_list)
+   })
+   
+   heatmap_input <- reactive({
+     heatmap_list <- heatmap_cluster()
      heatmap_list[[1]]
    })
+   
+   
+   # heatmap_input<-eventReactive(input$analyze ,{ 
+   #   if(input$analyze==0 ){
+   #     return()
+   #   }
+   #   
+   #   heatmap_list <-get_cluster_heatmap(dep(),
+   #                       type="centered",kmeans = TRUE,
+   #                       k=input$k_number, col_limit = 6,
+   #                       indicate = "condition"
+   #                       )
+   #   heatmap_list[[1]]
+   # })
    
    ### Volcano Plot
     volcano_input <- reactive({
@@ -669,48 +687,48 @@ autoWidth=TRUE,
     options = list(scrollX= TRUE)
     )
     
-    proteins_selected<-data_result()[data_result()[["Gene Name"]] %in% protein_name_brush(), ] ## get all rows selected
-    ## convert contrast to x and padj to y
-    diff_proteins <- grep(paste("^",input$volcano_cntrst, "_log2", sep = ""),
-                          colnames(proteins_selected))
-    if(input$p_adj=="FALSE"){
-      padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.val", sep = ""),
-                            colnames(proteins_selected))
-    }
-    else{
-      padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.adj", sep = ""),
-                            colnames(proteins_selected))
-    }
-    df_protein <- data.frame(x = proteins_selected[, diff_proteins],
-                             y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,
-                             name = proteins_selected$`Gene Name`)
-    #print(df_protein)
-    
-    p<-plot_volcano_new(dep(),
-                        input$volcano_cntrst,
-                        input$fontsize,
-                        input$check_names,
-                        input$p_adj)
-    
-      p<- p + geom_point(data = df_protein, aes(x, y), color = "maroon", size= 3) +
-      ggrepel::geom_text_repel(data = df_protein,
-                               aes(x, y, label = name),
-                               size = 4,
-                               box.padding = unit(0.1, 'lines'),
-                               point.padding = unit(0.1, 'lines'),
-                               segment.size = 0.5)
-    
-    output$volcano <- renderPlot({
-      withProgress(message = 'Volcano Plot calculations are in progress',
-                   detail = 'Please wait for a while', value = 0, {
-                     for (i in 1:15) {
-                       incProgress(1/15)
-                       Sys.sleep(0.25)
-                     }
-                   })
-     p
-    })
-    return(p)
+    # proteins_selected<-data_result()[data_result()[["Gene Name"]] %in% protein_name_brush(), ] ## get all rows selected
+    # ## convert contrast to x and padj to y
+    # diff_proteins <- grep(paste("^",input$volcano_cntrst, "_log2", sep = ""),
+    #                       colnames(proteins_selected))
+    # if(input$p_adj=="FALSE"){
+    #   padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.val", sep = ""),
+    #                         colnames(proteins_selected))
+    # }
+    # else{
+    #   padj_proteins <- grep(paste("^",input$volcano_cntrst, "_p.adj", sep = ""),
+    #                         colnames(proteins_selected))
+    # }
+    # df_protein <- data.frame(x = proteins_selected[, diff_proteins],
+    #                          y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,
+    #                          name = proteins_selected$`Gene Name`)
+    # #print(df_protein)
+    # 
+    # p<-plot_volcano_new(dep(),
+    #                     input$volcano_cntrst,
+    #                     input$fontsize,
+    #                     input$check_names,
+    #                     input$p_adj)
+    # 
+    #   p<- p + geom_point(data = df_protein, aes(x, y), color = "maroon", size= 3) +
+    #   ggrepel::geom_text_repel(data = df_protein,
+    #                            aes(x, y, label = name),
+    #                            size = 4,
+    #                            box.padding = unit(0.1, 'lines'),
+    #                            point.padding = unit(0.1, 'lines'),
+    #                            segment.size = 0.5)
+    # 
+    # output$volcano <- renderPlot({
+    #   withProgress(message = 'Volcano Plot calculations are in progress',
+    #                detail = 'Please wait for a while', value = 0, {
+    #                  for (i in 1:15) {
+    #                    incProgress(1/15)
+    #                    Sys.sleep(0.25)
+    #                  }
+    #                })
+    #  p
+    # })
+    # return(p)
   })
  
  observeEvent(input$resetPlot,{
@@ -762,7 +780,7 @@ autoWidth=TRUE,
                      Sys.sleep(0.25)
                    }
                  })
-    if(is.null(input$contents_rows_selected)){
+    if(is.null(input$contents_rows_selected) & is.null(input$protein_brush)){
    volcano_input()
      }
     else if(!is.null(input$volcano_cntrst)){
@@ -861,13 +879,9 @@ autoWidth=TRUE,
   
   individual_cluster <- reactive({
       cluster_number <- input$cluster_number
-      heatmap_list <- get_cluster_heatmap(dep(),
-                                          type="centered",kmeans = TRUE,
-                                          k=input$k_number, col_limit = 6,
-                                          indicate = "condition"
-      )
-      cluster_all <- heatmap_list[[2]]
-      data_result()[cluster_all[[cluster_number]],]
+      cluster_all <-heatmap_cluster()[[2]]
+      df <- data_result()[cluster_all[[cluster_number]],]
+      return(df)
     })
   
   # output$text1 <- renderPrint({
@@ -890,14 +904,14 @@ autoWidth=TRUE,
     },
     content = function(file) {
       pdf(file)
-      if(is.null(input$protein_brush)){
+      if(is.null(input$contents_rows_selected) & is.null(input$protein_brush)){
         print(volcano_input())
         dev.off()
       }
       else{
-      observeEvent(input$protein_brush,{
-        print(p)
-      })
+      # observeEvent(input$protein_brush,{
+      #   print(p)
+      # })
       print(volcano_input_selected())
       dev.off()
       }
@@ -1467,53 +1481,53 @@ imputed_data_dm<-reactive({
      return(df)
    },
    options = list(scrollX= TRUE,
-autoWidth=TRUE,
-                columnDefs= list(list(width = '400px', targets = c(-1))))
+                  autoWidth=TRUE,
+                  columnDefs= list(list(width = '400px', targets = c(-1))))
    )
    
-   proteins_selected<-data_result_dm()[data_result_dm()[["Gene Name"]] %in% protein_name_brush_dm(), ] #
-   # get all rows selected
-   ## convert contrast to x and padj to y
-   diff_proteins <- grep(paste(input$volcano_cntrst_dm, "_log2", sep = ""),
-                         colnames(proteins_selected))
-   if(input$p_adj=="FALSE"){
-     padj_proteins <- grep(paste(input$volcano_cntrst_dm, "_p.val", sep = ""),
-                           colnames(proteins_selected))
-   }
-   else{
-     padj_proteins <- grep(paste(input$volcano_cntrst_dm, "_p.adj", sep = ""),
-                           colnames(proteins_selected))
-   }
-   df_protein <- data.frame(x = proteins_selected[, diff_proteins],
-                            y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,
-                            name = proteins_selected$`Gene Name`)
-   #print(df_protein)
-   
-   p<-plot_volcano_new(dep_dm(),
-                       input$volcano_cntrst_dm,
-                       input$fontsize_dm,
-                       input$check_names_dm,
-                       input$p_adj_dm)
-   
-   p<- p + geom_point(data = df_protein, aes(x, y), color = "maroon", size= 3) +
-     ggrepel::geom_text_repel(data = df_protein,
-                              aes(x, y, label = name),
-                              size = 4,
-                              box.padding = unit(0.1, 'lines'),
-                              point.padding = unit(0.1, 'lines'),
-                              segment.size = 0.5)
-   
-   output$volcano_dm <- renderPlot({
-     withProgress(message = 'Volcano Plot calculations are in progress',
-                  detail = 'Please wait for a while', value = 0, {
-                    for (i in 1:15) {
-                      incProgress(1/15)
-                      Sys.sleep(0.25)
-                    }
-                  })
-     p
-   })
-   return(p)
+   # proteins_selected<-data_result_dm()[data_result_dm()[["Gene Name"]] %in% protein_name_brush_dm(), ] #
+   # # get all rows selected
+   # ## convert contrast to x and padj to y
+   # diff_proteins <- grep(paste(input$volcano_cntrst_dm, "_log2", sep = ""),
+   #                       colnames(proteins_selected))
+   # if(input$p_adj=="FALSE"){
+   #   padj_proteins <- grep(paste(input$volcano_cntrst_dm, "_p.val", sep = ""),
+   #                         colnames(proteins_selected))
+   # }
+   # else{
+   #   padj_proteins <- grep(paste(input$volcano_cntrst_dm, "_p.adj", sep = ""),
+   #                         colnames(proteins_selected))
+   # }
+   # df_protein <- data.frame(x = proteins_selected[, diff_proteins],
+   #                          y = -log10(as.numeric(proteins_selected[, padj_proteins])),#)#,
+   #                          name = proteins_selected$`Gene Name`)
+   # #print(df_protein)
+   # 
+   # p<-plot_volcano_new(dep_dm(),
+   #                     input$volcano_cntrst_dm,
+   #                     input$fontsize_dm,
+   #                     input$check_names_dm,
+   #                     input$p_adj_dm)
+   # 
+   # p<- p + geom_point(data = df_protein, aes(x, y), color = "maroon", size= 3) +
+   #   ggrepel::geom_text_repel(data = df_protein,
+   #                            aes(x, y, label = name),
+   #                            size = 4,
+   #                            box.padding = unit(0.1, 'lines'),
+   #                            point.padding = unit(0.1, 'lines'),
+   #                            segment.size = 0.5)
+   # 
+   # output$volcano_dm <- renderPlot({
+   #   withProgress(message = 'Volcano Plot calculations are in progress',
+   #                detail = 'Please wait for a while', value = 0, {
+   #                  for (i in 1:15) {
+   #                    incProgress(1/15)
+   #                    Sys.sleep(0.25)
+   #                  }
+   #                })
+   #   p
+   # })
+   # return(p)
  })
  
  observeEvent(input$resetPlot_dm,{
@@ -1561,7 +1575,7 @@ autoWidth=TRUE,
                     Sys.sleep(0.25)
                   }
                 })
-   if(is.null(input$contents_dm_rows_selected)){
+   if(is.null(input$contents_dm_rows_selected) & is.null(input$protein_brush_dm)){
      volcano_input_dm()
    }
    else if(!is.null(input$volcano_cntrst_dm)){
@@ -1677,8 +1691,17 @@ autoWidth=TRUE,
    },
    content = function(file) {
      pdf(file)
-     print(volcano_input_selected_dm())
-     dev.off()
+     if(is.null(input$contents_dm_rows_selected) & is.null(input$protein_brush_dm)){
+       print(volcano_input_dm())
+       dev.off()
+     }
+     else{
+       # observeEvent(input$protein_brush_dm,{
+       #   print(p)
+       # })
+       print(volcano_input_selected_dm())
+       dev.off()
+     }
    }
  )
  
