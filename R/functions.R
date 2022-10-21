@@ -666,7 +666,11 @@ get_results_proteins <- function(dep) {
   table<-table %>% dplyr::arrange(desc(significant))
   colnames(table)[1]<-c("Gene Name")
   colnames(table)[2]<-c("Protein IDs")
+<<<<<<< HEAD
   table <- table %>% dplyr::relocate(Protein.names, .after = last_col())
+=======
+  table <- table %>% dplyr::select(grep("[^Protein.names]",colnames(table)), "Protein.names")
+>>>>>>> 6bb35366647de1666a48c9cef7053d813e3e756b
   # table$Gene_name<-table$name
   return(table)
 }
