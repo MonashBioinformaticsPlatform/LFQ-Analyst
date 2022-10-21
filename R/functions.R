@@ -342,7 +342,7 @@ get_cluster_heatmap <- function(dep, type = c("contrast", "centered"),
                 ...)
   # return (row_order(ht1))
   # Return data.frame
-  draw(ht1, heatmap_legend_side = "top")
+  p <- draw(ht1, heatmap_legend_side = "top")
   row_clusters<- row_order(ht1)
   #mat<-as.matrix(df)
   
@@ -358,7 +358,8 @@ get_cluster_heatmap <- function(dep, type = c("contrast", "centered"),
   #     out <- cbind(out, clu)
   #   }
   # }
-  return(row_clusters)
+  heatmap_list <- list(p, row_clusters)
+  return(heatmap_list)
 }
 
 # Internal function to get ComplexHeatmap::HeatmapAnnotation object
@@ -632,7 +633,7 @@ get_results_proteins <- function(dep) {
   
   # Obtain average enrichments of conditions versus the control condition
   ratio <- as.data.frame(row_data) %>%
-    tibble::column_to_rownames("name") %>%
+    # tibble::column_to_rownames("name") %>%
     dplyr::select(dplyr::ends_with("diff")) %>%
     signif(., digits = 3) %>%
     tibble::rownames_to_column()
@@ -642,7 +643,7 @@ get_results_proteins <- function(dep) {
   
   # Select the adjusted p-values and significance columns
   pval <- as.data.frame(row_data) %>%
-    tibble::column_to_rownames("name") %>%
+    # tibble::column_to_rownames("name") %>%
     dplyr::select(dplyr::ends_with("p.val"),
                   dplyr::ends_with("p.adj"),
                   dplyr::ends_with("significant")) %>%
@@ -665,7 +666,11 @@ get_results_proteins <- function(dep) {
   table<-table %>% dplyr::arrange(desc(significant))
   colnames(table)[1]<-c("Gene Name")
   colnames(table)[2]<-c("Protein IDs")
+<<<<<<< HEAD
+  table <- table %>% dplyr::relocate(Protein.names, .after = last_col())
+=======
   table <- table %>% dplyr::select(grep("[^Protein.names]",colnames(table)), "Protein.names")
+>>>>>>> 6bb35366647de1666a48c9cef7053d813e3e756b
   # table$Gene_name<-table$name
   return(table)
 }

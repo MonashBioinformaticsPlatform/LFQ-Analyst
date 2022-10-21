@@ -38,7 +38,7 @@ ui <- function(request){shinyUI(
                           
                           radioButtons("imputation",
                                        "Imputation type",
-                                       choices = c("Perseus-type"="man", MSnbase::imputeMethods())[1:9],
+                                       choices = c("Perseus-type"="man", MsCoreUtils::imputeMethods())[1:9],
                                        selected = "man"),
                           
                           radioButtons("fdr_correction",
@@ -83,6 +83,13 @@ ui <- function(request){shinyUI(
      
       tags$head(
         tags$link(rel = "stylesheet", type = "text/css", href = "./css/custom.css")
+      ),
+      
+      tags$style(
+        ".box {
+        border-top: none;
+        box-shadow: 0 0px 0px rgb(0 0 0 / 10%);
+        }"
       ),
 
       #  Add logo to the body
@@ -235,7 +242,10 @@ ui <- function(request){shinyUI(
                                                             min=1, max=6, value = 1), width = 6),
                                            box(downloadButton('downloadCluster',"Save Cluster"),
                                                downloadButton('download_hm_svg', "Save svg"),
-                                                width = 5)
+                                                width = 5),
+                                           # align save button
+                                           tags$style(type='text/css', "#downloadCluster {margin-top: 25px;}"),
+                                           tags$style(type='text/css', "#download_hm_svg {margin-top: 25px;}")
                                          )
                                 ),
                                 tabPanel(title = "Protein Plot",
@@ -315,28 +325,37 @@ ui <- function(request){shinyUI(
                               width=6,
                               tabBox(title = "Enrichment", width = 12,
                                      tabPanel(title="Gene Ontology",
-                                              box(uiOutput("contrast"), width = 5),
-                                            box(
-                                              selectInput("go_database", "GO database:",
-                                                        c("Molecular Function"="GO_Molecular_Function_2017b",
-                                                          "Cellular Component"="GO_Cellular_Component_2017b",
-                                                          "Biological Process"="GO_Biological_Process_2017b")),
-                                              width= 5),
-                                           actionButton("go_analysis", "Run Enrichment"),
-                                              plotOutput("go_enrichment"),
-                                              downloadButton('downloadGO', 'Download Table')
-                                              
+                                           fluidRow(
+                                             column(6,
+                                                    uiOutput("contrast")),
+                                             column(6,
+                                                    selectInput("go_database", "GO database:",
+                                                                c("Molecular Function"="GO_Molecular_Function_2017b",
+                                                                  "Cellular Component"="GO_Cellular_Component_2017b",
+                                                                  "Biological Process"="GO_Biological_Process_2017b"))
+                                             ),
+                                             column(12,actionButton("go_analysis", "Run Enrichment")),
+                                             column(12,
+                                                    box(width = 12,uiOutput("spinner_go"),height = 400)
+                                             ),
+                                             column(12,downloadButton('downloadGO', 'Download Table'))
+                                           )
                                      ),
                                      tabPanel(title= "Pathway enrichment",
-                                              box(uiOutput("contrast_1"), width = 5),
-                                              box(
-                                                selectInput("pathway_database", "Pathway database:",
-                                                            c("KEGG"="KEGG_2016",
-                                                              "Reactome"="Reactome_2016")),
-                                                width= 5),
-                                              actionButton("pathway_analysis", "Run Enrichment"),
-                                              plotOutput("pathway_enrichment"),
-                                              downloadButton('downloadPA', 'Download Table')
+                                              fluidRow(
+                                                column(6,
+                                                       uiOutput("contrast_1")),
+                                                column(6,
+                                                       selectInput("pathway_database", "Pathway database:",
+                                                                   c("KEGG"="KEGG_2016",
+                                                                     "Reactome"="Reactome_2016"))
+                                                ),
+                                                column(12,actionButton("pathway_analysis", "Run Enrichment")),
+                                                column(12,
+                                                       box(width = 12,uiOutput("spinner_pa"),height = 400)
+                                                ),
+                                                column(12,downloadButton('downloadPA', 'Download Table'))
+                                              )
                                      )
                                      
                               ) # Tab box close
@@ -486,7 +505,9 @@ ui <- function(request){shinyUI(
                                            box(numericInput("cluster_number_dm",
                                                             "Cluster to download",
                                                             min=1, max=6, value = 1), width = 6),
-                                           box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3)
+                                           box(downloadButton('downloadCluster_dm',"Save Cluster"),width = 3),
+                                           # align save button
+                                           tags$style(type='text/css', "#downloadCluster_dm {margin-top: 25px;}"),
                                          )
                                 ),
                                 tabPanel(title = "Protein Plot",
@@ -557,28 +578,40 @@ ui <- function(request){shinyUI(
                               width=6,
                               tabBox(title = "Enrichment", width = 12,
                                      tabPanel(title="Gene Ontology",
-                                              box(uiOutput("contrast_dm"), width = 5),
-                                            box(
-                                              selectInput("go_database_dm", "GO database:",
-                                                        c("Molecular Function"="GO_Molecular_Function_2017b",
-                                                          "Cellular Component"="GO_Cellular_Component_2017b",
-                                                          "Biological Process"="GO_Biological_Process_2017b")),
-                                              width= 5),
-                                           actionButton("go_analysis_dm", "Run Enrichment"),
-                                              plotOutput("go_enrichment_dm"),
-                                              downloadButton('downloadGO_dm', 'Download Table')
+                                              fluidRow(
+                                                column(6,
+                                                       uiOutput("contrast_dm")
+                                                ),
+                                                column(6,
+                                                       selectInput("go_database_dm", "GO database:",
+                                                                   c("Molecular Function"="GO_Molecular_Function_2017b",
+                                                                     "Cellular Component"="GO_Cellular_Component_2017b",
+                                                                     "Biological Process"="GO_Biological_Process_2017b"))
+                                                ),
+                                                column(12,actionButton("go_analysis_dm", "Run Enrichment")),
+                                                column(12,
+                                                       box(width = 12,uiOutput("spinner_go_dm"),height = 400)
+                                                ),
+                                                column(12,downloadButton('downloadGO_dm', 'Download Table'))
+                                              )
                                               
                                      ),
                                      tabPanel(title= "Pathway enrichment",
-                                              box(uiOutput("contrast_dm_1"), width = 5),
-                                              box(
-                                                selectInput("pathway_database_dm", "Pathway database:",
-                                                            c("KEGG"="KEGG_2016",
-                                                              "Reactome"="Reactome_2016")),
-                                                width= 5),
-                                              actionButton("pathway_analysis_dm", "Run Enrichment"),
-                                              plotOutput("pathway_enrichment_dm"),
-                                              downloadButton('downloadPA_dm', 'Download Table')
+                                              fluidRow(
+                                                column(6,
+                                                       uiOutput("contrast_dm_1")
+                                                ),
+                                                column(6,
+                                                       selectInput("pathway_database_dm", "Pathway database:",
+                                                                   c("KEGG"="KEGG_2016",
+                                                                     "Reactome"="Reactome_2016"))
+                                                ),
+                                                column(12,actionButton("pathway_analysis_dm", "Run Enrichment")),
+                                                column(12,
+                                                       box(width = 12,uiOutput("spinner_pa_dm"),height = 400)
+                                                ),
+                                                column(12,downloadButton('downloadPA_dm', 'Download Table'))
+                                              )
                                      ) #### Tab demo closed
                                      
                               ) # Tab box close
