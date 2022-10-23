@@ -1,10 +1,9 @@
-R version 3.4.3 (2017-11-30)
+R version 4.2.1 (2022-06-23)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Ubuntu 16.04.3 LTS
 
 Matrix products: default
-BLAS: /usr/lib/libblas/libblas.so.3.6.0
-LAPACK: /usr/lib/lapack/liblapack.so.3.6.0
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
 
 locale:
  [1] LC_CTYPE=en_AU.UTF-8       LC_NUMERIC=C              
@@ -19,44 +18,84 @@ attached base packages:
  [8] datasets  methods   base     
 
 other attached packages:
- [1] svglite_1.2.2.9000         rjson_0.2.15              
- [3] httr_1.3.1                 ggrepel_0.8.0             
- [5] DT_0.4                     limma_3.34.8              
- [7] ComplexHeatmap_1.17.1      shinyalert_1.0            
- [9] shinyjs_1.0                shinydashboard_0.6.1      
-[11] testthat_2.0.0             DEP_1.0.1                 
-[13] forcats_0.3.0              stringr_1.3.0             
-[15] dplyr_0.7.4                purrr_0.2.4               
-[17] readr_1.1.1                tidyr_0.8.0               
-[19] tibble_1.4.2               ggplot2_2.2.1             
-[21] tidyverse_1.2.1            SummarizedExperiment_1.8.1
-[23] DelayedArray_0.4.1         matrixStats_0.53.1        
-[25] Biobase_2.38.0             GenomicRanges_1.30.2      
-[27] GenomeInfoDb_1.14.0        IRanges_2.12.0            
-[29] S4Vectors_0.16.0           BiocGenerics_0.24.0       
-[31] shiny_1.0.5               
+ [1] shinycssloaders_1.0.0       svglite_2.1.0              
+ [3] rjson_0.2.21                httr_1.4.4                 
+ [5] ggrepel_0.9.1               DT_0.25                    
+ [7] limma_3.52.4                ComplexHeatmap_2.12.1      
+ [9] shinyalert_3.0.0            shinyjs_2.1.0              
+[11] shinydashboard_0.7.2        testthat_3.1.5             
+[13] DEP_1.18.0                  forcats_0.5.2              
+[15] stringr_1.4.1               dplyr_1.0.10               
+[17] purrr_0.3.5                 readr_2.1.3                
+[19] tidyr_1.2.1                 tibble_3.1.8               
+[21] ggplot2_3.3.6               tidyverse_1.3.2            
+[23] shiny_1.7.2                 SummarizedExperiment_1.26.1
+[25] Biobase_2.56.0              GenomicRanges_1.48.0       
+[27] GenomeInfoDb_1.32.4         IRanges_2.30.1             
+[29] S4Vectors_0.34.0            BiocGenerics_0.42.0        
+[31] MatrixGenerics_1.8.1        matrixStats_0.62.0         
 
 loaded via a namespace (and not attached):
- [1] nlme_3.1-131.1         bitops_1.0-6           lubridate_1.7.2       
- [4] RColorBrewer_1.1-2     tools_3.4.3            R6_2.2.2              
- [7] tmvtnorm_1.4-10        lazyeval_0.2.1         colorspace_1.3-2      
-[10] GetoptLong_0.1.6       mnormt_1.5-5           compiler_3.4.3        
-[13] cli_1.0.0              rvest_0.3.2            xml2_1.2.0            
-[16] sandwich_2.4-0         scales_0.5.0           mvtnorm_1.0-7         
-[19] psych_1.7.8            systemfonts_0.1.1      digest_0.6.15         
-[22] foreign_0.8-69         XVector_0.18.0         pkgconfig_2.0.1       
-[25] htmltools_0.3.6        htmlwidgets_1.0        rlang_0.2.0           
-[28] GlobalOptions_0.0.12   readxl_1.0.0           rstudioapi_0.7        
-[31] impute_1.52.0          shape_1.4.4            bindr_0.1             
-[34] zoo_1.8-1              jsonlite_1.5           RCurl_1.95-4.10       
-[37] magrittr_1.5           GenomeInfoDbData_1.0.0 Matrix_1.2-12         
-[40] Rcpp_1.0.2             munsell_0.4.3          gdtools_0.2.1.001     
-[43] imputeLCMD_2.0         stringi_1.1.6          zlibbioc_1.24.0       
-[46] plyr_1.8.4             crayon_1.3.4           lattice_0.20-35       
-[49] haven_1.1.1            circlize_0.4.3         hms_0.4.1             
-[52] pillar_1.1.0           reshape2_1.4.3         glue_1.2.0            
-[55] pcaMethods_1.70.0      modelr_0.1.1           httpuv_1.3.5          
-[58] cellranger_1.1.0       gtable_0.2.0           norm_1.0-9.5          
-[61] assertthat_0.2.0       mime_0.5               xtable_1.8-2          
-[64] broom_0.4.3            gmm_1.6-1              bindrcpp_0.2
+  [1] uuid_1.1-0             readxl_1.4.1          
+  [3] backports_1.4.1        circlize_0.4.15       
+  [5] systemfonts_1.0.4      plyr_1.8.7            
+  [7] gmm_1.7                crosstalk_1.2.0       
+  [9] BiocParallel_1.30.4    digest_0.6.30         
+ [11] foreach_1.5.2          htmltools_0.5.3       
+ [13] magick_2.7.3           fansi_1.0.3           
+ [15] memoise_2.0.1          magrittr_2.0.3        
+ [17] googlesheets4_1.0.1    cluster_2.1.4         
+ [19] doParallel_1.0.17      tzdb_0.3.0            
+ [21] modelr_0.1.9           imputeLCMD_2.1        
+ [23] sandwich_3.0-2         colorspace_2.0-3      
+ [25] rvest_1.0.3            haven_2.5.1           
+ [27] xfun_0.34              crayon_1.5.2          
+ [29] RCurl_1.98-1.9         jsonlite_1.8.2        
+ [31] impute_1.70.0          zoo_1.8-11            
+ [33] iterators_1.0.14       glue_1.6.2            
+ [35] gtable_0.3.1           gargle_1.2.1          
+ [37] zlibbioc_1.42.0        XVector_0.36.0        
+ [39] GetoptLong_1.0.5       DelayedArray_0.22.0   
+ [41] shape_1.4.6            scales_1.2.1          
+ [43] vsn_3.64.0             mvtnorm_1.1-3         
+ [45] DBI_1.1.3              Rcpp_1.0.9            
+ [47] mzR_2.30.0             xtable_1.8-4          
+ [49] clue_0.3-62            preprocessCore_1.58.0 
+ [51] MsCoreUtils_1.8.0      htmlwidgets_1.5.4     
+ [53] RColorBrewer_1.1-3     ellipsis_0.3.2        
+ [55] farver_2.1.1           pkgconfig_2.0.3       
+ [57] XML_3.99-0.11          sass_0.4.2            
+ [59] dbplyr_2.2.1           utf8_1.2.2            
+ [61] labeling_0.4.2         tidyselect_1.2.0      
+ [63] rlang_1.0.6            later_1.3.0           
+ [65] munsell_0.5.0          cellranger_1.1.0      
+ [67] tools_4.2.1            cachem_1.0.6          
+ [69] cli_3.4.1              generics_0.1.3        
+ [71] broom_1.0.1            fdrtool_1.2.17        
+ [73] evaluate_0.17          fastmap_1.1.0         
+ [75] mzID_1.34.0            yaml_2.3.6            
+ [77] knitr_1.40             fs_1.5.2              
+ [79] ncdf4_1.19             mime_0.12             
+ [81] xml2_1.3.3             brio_1.1.3            
+ [83] compiler_4.2.1         rstudioapi_0.14       
+ [85] png_0.1-7              affyio_1.66.0         
+ [87] reprex_2.0.2           bslib_0.4.0           
+ [89] stringi_1.7.8          highr_0.9             
+ [91] MSnbase_2.22.0         lattice_0.20-45       
+ [93] ProtGenerics_1.28.0    Matrix_1.5-1          
+ [95] tmvtnorm_1.5           vctrs_0.4.2           
+ [97] pillar_1.8.1           norm_1.0-10.0         
+ [99] lifecycle_1.0.3        BiocManager_1.30.18   
+[101] jquerylib_0.1.4        MALDIquant_1.21       
+[103] GlobalOptions_0.1.2    bitops_1.0-7          
+[105] httpuv_1.6.6           R6_2.5.1              
+[107] pcaMethods_1.88.0      affy_1.74.0           
+[109] renv_0.16.0            promises_1.2.0.1      
+[111] codetools_0.2-18       MASS_7.3-58.1         
+[113] assertthat_0.2.1       fontawesome_0.3.0     
+[115] withr_2.5.0            GenomeInfoDbData_1.2.8
+[117] parallel_4.2.1         hms_1.1.2             
+[119] rmarkdown_2.17         googledrive_2.0.0     
+[121] Cairo_1.6-0            lubridate_1.8.0       
+[123] tinytex_0.42  
 

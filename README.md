@@ -1,6 +1,6 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![GitHub](https://img.shields.io/github/license/Monashbioinformaticsplatform/LFQ-Analyst?color=brightgreen)
-![R](https://img.shields.io/badge/R-%3E3.4--3.5-brightgreen)
+![R](https://img.shields.io/badge/R-%3E4.2-brightgreen)
 
 # LFQ-Analyst
 A tool for analysing label-free quantitative proteomics dataset https://bioinformatics.erc.monash.edu/apps/LFQ-Analyst/
@@ -91,7 +91,7 @@ at least 2 out of three replicates)
 
 ### Local installation
 
-The current version of LFQ-Analyst is hosted on `R - 3.4.3`. The detailed dependency information can be found in the `dependencies.txt` file.
+The current version of LFQ-Analyst is hosted on `R - 4.2.1`. The detailed dependency information can be found in the `dependencies.txt` file.
 
 Once installed all the dependencies following steps to run the server locally.
 
@@ -115,6 +115,11 @@ cd LFQ-Analyst
 Install & start Docker demon on your PC
 
 ```
+## Option one：
+## Pull LFQ-Analyst image from Docker Hub (From terminal)
+> docker pull haileyzhang/lfq-analyst:tagname
+
+## Option two：
 ## Clone the repository
 git clone https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst.git
 
@@ -133,13 +138,4 @@ cd LFQ-Analyst
 https://localhost:3838/LFQ-Analyst
 
 
-```
-
-
-
-If you are using more recent versions of R i.e `R  3.6.0`, please clone the **dev** branch. 
-
-```
-# cloning single branch
-git clone https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst.git -b dev --single-branch /your_folder/location/
 ```
