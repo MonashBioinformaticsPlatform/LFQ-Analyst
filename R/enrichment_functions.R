@@ -105,21 +105,26 @@ test_gsea_mod <- function(dep,
           mutate(var = database)
         contrast_enrich <- rbind(contrast_enrich, temp)
       }
-      contrast_enrich$contrast <- contrast
-      contrast_enrich$n <- length(genes)
       
-      # Background correction
-      cat("Background correction... ")
-      contrast_enrich <- contrast_enrich %>%
-        mutate(IN = as.numeric(gsub("/.*", "", Overlap)),
-               OUT = n - IN) %>%
-        select(-n) %>%
-        left_join(OUT, by = "Term") %>%
-        mutate(log_odds = log2((IN * bg_OUT) / (OUT * bg_IN)))
-      cat("Done.")
-      
-      df_enrich <- rbind(df_enrich, contrast_enrich) %>%
-        mutate(contrast = gsub("_significant", "", contrast))
+      if (nrow(contrast_enrich) != 0){
+        contrast_enrich$contrast <- contrast
+        contrast_enrich$n <- length(genes)
+        
+        # Background correction
+        cat("Background correction... ")
+        contrast_enrich <- contrast_enrich %>%
+          mutate(IN = as.numeric(gsub("/.*", "", Overlap)),
+                 OUT = n - IN) %>%
+          select(-n) %>%
+          left_join(OUT, by = "Term") %>%
+          mutate(log_odds = log2((IN * bg_OUT) / (OUT * bg_IN)))
+        cat("Done.")
+        
+        df_enrich <- rbind(df_enrich, contrast_enrich) %>%
+          mutate(contrast = gsub("_significant", "", contrast))
+      } else {
+        cat("No enough significant genes for enrichment analysis")
+      }
     }
   } else {
     # Get gene symbols

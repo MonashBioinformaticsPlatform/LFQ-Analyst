@@ -624,9 +624,10 @@ ui <- function(request){shinyUI(
       #   )#tabitems close
         ),
         tags$footer(
-  tags$p("Supported by: Monash Proteomics and Metabolomics Facility & Monash Bioinformatics Platform, 
-         Monash University"),
-align = "right") # Dasbboardbody close 
+        tags$p("Supported by: Monash Proteomics and Metabolomics Facility & Monash Bioinformatics Platform, 
+               Monash University"),
+        align = "right"), # Dasbboardbody close 
+        shiny.info::version(position = "bottom right")
     
     ) #Dashboard page close
   ) 

@@ -702,19 +702,26 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
          call. = FALSE)
   }
   
+  no_enrichment_text <- paste("Enrichment could not be performed.\n",
+                              "\nDownload enrichment result table for more details. \n")
+  
   if(!is.null(contrasts)) {
     assertthat::assert_that(is.character(contrasts))
     
     valid_contrasts <- unique(gsea_results$contrast)
     
     if(!all(contrasts %in% valid_contrasts)) {
-      valid_cntrsts_msg <- paste0("Valid contrasts are: '",
-                                  paste0(valid_contrasts, collapse = "', '"),
-                                  "'")
-      stop("Not a valid contrast, please run `plot_gsea()`",
-           "with a valid contrast as argument\n",
-           valid_cntrsts_msg,
-           call. = FALSE)
+      # valid_cntrsts_msg <- paste0("Valid contrasts are: '",
+      #                             paste0(valid_contrasts, collapse = "', '"),
+      #                             "'")
+      # stop("Not a valid contrast, please run `plot_gsea()`",
+      #      "with a valid contrast as argument\n",
+      #      valid_cntrsts_msg,
+      #      call. = FALSE)
+      return(ggplot() +
+               annotate("text", x = 4, y = 25, size=8, label = no_enrichment_text) +
+               theme_void()
+      )
     }
     if(!any(contrasts %in% valid_contrasts)) {
       contrasts <- contrasts[contrasts %in% valid_contrasts]
@@ -764,17 +771,23 @@ plot_enrichment <- function(gsea_results, number = 10, alpha = 0.05,
   subset$var <- readr::parse_factor(subset$var, levels = unique(subset$var))
   
   # Plot top enriched gene sets
-  p<-ggplot(subset, aes(Term,
-                     y=-log10(`Adjusted.P.value`))) +
-    geom_col(aes(fill = log_odds )) +
-    facet_wrap(~contrast, nrow = nrow) +
-    coord_flip() +
-    labs(y = "-Log10 adjusted p-value",
-         fill = "Log2 odds ratio (vs. current background)") +
-    theme_bw() +
-    theme(legend.position = "top",
-          legend.text = element_text(size = 9)) +
-    scale_fill_distiller(palette="Spectral")
+  if (nrow(subset) == 0){
+    p <- ggplot() +
+      annotate("text", x = 4, y = 25, size=8, label = no_enrichment_text) + 
+      theme_void()
+  } else {
+    p<-ggplot(subset, aes(Term,
+                          y=-log10(`Adjusted.P.value`))) +
+      geom_col(aes(fill = log_odds )) +
+      facet_wrap(~contrast, nrow = nrow) +
+      coord_flip() +
+      labs(y = "-Log10 adjusted p-value",
+           fill = "Log2 odds ratio (vs. current background)") +
+      theme_bw() +
+      theme(legend.position = "top",
+            legend.text = element_text(size = 9)) +
+      scale_fill_distiller(palette="Spectral")
+  }
 }
                                   
 #### ==== get prefix function 
