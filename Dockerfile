@@ -10,7 +10,7 @@ RUN Rscript -e 'install.packages(c("devtools", "tidyverse", "ggrepel", "httr", "
 "shinyjs", "svglite", "rhandsontable", "shinyBS", "shinyWidgets", "ggVennDiagram", "shinycssloaders"), dependencies=TRUE)'
 
 #FROM bioconductor/bioconductor_docker:RELEASE_3_15
-RUN Rscript -e 'BiocManager::install(pkgs=c("DEP", "DT", "SummarizedExperiment", "limma", "ComplexHeatmap", ask=F), dependencies=TRUE)'
+RUN Rscript -e 'BiocManager::install(pkgs=c("DEP", "SummarizedExperiment", "limma", "ComplexHeatmap"), ask=F, dependencies=TRUE)'
 
 COPY ./ /srv/shiny-server/lfq-analyst
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
