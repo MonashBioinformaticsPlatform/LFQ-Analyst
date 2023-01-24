@@ -584,9 +584,9 @@ ui <- function(request){shinyUI(
                                                 ),
                                                 column(6,
                                                        selectInput("go_database_dm", "GO database:",
-                                                                   c("Molecular Function"="GO_Molecular_Function_2017b",
-                                                                     "Cellular Component"="GO_Cellular_Component_2017b",
-                                                                     "Biological Process"="GO_Biological_Process_2017b"))
+                                                                   c("Molecular Function"="GO_Molecular_Function_2021",
+                                                                     "Cellular Component"="GO_Cellular_Component_2021",
+                                                                     "Biological Process"="GO_Biological_Process_2021"))
                                                 ),
                                                 column(12,actionButton("go_analysis_dm", "Run Enrichment")),
                                                 column(12,
@@ -603,8 +603,8 @@ ui <- function(request){shinyUI(
                                                 ),
                                                 column(6,
                                                        selectInput("pathway_database_dm", "Pathway database:",
-                                                                   c("KEGG"="KEGG_2016",
-                                                                     "Reactome"="Reactome_2016"))
+                                                                   c("KEGG"="KEGG_2021_Human",
+                                                                     "Reactome"="Reactome_2022"))
                                                 ),
                                                 column(12,actionButton("pathway_analysis_dm", "Run Enrichment")),
                                                 column(12,
