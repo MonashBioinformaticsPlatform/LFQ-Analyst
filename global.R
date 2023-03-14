@@ -1,3 +1,5 @@
+VERSION <- "v1.2.4"
+
 library("SummarizedExperiment")
 library("tidyverse")
 library("DEP")
@@ -20,7 +22,6 @@ source("R/volcano_function.R")
 source("R/tests.R")
 source("R/demo_functions.R")
 source("R/enrichment_functions.R")
-VERSION <- "v1.2.3"
 
 
 
