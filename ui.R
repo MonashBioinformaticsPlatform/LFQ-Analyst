@@ -102,6 +102,32 @@ ui <- function(request){shinyUI(
       tabItem(tabName = "home",
              fluidRow( 
                box(
+                 title = "Important Updates",
+                 # h3("LFQ-Analyst: An easy-to-use interactive web-platform to analyze and visualize proteomics data 
+                 #     preprocessed with MaxQuant."),
+                 # tags$hr(),
+                 h4(tags$b("Analyst Suites")," Website available now"),
+                 h5(tags$ul(
+                   "Get access to additional Analyst Apps: ", tags$a(href = "https://analyst-suites.org/",
+                                             target = "_blank", "https://analyst-suites.org/")
+                 )),
+                 # br(),
+                 h4(tags$b("Developer Version (recommended)")),
+                 h5(tags$ul(
+                   "Includes more features: ", tags$a(href = "http://118.138.235.40:3838/LFQ-Analyst_Fragpipe/",
+                                                            target = "_blank", "LFQ-Analyst(Dev.)")
+                 )),
+                 # br(),
+                 h4(tags$b("Questions/Suggestions/Bug reports: ")),
+                 h5(tags$ul(
+                   "Leave comments to our GitHub: ", tags$a(href = "https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst",
+                                                            target = "_blank", "here")
+                 )),
+                 width = 12,
+                 solidHeader = TRUE,
+                 status = "primary"
+               ), # box 1 closed
+               box(
                 title = "Overview",
                   h3("LFQ-Analyst: An easy-to-use interactive web-platform to analyze and visualize proteomics data 
                      preprocessed with MaxQuant."),
@@ -121,9 +147,10 @@ ui <- function(request){shinyUI(
                 ),
                 width = 12,
                 solidHeader = TRUE,
-                status = "primary"
-                 )#box 1 closed
-               
+                collapsed = TRUE,
+                # collapsible = TRUE,
+                status = "success"
+                 )#box 2 closed
              ) #fluidrow close
             ), # home tab close
       tabItem(tabName = "analysis",
