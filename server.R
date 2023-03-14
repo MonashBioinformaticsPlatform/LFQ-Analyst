@@ -1671,7 +1671,9 @@ imputed_data_dm<-reactive({
  individual_cluster_dm <- reactive({
    cluster_number <- input$cluster_number_dm
    cluster_all <- heatmap_input_dm()[[2]]
-   data_result_dm()[cluster_all[[cluster_number]],]
+   single_cluster <- cluster_all[names(cluster_all)==cluster_number] %>% unlist()
+   # data_result_dm()[cluster_all[[cluster_number]],]
+   data_result_dm()[single_cluster,]
  })
  
  
