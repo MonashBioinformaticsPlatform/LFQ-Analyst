@@ -880,7 +880,8 @@ autoWidth=TRUE,
   individual_cluster <- reactive({
       cluster_number <- input$cluster_number
       cluster_all <-heatmap_cluster()[[2]]
-      df <- data_result()[cluster_all[[cluster_number]],]
+      single_cluster <- cluster_all[names(cluster_all)==cluster_number] %>% unlist()
+      df <- data_result()[single_cluster,]
       return(df)
     })
   
