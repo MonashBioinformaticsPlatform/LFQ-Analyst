@@ -1,36 +1,74 @@
 #Define server logic to read selected file ----
-server <- function(input, output, session) {
+server <- function(input, output, session,protein_path = NULL, exp_path =NULL) {
   options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
   
-#  Show elements on clicking Start analysis button
-   observeEvent(input$analyze ,{ 
-     if(input$analyze==0){
-       return()
-     }
-    shinyjs::hide("quickstart_info")
-    shinyjs::show("downloadbox")
-    })
+# Check input path
+  path_check <- reactive({
+    if(is.null(protein_path) | is.null(exp_path)){
+      return(F)
+    } 
+    return(T)
+  })
+  
+  
+  observe({
+    if(path_check() == FALSE & input$analyze == 0 ){
+      return()
+    } else {
+      shinyjs::hide("quickstart_info")
+      shinyjs::show("downloadbox")
+      shinyjs::show("results_tab")
+      shinyjs::show("qc_tab")
+      shinyjs::show("enrichment_tab")
+      if (path_check() == TRUE){
+        shinyjs::disable("file1")
+        shinyjs::disable("file2")
+        shinyjs::disable("analyze")
+        shinyalert("In Progress!", "Switch to Analysis Tab and wait untile results appear on the screen", type="info",
+                   closeOnClickOutside = TRUE,
+                   closeOnEsc = TRUE,
+                   timer = 0) # timer in miliseconds (10 sec)
+      } else {
+        shinyalert("In Progress!", "Data analysis has started, wait until table and plots
+                appear on the screen", type="info",
+                   closeOnClickOutside = TRUE,
+                   closeOnEsc = TRUE,
+                   timer = 10000) # timer in miliseconds (10 sec)
+      }
+    }
+  })
+  
+# #  Show elements on clicking Start analysis button
+#    observeEvent(input$analyze ,{ 
+#      if(input$analyze==0){
+#        return()
+#      }
+#     shinyjs::hide("quickstart_info")
+#     shinyjs::show("downloadbox")
+#     })
+#    
+#    observeEvent(input$analyze ,{ 
+#        if(input$analyze==0 ){
+#          return()
+#        }
+#      shinyjs::show("results_tab")
+#    })
+#    
+#    observeEvent(input$analyze ,{ 
+#      if(input$analyze==0 ){
+#        return()
+#      }
+#      shinyjs::show("qc_tab")
+#    })
+#    
+#    observeEvent(input$analyze ,{ 
+#      if(input$analyze==0 ){
+#        return()
+#      }
+#      shinyjs::show("enrichment_tab")
+#    })
    
-   observeEvent(input$analyze ,{ 
-       if(input$analyze==0 ){
-         return()
-       }
-     shinyjs::show("results_tab")
-   })
    
-   observeEvent(input$analyze ,{ 
-     if(input$analyze==0 ){
-       return()
-     }
-     shinyjs::show("qc_tab")
-   })
-   
-   observeEvent(input$analyze ,{ 
-     if(input$analyze==0 ){
-       return()
-     }
-     shinyjs::show("enrichment_tab")
-   })
    # observeEvent(input$analyze,{
    #   shinyjs::hide("howto")
    # })
@@ -53,17 +91,17 @@ server <- function(input, output, session) {
     # })
  
    ## Shinyalert
-   observeEvent(input$analyze ,{ 
-     if(input$analyze==0 ){
-       return()
-     }
-     
-     shinyalert("In Progress!", "Data analysis has started, wait until table and plots
-                appear on the screen", type="info",
-                closeOnClickOutside = TRUE,
-                closeOnEsc = TRUE,
-                timer = 10000) # timer in miliseconds (10 sec)
-   })
+   # observeEvent(input$analyze ,{ 
+   #   if(input$analyze==0 ){
+   #     return()
+   #   }
+   #   
+   #   shinyalert("In Progress!", "Data analysis has started, wait until table and plots
+   #              appear on the screen", type="info",
+   #              closeOnClickOutside = TRUE,
+   #              closeOnEsc = TRUE,
+   #              timer = 10000) # timer in miliseconds (10 sec)
+   # })
    
    observe({
    if (input$tabs_selected=="demo"){
@@ -164,46 +202,46 @@ server <- function(input, output, session) {
     exp_design_example<-reactive({NULL})
     maxquant_data_example<-reactive({NULL})
     
-    maxquant_data_input<-eventReactive(input$analyze,{
-      inFile<-input$file1
-      if(is.null(inFile))
-        return(NULL)
-      temp_data<-read.table(inFile$datapath,
-                 header = TRUE,
-                 fill= TRUE, # to fill any missing data
-                 sep = "\t",
-                 quote = ""
-      )
-      validate(maxquant_input_test(temp_data))
-      return(temp_data)
+    maxquant_data_input<-reactive({
+      if (path_check() == TRUE | input$analyze != 0 ){
+        # inFile<-input$file1
+        if (is.null(input$file1)){
+          inFile <- protein_path
+        } else {
+          inFile<-input$file1$datapath
+        }
+        if(is.null(inFile))
+          return(NULL)
+        temp_data<-read.table(inFile,
+                              header = TRUE,
+                              fill= TRUE, # to fill any missing data
+                              sep = "\t",
+                              quote = ""
+        )
+        validate(maxquant_input_test(temp_data))
+        return(temp_data)
+      }
     })
-   
-    # observeEvent(input$analyze,{
-    #   exp_design<-reactive({
-    #     inFile<-input$file2
-    #     if (is.null(inFile))
-    #       return(NULL)
-    #     temp_df<-read.table(inFile$datapath,
-    #                         header = TRUE,
-    #                         sep="\t",
-    #                         stringsAsFactors = FALSE)
-    #     exp_design_test(temp_df)
-    #     temp_df$label<-as.character(temp_df$label)
-    #     return(temp_df)
-    #   })    
-    # })
-    exp_design_input<-eventReactive(input$analyze,{
-      inFile<-input$file2
-      if (is.null(inFile))
-        return(NULL)
-      temp_df<-read.table(inFile$datapath,
-                          header = TRUE,
-                          sep="\t",
-                          stringsAsFactors = FALSE)
-      exp_design_test(temp_df)
-      temp_df$label<-as.character(temp_df$label)
-      temp_df$condition<-trimws(temp_df$condition, which = "left")
-      return(temp_df)
+    
+    exp_design_input<-reactive({
+      if(path_check() == TRUE | input$analyze != 0 ){
+        # inFile<-input$file2
+        if (is.null(input$file2)){
+          inFile <- exp_path
+        } else {
+          inFile<-input$file2$datapath
+        }
+        if (is.null(inFile))
+          return(NULL)
+        temp_df<-read.table(inFile,
+                            header = TRUE,
+                            sep="\t",
+                            stringsAsFactors = FALSE)
+        exp_design_test(temp_df)
+        temp_df$label<-as.character(temp_df$label)
+        temp_df$condition<-trimws(temp_df$condition, which = "left")
+        return(temp_df)
+      }
     })
    
     
@@ -356,10 +394,10 @@ server <- function(input, output, session) {
    ## Results plot inputs
    
    ## PCA Plot
-   pca_input<-eventReactive(input$analyze ,{ 
-     if(input$analyze==0 ){
-       return()
-     }
+   pca_input<-reactive({ 
+     # if(input$analyze==0 ){
+     #   return()
+     # }
      if (num_total()<=500){
        if(length(levels(as.factor(colData(dep())$replicate))) <= 6){
          pca_plot<-DEP::plot_pca(dep(), n=num_total(), point_size = 4)
@@ -402,10 +440,10 @@ server <- function(input, output, session) {
    })
    
    ### Heatmap Differentially expressed proteins
-   heatmap_cluster <- eventReactive(input$analyze ,{ 
-     if(input$analyze==0 ){
-       return()
-     }
+   heatmap_cluster <- reactive({ 
+     # if(input$analyze==0 ){
+     #   return()
+     # }
      heatmap_list <- get_cluster_heatmap(dep(),
                                          type="centered",kmeans = TRUE,
                                          k=input$k_number, col_limit = 6,
