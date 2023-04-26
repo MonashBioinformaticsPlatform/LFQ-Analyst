@@ -137,7 +137,7 @@ ui <- function(request){shinyUI(
                   and offers numerous publication-quality result output graphics and tables to facilitate statistical 
                   and exploratory analysis of label-free quantitative datasets. "), 
                 br(),
-                HTML('<center><a href="https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst/tree/master/www"><img src="./LFQ_analyst.svg" width="600px"></a></center>'),
+                HTML('<center><img src="https://raw.githubusercontent.com/MonashBioinformaticsPlatform/LFQ-Analyst/1d3de70ebaf74f254617fb950a1bd9cdbbf4fdb3/www/LFQ_analyst.svg" width="600px"></center>'),
                 br(),
                 h4("Sidebar tabs"),
                 tags$ul(
@@ -173,7 +173,7 @@ ui <- function(request){shinyUI(
                         from MaxQuant. Use the example file template provided.")
                         ),
                         br(),
-                        HTML('<center><a href="https://github.com/MonashBioinformaticsPlatform/LFQ-Analyst/tree/master/www"><img src="./LFQ_analyst.svg" width="500px"></a></center>'),
+                        HTML('<center><img src="https://raw.githubusercontent.com/MonashBioinformaticsPlatform/LFQ-Analyst/1d3de70ebaf74f254617fb950a1bd9cdbbf4fdb3/www/LFQ_analyst.svg" width="500px"></center>'),
                         width = 12,
                         solidHeader = TRUE,
                         status = "danger"
