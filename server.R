@@ -448,7 +448,9 @@ server <- function(input, output, session) {
     volcano_df<- reactive({
       if(!is.null(input$volcano_cntrst)) {
         get_volcano_df(dep(),
-                         input$volcano_cntrst)
+                       input$volcano_cntrst,
+                       input$p_adj
+                       )
         
       }
     })
@@ -1243,7 +1245,9 @@ print(pca_label)
  volcano_df_dm<- reactive({
    if(!is.null(input$volcano_cntrst_dm)) {
      get_volcano_df(dep_dm(),
-                    input$volcano_cntrst_dm)
+                    input$volcano_cntrst_dm,
+                    input$p_adj_dm
+                    )
      
    }
  })
