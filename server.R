@@ -12,18 +12,18 @@ server <- function(input, output, session,protein_path = NULL, exp_path =NULL) {
   
   
   observe({
-    if(path_check() == FALSE & input$analyze == 0 ){
+    if(path_check() == FALSE ){
       return()
     } else {
-      shinyjs::hide("quickstart_info")
+      # shinyjs::hide("quickstart_info")
       shinyjs::show("downloadbox")
       shinyjs::show("results_tab")
       shinyjs::show("qc_tab")
       shinyjs::show("enrichment_tab")
       if (path_check() == TRUE){
-        shinyjs::disable("file1")
-        shinyjs::disable("file2")
-        shinyjs::disable("analyze")
+        # shinyjs::disable("file1")
+        # shinyjs::disable("file2")
+        # shinyjs::disable("analyze")
         shinyalert("In Progress!", "Switch to Analysis Tab and wait untile results appear on the screen", type="info",
                    closeOnClickOutside = TRUE,
                    closeOnEsc = TRUE,
@@ -203,13 +203,14 @@ server <- function(input, output, session,protein_path = NULL, exp_path =NULL) {
     maxquant_data_example<-reactive({NULL})
     
     maxquant_data_input<-reactive({
-      if (path_check() == TRUE | input$analyze != 0 ){
+      if (path_check() == TRUE){
         # inFile<-input$file1
-        if (is.null(input$file1)){
-          inFile <- protein_path
-        } else {
-          inFile<-input$file1$datapath
-        }
+        # if (is.null(input$file1)){
+        #   inFile <- protein_path
+        # } else {
+        #   inFile<-input$file1$datapath
+        # }
+        inFile <- protein_path
         if(is.null(inFile))
           return(NULL)
         temp_data<-read.table(inFile,
@@ -224,13 +225,14 @@ server <- function(input, output, session,protein_path = NULL, exp_path =NULL) {
     })
     
     exp_design_input<-reactive({
-      if(path_check() == TRUE | input$analyze != 0 ){
+      if(path_check() == TRUE){
         # inFile<-input$file2
-        if (is.null(input$file2)){
-          inFile <- exp_path
-        } else {
-          inFile<-input$file2$datapath
-        }
+        # if (is.null(input$file2)){
+        #   inFile <- exp_path
+        # } else {
+        #   inFile<-input$file2$datapath
+        # }
+        inFile <- exp_path
         if (is.null(inFile))
           return(NULL)
         temp_df<-read.table(inFile,
