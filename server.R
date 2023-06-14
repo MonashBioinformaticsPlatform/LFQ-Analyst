@@ -499,7 +499,16 @@ server <- function(input, output, session) {
     
     protein_input<-reactive({ 
       
-      protein_selected  <- data_result()[input$contents_rows_selected,1]
+      # protein_selected  <- data_result()[input$contents_rows_selected,1]
+      df<- data_result()
+      if(!is.null(input$protein_brush)){
+        df<- df[df[["Gene Name"]] %in% protein_name_brush(), ] 
+      } 
+      
+      if(!is.null(input$protein_click)){
+        df<- df[df[["Gene Name"]] %in% protein_name_click(), ] 
+      } 
+      protein_selected  <- df[input$contents_rows_selected,1]
       
       if(length(levels(as.factor(colData(dep())$replicate))) <= 8){
         plot_protein(dep(), protein_selected, input$type)
@@ -1283,7 +1292,16 @@ print(pca_label)
  
  protein_input_dm<-reactive({ 
    
-   protein_selected  <- data_result_dm()[input$contents_dm_rows_selected,1]
+   # protein_selected  <- data_result_dm()[input$contents_dm_rows_selected,1]
+   df<- data_result_dm()
+   if(!is.null(input$protein_brush_dm)){
+     df<- df[df[["Gene Name"]] %in% protein_name_brush_dm(), ] 
+   } 
+   
+   if(!is.null(input$protein_click_dm)){
+     df<- df[df[["Gene Name"]] %in% protein_name_click_dm(), ] 
+   } 
+   protein_selected  <- df[input$contents_dm_rows_selected,1]
    
    #protein<-row_selected$name
    if(length(levels(as.factor(colData(dep_dm())$replicate))) <= 8){
