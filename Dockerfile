@@ -15,6 +15,8 @@ RUN Rscript -e 'BiocManager::install(pkgs=c("DEP", "SummarizedExperiment", "limm
 COPY ./ /srv/shiny-server/lfq-analyst
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 
-EXPOSE 8888
+# disable shiny-server
+RUN touch /etc/services.d/shiny-server/down
+
 #RUN rm -f /srv/shiny-server/lfq-analyst/.Rprofile
 RUN chmod -R +r /srv/shiny-server/lfq-analyst
