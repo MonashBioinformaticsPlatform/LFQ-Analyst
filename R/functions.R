@@ -592,6 +592,14 @@ test_limma <- function(se, type = c("control", "all", "manual"),
     dplyr::mutate(variable = dplyr::recode(variable, logFC = "diff", P.Value = "p.val", adj.P.Val = "p.adj")) %>%
     tidyr::unite(temp, comparison, variable) %>%
     tidyr::spread(temp, value)
+  
+  # avoid wrong order of similar comparison names
+  comp_list <- sort(gsub(" - ", "_vs_", cntrst))
+  ordered_colNames <- c("rowname" ,
+                        lapply(comp_list, function(x) colnames(table)[grep(paste0(x, "(_CI.L|_CI.R|_diff|_p.adj|_p.val)"), colnames(table))]) %>% unlist())
+  
+  table <- table %>% select(all_of(ordered_colNames))
+  
   rowData(se) <- merge(rowData(se), table,
                        by.x = "name", by.y = "rowname", all.x = TRUE)
   return(se)
