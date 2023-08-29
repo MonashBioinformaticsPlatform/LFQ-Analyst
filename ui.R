@@ -115,7 +115,7 @@ ui <- function(request){shinyUI(
                  # br(),
                  h4(tags$b("Developer Version (recommended)")),
                  h5(tags$ul(
-                   "Includes more features: ", tags$a(href = "http://118.138.235.40:3838/LFQ-Analyst_Fragpipe/",
+                   "Includes more features: ", tags$a(href = "https://analyst-suites.org/apps/lfq-analyst-dev/",
                                                             target = "_blank", "LFQ-Analyst(Dev.)")
                  )),
                  # br(),
