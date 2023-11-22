@@ -1,41 +1,29 @@
 #Define server logic to read selected file ----
-server <- function(input, output, session,protein_path = NULL, exp_path =NULL) {
+server <- function(input, output, session) {
   options(shiny.maxRequestSize=100*1024^2)## Set maximum upload size to 100MB
   
 # Check input path
-  path_check <- reactive({
-    if(is.null(protein_path) | is.null(exp_path)){
-      return(F)
-    } 
-    return(T)
+  file_path <- reactive({
+    if (dir.exists("external_data")) {
+      # use all .se and .clarion files specified in external_data
+      external <- sapply(list.files(path = "external_data" ), function(x){ file.path("external_data", x)})
+      return(external)
+    } else {
+      return(NULL)
+    }
   })
   
-  
   observe({
-    if(path_check() == FALSE ){
-      return()
-    } else {
-      # shinyjs::hide("quickstart_info")
+    if (!is.null(file_path())){
       shinyjs::show("downloadbox")
       shinyjs::show("results_tab")
       shinyjs::show("qc_tab")
       shinyjs::show("enrichment_tab")
-      if (path_check() == TRUE){
-        # shinyjs::disable("file1")
-        # shinyjs::disable("file2")
-        # shinyjs::disable("analyze")
-        shinyalert("In Progress!", "Switch to Analysis Tab and wait untile results appear on the screen", type="info",
-                   closeOnClickOutside = TRUE,
-                   closeOnEsc = TRUE,
-                   timer = 0) # timer in miliseconds (10 sec)
-      } else {
-        shinyalert("In Progress!", "Data analysis has started, wait until table and plots
-                appear on the screen", type="info",
-                   closeOnClickOutside = TRUE,
-                   closeOnEsc = TRUE,
-                   timer = 10000) # timer in miliseconds (10 sec)
+      shinyalert("In Progress!", "Switch to Analysis Tab and wait untile results appear on the screen", type="info",
+                 closeOnClickOutside = TRUE,
+                 closeOnEsc = TRUE,
+                 timer = 0)
       }
-    }
   })
   
 # #  Show elements on clicking Start analysis button
@@ -203,47 +191,34 @@ server <- function(input, output, session,protein_path = NULL, exp_path =NULL) {
     maxquant_data_example<-reactive({NULL})
     
     maxquant_data_input<-reactive({
-      if (path_check() == TRUE){
-        # inFile<-input$file1
-        # if (is.null(input$file1)){
-        #   inFile <- protein_path
-        # } else {
-        #   inFile<-input$file1$datapath
-        # }
-        inFile <- protein_path
-        if(is.null(inFile))
-          return(NULL)
-        temp_data<-read.table(inFile,
-                              header = TRUE,
-                              fill= TRUE, # to fill any missing data
-                              sep = "\t",
-                              quote = ""
-        )
-        validate(maxquant_input_test(temp_data))
-        return(temp_data)
-      }
+      protein_path <- file_path()[grep("^protein", names(file_path()),ignore.case = T)]
+      inFile <- list.files(path = protein_path,pattern="*.txt|*.csv",full.names = TRUE)
+      if(is.null(inFile))
+        return(NULL)
+      temp_data<-read.table(inFile,
+                            header = TRUE,
+                            fill= TRUE, # to fill any missing data
+                            sep = "\t",
+                            quote = ""
+      )
+      validate(maxquant_input_test(temp_data))
+      return(temp_data)
     })
     
     exp_design_input<-reactive({
-      if(path_check() == TRUE){
-        # inFile<-input$file2
-        # if (is.null(input$file2)){
-        #   inFile <- exp_path
-        # } else {
-        #   inFile<-input$file2$datapath
-        # }
-        inFile <- exp_path
-        if (is.null(inFile))
-          return(NULL)
-        temp_df<-read.table(inFile,
-                            header = TRUE,
-                            sep="\t",
-                            stringsAsFactors = FALSE)
-        exp_design_test(temp_df)
-        temp_df$label<-as.character(temp_df$label)
-        temp_df$condition<-trimws(temp_df$condition, which = "left")
-        return(temp_df)
-      }
+      exp_path <- file_path()[grep("^exp", names(file_path()),ignore.case = T)]
+      inFile <- list.files(path = exp_path,pattern="*.txt|*.csv",full.names = TRUE)
+      if (is.null(inFile))
+        return(NULL)
+      temp_df<-read.table(inFile,
+                          header = TRUE,
+                          sep="\t",
+                          stringsAsFactors = FALSE)
+      exp_design_test(temp_df)
+      temp_df$label<-as.character(temp_df$label)
+      temp_df$condition<-trimws(temp_df$condition, which = "left")
+      return(temp_df)
+      
     })
    
     
