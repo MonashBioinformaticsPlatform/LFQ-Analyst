@@ -5,8 +5,8 @@ server <- function(input, output, session) {
 # Check input path
   file_path <- reactive({
     if (dir.exists("external_data")) {
-      # use all .se and .clarion files specified in external_data
-      external <- sapply(list.files(path = "external_data" ), function(x){ file.path("external_data", x)})
+      # use all .txt and .csv files specified in external_data
+      external <- sapply(list.files(path = "external_data", pattern = "\\.txt$|\\.csv$",recursive = T), function(x){ file.path("external_data", x)})
       return(external)
     } else {
       return(NULL)
@@ -191,8 +191,8 @@ server <- function(input, output, session) {
     maxquant_data_example<-reactive({NULL})
     
     maxquant_data_input<-reactive({
-      protein_path <- file_path()[grep("^protein", names(file_path()),ignore.case = T)]
-      inFile <- list.files(path = protein_path,pattern="*.txt|*.csv",full.names = TRUE)
+      req(file_path())
+      inFile <- file_path()[grep("^protein", names(file_path()),ignore.case = T)]
       if(is.null(inFile))
         return(NULL)
       temp_data<-read.table(inFile,
@@ -206,8 +206,8 @@ server <- function(input, output, session) {
     })
     
     exp_design_input<-reactive({
-      exp_path <- file_path()[grep("^exp", names(file_path()),ignore.case = T)]
-      inFile <- list.files(path = exp_path,pattern="*.txt|*.csv",full.names = TRUE)
+      req(file_path())
+      inFile <- file_path()[grep("^exp", names(file_path()),ignore.case = T)]
       if (is.null(inFile))
         return(NULL)
       temp_df<-read.table(inFile,

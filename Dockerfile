@@ -16,6 +16,7 @@ COPY . /srv/shiny-server
 #COPY /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 COPY entrypoint.sh /
+RUN chmod +x entrypoint.sh
 #COPY shiny-server.sh /usr/bin/shiny-server.sh
 #RUN chmod -R 755 /usr/bin/shiny-server.sh
 
