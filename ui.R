@@ -408,9 +408,9 @@ ui <- function(request){shinyUI(
 			                              target='_blank', tags$b("here.")))))),  
 			h4("Contact Us"),
 			p("For any feedback or question regarding LFQ-Analyst, please contact the 
-			  Monash Proteomics and Metabolomics Facility:"),
+			  Monash Proteomics and Metabolomics Platform:"),
       tags$ul(
-			tags$li("Anup Shah: anup.shah(at)monash.edu"),
+			# tags$li("Anup Shah: anup.shah(at)monash.edu"),
 			tags$li("Ralf Schittenhelm: ralf.schittenhelm(at)monash.edu"),
 			tags$li("Haijian Zhang: hailey.zhang1(at)monash.edu")
       ),
@@ -653,7 +653,7 @@ ui <- function(request){shinyUI(
       #   )#tabitems close
         ),
         tags$footer(
-        tags$p("Supported by: Monash Proteomics and Metabolomics Facility & Monash Bioinformatics Platform, 
+        tags$p("Supported by: Monash Proteomics and Metabolomics Platform & Monash Bioinformatics Platform, 
                Monash University"),
         align = "right"), # Dasbboardbody close 
         shiny.info::version(position = "bottom right")
