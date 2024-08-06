@@ -839,3 +839,60 @@ delete_prefix <- function(words) {
   # Delete prefix from words
   gsub(paste0("^", prefix), "", words)
 }
+
+### Filter missing values use different threshold per conditions/groups
+threshold_detect <- function(sample_rep){
+  valid_keep <- trunc(sample_rep/2) + 1
+  threshold <- sample_rep - valid_keep
+  return(threshold)
+}
+
+keep_function <- function(se){
+  # Show error if inputs are not the required classes
+  
+  # Show error if inputs do not contain required columns
+  if(any(!c("name", "ID") %in% colnames(rowData(se, use.names = FALSE)))) {
+    stop("'name' and/or 'ID' columns are not present in '",
+         deparse(substitute(se)),
+         "'\nRun make_unique() and make_se() to obtain the required columns",
+         call. = FALSE)
+  }
+  if(any(!c("label", "condition", "replicate") %in% colnames(colData(se)))) {
+    stop("'label', 'condition' and/or 'replicate' columns are not present in '",
+         deparse(substitute(se)),
+         "'\nRun make_se() or make_se_parse() to obtain the required columns",
+         call. = FALSE)
+  }
+  
+  # Make assay values binary (1 = valid value)
+  bin_data <- assay(se)
+  
+  # new, removed ref columns from dataset
+  bin_data <- bin_data %>% data.frame()
+  idx <- is.na(bin_data) # idx <- is.na(assay(se))
+  bin_data[!idx] <- 1
+  bin_data[idx] <- 0
+  
+  # Filter se on the maximum allowed number of
+  # missing values per condition (defined by thr)
+  keep <- bin_data %>%
+    data.frame() %>%
+    rownames_to_column() %>%
+    gather(ID, value, -rowname) %>%
+    left_join(., data.frame(colData(se)), by = "ID") %>%
+    group_by(rowname, condition) %>%
+    summarize(miss_val = n() - sum(value))
+  return(keep)
+}
+
+filter_missval_new <- function(se,one_condition,exp_df){
+  threshold <- exp_df$thr[exp_df$condition==one_condition] %>% unlist()
+  keep <- keep_function(se)
+  keep1 <- keep %>% 
+    dplyr::filter(condition == one_condition) %>%
+    dplyr::filter(miss_val <= threshold)
+  keep1 <- keep1 %>%
+    tidyr::spread(condition, miss_val)
+  se_fltrd <- se[keep1$rowname, ]
+  return(se_fltrd)
+}

@@ -203,6 +203,7 @@ server <- function(input, output, session) {
       exp_design_test(temp_df)
       temp_df$label<-as.character(temp_df$label)
       temp_df$condition<-trimws(temp_df$condition, which = "left")
+      temp_df$condition <- temp_df$condition %>% gsub("[^[:alnum:]|_]+", "_",.) # auto fix special characters
       return(temp_df)
     })
    
@@ -279,19 +280,26 @@ server <- function(input, output, session) {
      test_match_lfq_column_design(data_unique,lfq_columns, exp_design())
      data_se<-DEP:::make_se(data_unique,lfq_columns,exp_design())
   
-     # Check number of replicates
-     if(max(exp_design()$replicate)<3){
-       threshold<-0
-     } else  if(max(exp_design()$replicate)==3){
-       threshold<-1
-     } else if(max(exp_design()$replicate)<6 ){
-       threshold<-2
-     } else if (max(exp_design()$replicate)>=6){
-       threshold<-trunc(max(exp_design()$replicate)/2)
-     }
+     # # Check number of replicates
+     # if(max(exp_design()$replicate)<3){
+     #   threshold<-0
+     # } else  if(max(exp_design()$replicate)==3){
+     #   threshold<-1
+     # } else if(max(exp_design()$replicate)<6 ){
+     #   threshold<-2
+     # } else if (max(exp_design()$replicate)>=6){
+     #   threshold<-trunc(max(exp_design()$replicate)/2)
+     # }
+     # 
+     # 
+     # filter_missval(data_se,thr = threshold)
+     # filter_missval(data_se,thr = threshold)
+     exp_df <- exp_design() %>% dplyr::count(condition)
+     exp_df <- exp_df %>% dplyr::mutate(thr = lapply(exp_df$n, threshold_detect)) # function:threshold_detect
+     condition_list <- exp_df$condition
      
-     
-     filter_missval(data_se,thr = threshold)
+     data_filtered <- filter_missval_new(data_se,condition_list,exp_df)
+     return(data_filtered)
    })
    
    unimputed_table<-reactive({
