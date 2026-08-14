@@ -1,0 +1,69 @@
+cff-version: 1.2.0
+title: LFQ-Analyst
+type: software
+repository: https://bioinformatics.erc.monash.edu/apps/LFQ-Analyst
+identifiers:
+- type: other
+  value: LFQ-Analyst
+  description: bio.tools
+license: GPL-3.0
+keywords:
+- term: Proteomics
+  uri: http://edamontology.org/topic_0121
+- term: Sequence analysis
+  uri: http://edamontology.org/topic_0080
+- term: Small molecules
+  uri: http://edamontology.org/topic_0154
+- term: Metabolomics
+  uri: http://edamontology.org/topic_3172
+- term: Proteomics experiment
+  uri: http://edamontology.org/topic_3520
+abstract: 'An Easy-To-Use Interactive Web Platform To Analyze and Visualize Label-Free
+  Proteomics Data Preprocessed with MaxQuant.A tool for analysing label-free quantitative
+  proteomics dataset https://bioinformatics.erc.monash.edu/apps/LFQ-Analyst/.LFQ-Analyst:
+  An easy-to-use interactive web-platform to analyze and visualize proteomics data
+  preprocessed with MaxQuant.LFQ-Analyst is an easy-to-use, interactive web application
+  developed to perform differential expression analysis with “one click” and to visualize
+  label-free quantitative proteomic datasets preprocessed with MaxQuant. LFQ-Analyst
+  provides a wealth of user-analytic features and offers numerous publication-quality
+  result output graphics and tables to facilitate statistical and exploratory analysis
+  of label-free quantitative datasets'
+message: If you use this software, please cite it and the Primary publications below.
+references:
+- doi: 10.1021/acs.jproteome.9b00496
+  title: 'LFQ-Analyst: An Easy-To-Use Interactive Web Platform To Analyze and Visualize
+    Label-Free Proteomics Data Preprocessed with MaxQuant.'
+  authors:
+  - first_name: Anup D
+    last_name: Shah
+  - first_name: Robert J A
+    last_name: Goode
+  - first_name: Cheng
+    last_name: Huang
+  - first_name: David R
+    last_name: Powell
+  - first_name: Ralf B
+    last_name: Schittenhelm
+  year: 2020
+  page_start: 204
+  page_end: 211
+  pub_type: article
+preferred-citation:
+  doi: 10.1021/acs.jproteome.9b00496
+  title: 'LFQ-Analyst: An Easy-To-Use Interactive Web Platform To Analyze and Visualize
+    Label-Free Proteomics Data Preprocessed with MaxQuant.'
+  authors:
+  - first_name: Anup D
+    last_name: Shah
+  - first_name: Robert J A
+    last_name: Goode
+  - first_name: Cheng
+    last_name: Huang
+  - first_name: David R
+    last_name: Powell
+  - first_name: Ralf B
+    last_name: Schittenhelm
+  year: 2020
+  page_start: 204
+  page_end: 211
+  pub_type: article
